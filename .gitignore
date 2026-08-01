@@ -1,0 +1,6 @@
+data_1e9.csv
+*.csv
+*.aux
+*.log
+*.out
+!results/*_log.txt

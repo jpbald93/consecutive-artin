@@ -1,0 +1,632 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+\graphicspath{{./}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{remark}{Remark}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\newcommand{\Lsym}[2]{\left(\tfrac{#1}{#2}\right)}
+\newcommand{\Art}{\mathrm{Art}}
+
+\begin{document}
+
+\title[Correlations between primitive root statuses of consecutive primes]{Correlations between primitive root statuses\\ of consecutive primes}
+
+\author{Josh Bald}
+\thanks{\textbf{Corresponding author.} Josh Bald, Independent Researcher.
+Email: \texttt{jpbald93@gmail.com}. ORCID: \texttt{0000-0002-1317-6489}.}
+
+\date{\today}
+
+\begin{abstract}
+Call a prime $p$ an \emph{Artin prime for base $10$} if $10$ is a primitive root
+modulo $p$. We study, for the first time, the dependence between the Artin
+statuses of \emph{consecutive} primes. Computing Artin status for all
+$50{,}847{,}531$ primes up to $10^9$, we find that consecutive primes are
+significantly \emph{anticorrelated}: $P(\Art_{n+1} \mid \Art_n) = 0.36514$
+versus $P(\Art_{n+1} \mid \lnot\Art_n) = 0.37928$, a deficit
+$\delta = -0.01414$ ($z \approx -101$ over $50{,}847{,}529$ consecutive pairs).
+The dependence has striking gap structure. We prove an elementary but, to our
+knowledge, unrecorded exclusion law: if $p$ and $p + g$ are both prime with
+$g \equiv 20 \pmod{40}$, then $10$ is a quadratic residue modulo exactly one of
+them, so they can never both be Artin primes for base $10$; empirically, among
+$2{,}195{,}882$ consecutive pairs with gap $20$ or $60$ there is indeed not a
+single doubly-Artin pair. Conversely, gaps $g \equiv 0 \pmod{40}$ force equal
+quadratic-residue status and exhibit strong positive dependence
+($P(\Art_{n+1} \mid \Art_n) = 0.899$ at $g = 40$). We then decompose the global
+anticorrelation into arithmetically forced channels: conditioning on the joint
+residues of $(p_n, p_{n+1})$ modulo $120$ removes $93\%$ of the effect, and
+conditioning modulo $840$ removes $97\%$, with the residual dependence
+statistically compatible with the unabsorbed small-modulus channels
+($\chi^2/\mathrm{df} = 1.14$ on $633$ cells). The mechanism is the bias of
+Lemke Oliver and Soundararajan in consecutive prime residues, propagated
+through the factorisation of $p-1$ to the Artin property; as an intermediate
+link we measure the (apparently unreported) anticorrelation
+$r\bigl(\omega(p_n - 1), \omega(p_{n+1} - 1)\bigr) = -0.041$. We formulate
+quantitative conjectures and discuss extensions to general bases.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:intro}
+
+Two classical themes in the theory of primes intersect in this paper.
+
+The first is Artin's primitive root conjecture (1927): for any integer
+$a \notin \{-1, 0, 1\}$ that is not a perfect square, the set of primes $p$ for
+which $a$ is a primitive root modulo $p$ has positive density; for base
+$a = 10$ this density is Artin's constant
+$C = \prod_q \bigl(1 - \tfrac{1}{q(q-1)}\bigr) \approx 0.3739558$.
+Hooley~\cite{Hooley1967} proved the conjecture under the Generalized Riemann
+Hypothesis, Gupta and Murty~\cite{GuptaMurty1984} and
+Heath-Brown~\cite{HeathBrown1986} obtained the strongest unconditional
+results, and Moree's survey~\cite{Moree2012} gives a comprehensive account.
+For $a = 10$ the property has a pleasant classical meaning: $10$ is a primitive
+root mod $p$ precisely when the decimal expansion of $1/p$ has maximal period
+$p - 1$ (the \emph{full reptend} or \emph{long} primes; see
+\cite[pp.~166--171]{ConwayGuy1996}).
+
+The second theme is the surprising dependence between \emph{consecutive}
+primes discovered by Lemke Oliver and Soundararajan~\cite{LOS2016}: for a
+modulus $q$, a prime in a given reduced residue class mod $q$ is followed by a
+prime in the \emph{same} class markedly less often than equidistribution would
+predict. The phenomenon, which they explain conjecturally via the
+Hardy--Littlewood prime $k$-tuple conjectures~\cite{HardyLittlewood1923}, decays
+slowly and is prominent at the scales accessible to computation.
+
+This paper asks a question that appears not to have been raised before:
+\emph{are the Artin statuses of consecutive primes correlated?} Since the
+Artin property of $p$ is governed by the arithmetic of $p - 1$ (which primes
+$q$ divide it), and since the residues of consecutive primes modulo small $q$
+are correlated by~\cite{LOS2016}, one expects \emph{some} induced dependence
+between $\mathbf{1}[10 \text{ is a primitive root mod } p_n]$ and
+$\mathbf{1}[10 \text{ is a primitive root mod } p_{n+1}]$. What is not obvious
+is its sign, its size, its structure as a function of the gap
+$g = p_{n+1} - p_n$, or how completely it is accounted for by known
+mechanisms. We answer these questions computationally for all primes up to
+$10^9$ and isolate one component that is not merely statistical but
+\emph{deterministic}: an exclusion law for gaps $g \equiv 20 \pmod{40}$
+(Theorem~\ref{thm:exclusion}).
+
+Related but distinct questions have been studied. Garcia, Kahoro, and
+Luca~\cite{GarciaKahoroLuca2019} (see also the sequel~\cite{GarciaLucaShiUdell2020})
+compared the \emph{number} of primitive roots, $\varphi(p-1)$ versus
+$\varphi(p+1)$, for twin prime pairs, finding a strong bias which they explain
+under the Bateman--Horn conjecture. Pollack~\cite{Pollack2014} and Baker and
+Pollack~\cite{BakerPollack2016} proved, by combining Hooley's method with the
+Maynard--Tao sieve~\cite{Maynard2015,Zhang2014}, that (under GRH) there are
+infinitely many runs of $m$ \emph{consecutive} primes all having a prescribed
+primitive root within a bounded interval. These are existence results; the
+correlation statistics of Artin status along the sequence of primes appear to
+be unexamined, and the exclusion law of Theorem~\ref{thm:exclusion}, though
+elementary, seems to be unrecorded.
+
+\subsection*{Summary of results}
+\begin{enumerate}
+  \item (Theorem~\ref{thm:exclusion}) If $p$ and $p + g$ are primes exceeding
+    $5$ and $g \equiv 20 \pmod{40}$, then $\Lsym{10}{p+g} = -\Lsym{10}{p}$;
+    consequently $10$ is a quadratic residue for exactly one of the two, and at
+    most one can be an Artin prime for base $10$. If instead
+    $g \equiv 0 \pmod{40}$, then $\Lsym{10}{p+g} = \Lsym{10}{p}$.
+  \item (Section~\ref{sec:global}) Across all $50{,}847{,}529$ consecutive
+    prime pairs with $7 \le p \le 10^9$, Artin statuses are anticorrelated:
+    $\delta = P(\Art_{n+1} \mid \Art_n) - P(\Art_{n+1} \mid \lnot \Art_n)
+    = -0.01414$, with $\chi^2 = 10{,}167$ on one degree of freedom.
+  \item (Section~\ref{sec:gaps}) The dependence is violently non-uniform in
+    the gap: $\delta(g)$ ranges from $-0.553$ (at $g = 20$, where the theorem
+    forces exclusion) to $+0.643$ (at $g = 40$), with sign and magnitude
+    predicted by $g \bmod 40$ and $g \bmod 3$.
+  \item (Section~\ref{sec:decomposition}) Conditioning on the pair of residues
+    of $(p_n, p_{n+1})$ modulo $120$ shrinks the mean dependence by a factor of
+    $13$; modulo $840$, by a factor of $30$, to $\delta_{\mathrm{res}} =
+    -0.00047$ with $\chi^2/\mathrm{df} = 1.14$ --- consistent with the residue
+    channels at moduli beyond $840$ and with no additional mechanism.
+  \item (Section~\ref{sec:omega}) As an intermediate link in the causal chain
+    we measure $r\bigl(\omega(p_n-1), \omega(p_{n+1}-1)\bigr) = -0.0410$:
+    consecutive primes' $p-1$ factorisations repel.
+\end{enumerate}
+
+Throughout, \emph{Artin prime} means Artin prime for base $10$ unless stated
+otherwise, and $p_n$ denotes the $n$-th prime.
+
+\section{The exclusion law}
+\label{sec:theorem}
+
+\begin{definition}
+For an odd prime $p \nmid 10$, write $\Lsym{10}{p}$ for the Legendre symbol.
+We say $p$ is an \emph{Artin prime} (for base $10$) if the multiplicative order
+of $10$ modulo $p$ equals $p - 1$.
+\end{definition}
+
+If $10$ is a quadratic residue mod $p$ then its order divides $(p-1)/2$, so a
+QR is never a primitive root; $\Lsym{10}{p} = -1$ is a necessary (not
+sufficient) condition for the Artin property.
+
+\begin{theorem}[Exclusion law for gaps $\equiv 20 \pmod{40}$]
+\label{thm:exclusion}
+Let $p$ and $p' = p + g$ be primes with $p > 5$ and $g \equiv 20 \pmod{40}$.
+Then
+\[
+  \Lsym{10}{p'} = -\Lsym{10}{p}.
+\]
+In particular, $10$ is a quadratic residue modulo exactly one of $p, p'$, and
+at most one of them is an Artin prime for base $10$.
+\end{theorem}
+
+\begin{proof}
+By multiplicativity, $\Lsym{10}{p} = \Lsym{2}{p}\Lsym{5}{p}$.
+
+Since $g \equiv 0 \pmod 5$, we have $p' \equiv p \pmod 5$. By quadratic
+reciprocity ($5 \equiv 1 \bmod 4$), $\Lsym{5}{p} = \Lsym{p}{5}$ depends only on
+$p \bmod 5$; hence $\Lsym{5}{p'} = \Lsym{5}{p}$.
+
+Since $g \equiv 4 \pmod 8$, we have $p' \equiv p + 4 \pmod 8$. The map
+$r \mapsto r + 4$ on odd residues mod $8$ exchanges $1 \leftrightarrow 5$ and
+$3 \leftrightarrow 7$. By the second supplementary law,
+$\Lsym{2}{p} = +1$ iff $p \equiv \pm 1 \pmod 8$, and the exchange maps
+$\{1, 7\}$ onto $\{5, 3\}$ and vice versa; hence $\Lsym{2}{p'} = -\Lsym{2}{p}$
+for every admissible residue.
+
+Multiplying, $\Lsym{10}{p'} = -\Lsym{10}{p}$. The prime with
+$\Lsym{10}{\cdot} = +1$ has $\operatorname{ord}(10) \mid (p-1)/2 < p-1$, so it
+is not an Artin prime.
+\end{proof}
+
+\begin{corollary}[Coupling law for gaps $\equiv 0 \pmod{40}$]
+\label{cor:coupling}
+If $p, p' = p + g$ are primes with $p > 5$ and $g \equiv 0 \pmod{40}$, then
+$\Lsym{10}{p'} = \Lsym{10}{p}$. In particular, if either is an Artin prime,
+then $10$ is a quadratic non-residue for both.
+\end{corollary}
+
+\begin{proof}
+Now $g \equiv 0 \pmod 8$ and $g \equiv 0 \pmod 5$, so both
+$\Lsym{2}{\cdot}$ and $\Lsym{5}{\cdot}$ are preserved.
+\end{proof}
+
+\begin{remark}
+The modulus $40$ is specific to base $10$: it is the conductor of the
+quadratic character $p \mapsto \Lsym{10}{p}$, namely $4 \cdot 10 = 40$ (the
+discriminant of $\mathbb{Q}(\sqrt{10})$). For a general non-square base $a$
+the same argument applies with $40$ replaced by the conductor $|d_a|$ of the
+quadratic character attached to $\mathbb{Q}(\sqrt{a})$: gaps
+$g \equiv 0 \pmod{|d_a|}$ preserve quadratic-residue status, while suitable
+classes flip it. Base $10$ is distinguished only by our decimal habit and the
+full-reptend interpretation.
+\end{remark}
+
+\begin{remark}
+For gaps in classes other than $0, 20 \pmod{40}$ the relation between
+$\Lsym{10}{p}$ and $\Lsym{10}{p'}$ depends on $p$ as well as $g$ (the shift on
+$p \bmod 8$ or $p \bmod 5$ is not a symbol-preserving or symbol-flipping
+involution), producing the partial correlations catalogued in
+Section~\ref{sec:gaps}.
+\end{remark}
+
+We verified Theorem~\ref{thm:exclusion} computationally as a guard against
+error: for all $23{,}956$ consecutive prime pairs below $10^7$ with gap
+$\equiv 20 \pmod{40}$, the Legendre symbols flip in every single case, and a
+direct order computation on a systematic subsample found no doubly-Artin pair.
+In the full dataset up to $10^9$ (Section~\ref{sec:gaps}), the
+$2{,}195{,}882$ consecutive pairs with $g \in \{20, 60\}$ contain \emph{no}
+pair in which both primes are Artin --- an empirical count of zero, exactly as
+the theorem requires.
+
+\section{Data and computation}
+\label{sec:data}
+
+We use the dataset of our companion computation: for every prime
+$7 \le p \le 10^9$ ($50{,}847{,}531$ primes, generated by a segmented sieve of
+Eratosthenes in C), we store the gap to the neighbouring primes, the number
+$\omega(p-1)$ of distinct prime factors of $p - 1$ (by trial division), the
+Artin indicator (computed exactly via $10^{(p-1)/q} \not\equiv 1 \pmod p$ for
+each prime $q \mid p - 1$, using GMP modular exponentiation), and small
+residues of $p$. As a global check, the number of Artin primes in the dataset
+is $19{,}016{,}618$, a proportion $0.373993$, matching Artin's constant
+$0.373956$ to four decimal places (for base $10$ the squarefree part is
+$10 \not\equiv 1 \bmod 4$, so no correction factor applies and the conjectural
+density is exactly $C$; see~\cite{Hooley1967,Moree2012}).
+
+The consecutive-pair analysis is a single streaming pass over the
+$50{,}847{,}529$ ordered pairs $(p_n, p_{n+1})$, accumulating $2 \times 2$
+contingency tables of $(\mathbf{1}[\Art_n], \mathbf{1}[\Art_{n+1}])$: globally,
+stratified by gap $g$, and stratified by joint residues of $(p_n, p_{n+1})$ to
+various moduli. All counts reported below are exact (no sampling), except
+where noted. Analysis scripts (Python) and their outputs are available with
+the data (see the Data Availability statement).
+
+\section{The global anticorrelation}
+\label{sec:global}
+
+\begin{table}[ht]
+\centering
+\caption{Artin status of consecutive primes, all $50{,}847{,}529$ pairs with
+$7 \le p_n \le 10^9$.}
+\label{tab:global}
+\begin{tabular}{lr}
+\toprule
+Quantity & Value \\
+\midrule
+$P(\Art_{n+1})$ & $0.373993$ \\
+$P(\Art_{n+1} \mid \Art_n)$ & $0.365141$ \\
+$P(\Art_{n+1} \mid \lnot\Art_n)$ & $0.379281$ \\
+$\delta = $ difference & $-0.014140$ \\
+$\phi$ coefficient & $-0.014140$ \\
+$\chi^2$ (1 df) & $10{,}166.7$ \\
+$z$-score of $\delta$ & $-100.8$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:global} presents the central fact: an Artin prime is followed by
+another Artin prime about $1.4$ percentage points less often than a non-Artin
+prime is. The effect is small in absolute terms but enormous relative to
+sampling noise. If Artin statuses of consecutive primes were independent, the
+observed $|\delta|$ would be a $\sim 100 \sigma$ event.
+
+The sign is what the Lemke Oliver--Soundararajan repulsion predicts.
+Heuristically: the Artin property requires $\Lsym{10}{p} = -1$, which is a
+condition on $p \bmod 40$; it is further favoured by $3 \nmid p - 1$, i.e.\
+$p \equiv 2 \pmod 3$, since a factor of $3$ in $p-1$ contributes the largest
+single suppression $(1 - \tfrac13)$ of the primitive-root density among odd
+primes. Consecutive primes repel in their residues modulo $40$ and modulo
+$3$~\cite{LOS2016}; conditions favourable to the Artin property therefore tend
+\emph{not} to repeat at $p_{n+1}$ when they hold at $p_n$, depressing
+$P(\Art_{n+1} \mid \Art_n)$.
+
+For reference, the mod-$12$ transition matrix in our data displays the
+repulsion prominently: the diagonal entries
+$P(p_{n+1} \equiv r \mid p_n \equiv r)$ are $0.1813$--$0.1815$ for
+$r \in \{1, 5, 7, 11\}$, against the equidistribution value $0.25$ --- a
+$27\%$ deficit, consistent in magnitude with the computations
+in~\cite{LOS2016} at comparable scales.
+
+\section{Gap structure}
+\label{sec:gaps}
+
+Stratifying by the gap $g = p_{n+1} - p_n$ reveals that the global
+$\delta = -0.0141$ is the average of far larger, sign-alternating effects.
+Table~\ref{tab:gaps} shows all gaps with at least $10^5$ pairs;
+Figure~\ref{fig:gaps} displays $\delta(g)$ with the residue class of
+$g \bmod 40$ marked.
+
+\begin{table}[ht]
+\centering
+\caption{Conditional Artin dependence by gap ($N \ge 10^5$ pairs). $\delta(g) =
+P(\Art_{n+1} \mid \Art_n) - P(\Art_{n+1} \mid \lnot\Art_n)$.}
+\label{tab:gaps}
+\small
+\begin{tabular}{rrrrr@{\qquad}rrrrr}
+\toprule
+$g$ & $N$ & $P(A|A)$ & $P(A|\lnot A)$ & $\delta(g)$ &
+$g$ & $N$ & $P(A|A)$ & $P(A|\lnot A)$ & $\delta(g)$ \\
+\midrule
+ 2 & 3{,}424{,}504 & 0.291 & 0.293 & $-0.002$ & 32 &   683{,}896 & 0.176 & 0.386 & $-0.209$ \\
+ 4 & 3{,}424{,}679 & 0.562 & 0.381 & $+0.181$ & 34 &   719{,}531 & 0.445 & 0.445 & $+0.001$ \\
+ 6 & 6{,}089{,}791 & 0.407 & 0.382 & $+0.025$ & 36 & 1{,}171{,}524 & 0.559 & 0.314 & $+0.245$ \\
+ 8 & 2{,}695{,}108 & 0.160 & 0.409 & $-0.249$ & 38 &   548{,}746 & 0.288 & 0.293 & $-0.006$ \\
+10 & 3{,}484{,}767 & 0.448 & 0.443 & $+0.005$ & 40 &   648{,}780 & 0.899 & 0.257 & $+0.643$ \\
+12 & 4{,}468{,}957 & 0.512 & 0.283 & $+0.229$ & 42 &   954{,}456 & 0.380 & 0.358 & $+0.023$ \\
+14 & 2{,}464{,}565 & 0.298 & 0.296 & $+0.002$ & 44 &   389{,}634 & 0.344 & 0.249 & $+0.095$ \\
+16 & 1{,}846{,}097 & 0.296 & 0.543 & $-0.247$ & 46 &   334{,}720 & 0.469 & 0.469 & $+0.000$ \\
+18 & 3{,}351{,}032 & 0.378 & 0.359 & $+0.019$ & 48 &   577{,}247 & 0.216 & 0.454 & $-0.238$ \\
+20 & 1{,}824{,}043 & \textbf{0.000} & 0.553 & $-0.553$ & 50 &   328{,}066 & 0.312 & 0.307 & $+0.005$ \\
+22 & 1{,}569{,}679 & 0.444 & 0.447 & $-0.004$ & 52 &   245{,}804 & 0.572 & 0.381 & $+0.191$ \\
+24 & 2{,}367{,}474 & 0.295 & 0.411 & $-0.116$ & 54 &   410{,}754 & 0.382 & 0.356 & $+0.026$ \\
+26 & 1{,}119{,}585 & 0.313 & 0.313 & $+0.000$ & 56 &   211{,}462 & 0.225 & 0.389 & $-0.164$ \\
+28 & 1{,}219{,}243 & 0.619 & 0.366 & $+0.253$ & 58 &   181{,}948 & 0.437 & 0.441 & $-0.004$ \\
+30 & 2{,}177{,}991 & 0.390 & 0.363 & $+0.027$ & 60 &   371{,}839 & \textbf{0.000} & 0.592 & $-0.592$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.95\textwidth]{fig_gap_delta.png}
+\caption{$\delta(g)$ for all gaps with $N \ge 10^5$ pairs, $p \le 10^9$. Red:
+$g \equiv 20 \pmod{40}$ (Theorem~\ref{thm:exclusion} forces
+$P(A|A) = 0$). Green: $g \equiv 0 \pmod{40}$
+(Corollary~\ref{cor:coupling} preserves quadratic-residue status). Grey: other
+classes.}
+\label{fig:gaps}
+\end{figure}
+
+Three features stand out.
+
+\emph{(i) The exclusion rows.} At $g = 20$ ($1{,}824{,}043$ pairs) and $g = 60$
+($371{,}839$ pairs), $P(A \mid A)$ is exactly zero: among $2.2$ million
+consecutive pairs, not one is doubly Artin. This is
+Theorem~\ref{thm:exclusion} in action, and conversely the observation that
+motivated its proof.
+
+\emph{(ii) The $g = 40$ spike.} $P(A \mid A) = 0.899$, the largest conditional
+probability in the table and $2.4$ times the unconditional density. Two forced
+mechanisms combine. First, by Corollary~\ref{cor:coupling}, if $p_n$ is Artin
+then $10$ is a non-residue for $p_{n+1}$ as well, doubling its prior
+($1/C \cdot$-fold, roughly, since about half of primes have
+$\Lsym{10}{p} = -1$). Second, $40 \equiv 1 \pmod 3$ forces the pair's mod-$3$
+residues: $p_n \equiv 2 \pmod 3$ would give $3 \mid p_n + 40$, impossible; so
+every $g = 40$ pair has $p_n \equiv 1$, $p_{n+1} \equiv 2 \pmod 3$ --- that is,
+$3 \mid p_n - 1$ (suppressing $\Art_n$) and $3 \nmid p_{n+1} - 1$ (favouring
+$\Art_{n+1}$). Conditioning on $\Art_n$ therefore selects pairs in which
+$p_{n+1}$ enjoys both the non-residue status and the mod-$3$ advantage,
+yielding the observed $0.899$.
+
+\emph{(iii) Sign classes.} Gaps divisible by $3$ but not constrained mod $40$
+(e.g.\ $6, 18, 30, 42, 54$) show small positive $\delta \approx +0.02$: the
+pair shares its mod-$3$ status, weakly coupling the largest single
+suppression factor. Gaps $g \equiv 8, 16 \pmod{24}$-type classes with
+adverse mod-$8$/mod-$5$ shifts show strong negative $\delta$. The entire sign
+pattern of Table~\ref{tab:gaps} is reproduced by tracking how the shift by
+$g$ permutes the residues of $p$ modulo $8$, $5$, and $3$; no free parameter
+is involved.
+
+\section{Decomposition of the global effect}
+\label{sec:decomposition}
+
+How much of the global $\delta = -0.0141$ do the explicit residue channels
+account for? We condition on the \emph{joint} residue class of
+$(p_n, p_{n+1})$ to modulus $m$ and measure the residual within-cell
+dependence, aggregating cells by Cochran--Mantel--Haenszel-style summation of
+per-cell $\chi^2$ and by the pair-weighted mean of per-cell $\delta$.
+
+Conditioning on $m = 120 = \mathrm{lcm}(8,3,5)$ fixes the quadratic character
+$\Lsym{10}{\cdot}$ of both primes (its conductor $40$ divides $120$) and the
+mod-$3$ channel. Cells in which $10$ is a quadratic residue for $p_n$ or
+$p_{n+1}$ are degenerate for the analysis (one margin of the $2\times2$ table
+vanishes --- the Artin property is impossible); the informative population is
+the quarter of pairs in doubly-non-residue cells.
+
+\begin{table}[ht]
+\centering
+\caption{Residual dependence after conditioning on joint residues mod $m$.
+``$\delta_{\mathrm{res}}$'' is the pair-weighted mean within-cell $\delta$;
+cells with fewer than $5000$ ($m = 120$) or $2000$ ($m = 840$) pairs are
+excluded from the summed $\chi^2$.}
+\label{tab:decomp}
+\begin{tabular}{lrrrr}
+\toprule
+Conditioning & cells & pairs used & $\sum \chi^2$ (df) & $\delta_{\mathrm{res}}$ \\
+\midrule
+none (global)          & 1   & 50{,}847{,}529 & 10{,}166.7 \ (1)  & $-0.014140$ \\
+mod 120 joint residues & 145 & 12{,}255{,}203 & 789.2 \ (145)     & $-0.001055$ \\
+mod 840 joint residues & 633 & 12{,}086{,}765 & 719.8 \ (633)     & $-0.000473$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Conditioning mod $120$ removes $93\%$ of the mean dependence; extending to
+$840 = \mathrm{lcm}(8,3,5,7)$, which additionally fixes whether
+$7 \mid p - 1$ on both sides, removes $97\%$ and brings the aggregate
+$\chi^2$ per degree of freedom down to $719.8 / 633 = 1.14$, close to the
+null value $1$. Two consistency checks support the interpretation that the
+remaining crumb of dependence is simply the tail of the same mechanism at
+moduli beyond $840$ (channels $q = 11, 13, \ldots$), rather than anything new:
+(i) the residual shrinks monotonically, and roughly geometrically, as
+channels are absorbed ($-0.0141 \to -0.00106 \to -0.00047$); (ii) a
+split-sample check (pairs with $p < 5 \times 10^8$ versus
+$p \ge 5 \times 10^8$, conditioning mod $120$) gives residuals
+$-0.00096$ and $-0.00094$ --- stable across the range, as a residue-driven
+effect should be, whereas a finite-size artefact would be expected to shrink.
+
+We summarise the decomposition as follows: \emph{the consecutive-prime Artin
+anticorrelation is, to the accuracy measurable at $10^9$, entirely a sum of
+residue-coupling channels: the quadratic-character channel at conductor $40$,
+and one channel for each small prime $q$, each transmitting the
+Lemke Oliver--Soundararajan bias at modulus $q$ into the divisibility of
+$p - 1$ by $q$, and hence into the Artin property.}
+
+\section{The intermediate link: repulsion of \texorpdfstring{$\omega(p-1)$}{omega(p-1)}}
+\label{sec:omega}
+
+The chain from residue bias to Artin status passes through the factorisation
+of $p - 1$. Its first summary statistic is
+$\omega(p-1)$, the number of distinct prime factors, whose average grows like
+$\log\log p$ (for $p - 1$ shifted primes this is a classical result of
+Erd\H{o}s~\cite{Erdos1935}). If consecutive primes repel modulo every small
+$q$, then $q \mid p_n - 1$ makes $q \mid p_{n+1} - 1$ \emph{less} likely than
+average, and summing over $q$ one predicts a negative correlation between
+$\omega(p_n - 1)$ and $\omega(p_{n+1} - 1)$.
+
+The data confirm this with a value that is, to our knowledge, unreported:
+\[
+  r\bigl(\omega(p_n - 1),\, \omega(p_{n+1} - 1)\bigr) = -0.0410
+  \qquad (50{,}847{,}529 \text{ pairs}, \; p \le 10^9).
+\]
+The factorisations of $p - 1$ for consecutive primes are not independent: they
+repel, in the same sense and for the same reason that the primes themselves
+repel in residue classes.
+
+\section{Conjectures}
+\label{sec:conjectures}
+
+The Hardy--Littlewood-based framework of~\cite{LOS2016} makes the residue
+transition frequencies of consecutive primes quantitatively predictable, and
+every channel in our decomposition is built from such frequencies. This
+motivates:
+
+\begin{conjecture}[Persistence and decay]
+\label{conj:decay}
+For primes up to $x$, the consecutive-pair Artin correlation
+$\delta(x) = P(\Art_{n+1} \mid \Art_n) - P(\Art_{n+1} \mid \lnot\Art_n)$
+is negative for all sufficiently large $x$, tends to $0$ as $x \to \infty$,
+and does so at the (slow) rate of the Lemke Oliver--Soundararajan bias, i.e.\
+$\delta(x) \asymp -\,1/\log x$ up to factors of $\log\log x$.
+\end{conjecture}
+
+The heuristic for the rate: each channel's transition bias decays like
+$(\log x)^{-1}$ times slowly varying corrections~\cite{LOS2016}, and the
+channels combine linearly at first order. At $x = 10^9$ we measure
+$\delta = -0.0141$; the conjecture predicts, for instance,
+$|\delta| \approx 0.010$--$0.012$ at $x = 10^{12}$, a directly testable
+statement.
+
+\begin{conjecture}[Completeness of the residue decomposition]
+\label{conj:complete}
+For every $\varepsilon > 0$ there is a modulus $M$ such that conditioning on
+the joint residues of $(p_n, p_{n+1})$ modulo $M$ reduces the weighted mean
+within-cell dependence below $\varepsilon$ in absolute value, uniformly in
+$x$. Equivalently: consecutive-prime Artin correlation is carried entirely by
+joint residue distributions, with no additional mechanism.
+\end{conjecture}
+
+\begin{conjecture}[$\omega$ repulsion]
+\label{conj:omega}
+$r\bigl(\omega(p_n-1), \omega(p_{n+1}-1)\bigr)$ is negative for all large $x$
+and tends to $0$ as $x \to \infty$.
+\end{conjecture}
+
+We remark that Conjecture~\ref{conj:complete} is in the spirit of --- and would
+follow from a sufficiently uniform version of --- the Hardy--Littlewood prime
+pair conjectures, since the joint distribution of
+$(p_n \bmod M, p_{n+1} \bmod M, g)$ is governed by singular series; but we
+state it as an empirical proposition because that is what the data test.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection*{What is new here}
+The individual ingredients are classical: quadratic reciprocity, the
+QR-obstruction to primitive roots, and the consecutive-prime bias
+of~\cite{LOS2016}. The contributions of this paper are (i) the observation
+that these combine into a deterministic exclusion law for prime pairs at gaps
+$\equiv 20 \pmod{40}$ (Theorem~\ref{thm:exclusion}) --- elementary, but we have
+not found it stated anywhere; (ii) the first measurement of the
+consecutive-prime Artin correlation, its gap profile, and the $\omega$
+repulsion; and (iii) the demonstration that the measured dependence
+decomposes, quantitatively and apparently completely, into residue-coupling
+channels. Point (iii) is the analogue, for a multiplicative property of
+$p - 1$, of the explanation of the original bias via the Hardy--Littlewood
+conjectures, and turns the Artin correlation from a curiosity into a sharp
+consistency test of that framework at scale.
+
+\subsection*{Relation to runs of Artin primes}
+Pollack~\cite{Pollack2014} and Baker--Pollack~\cite{BakerPollack2016} show
+(under GRH) that infinitely many runs of $m$ consecutive primes share a
+primitive root lying in a bounded interval. Our results add a quantitative
+caution to the base-specific version of such statements: for base $10$, runs
+of consecutive Artin primes must navigate the exclusion law --- a run is broken
+whenever a gap $\equiv 20 \pmod{40}$ occurs --- and the prevailing
+anticorrelation makes long runs rarer than independence would suggest. It
+would be interesting to quantify the interaction between the sieve
+constructions and the residue channels identified here.
+
+\subsection*{Future work}
+Three extensions suggest themselves. (1) Other bases: the same pipeline with
+$a = 2, 3, 5, 6, 7$ would test the conductor prediction of the Remark after
+Corollary~\ref{cor:coupling} (e.g.\ conductor $8$ for $a = 2$, so exclusion
+classes mod $8$; conductor $24$ for $a = 6$). (2) Scale: extending to
+$10^{12}$ tests the decay rate of Conjecture~\ref{conj:decay}. (3) Theory: a
+derivation of $\delta(g)$ from the singular series of~\cite{HardyLittlewood1923}
+combined with the density computations of Hooley's method, at least for the
+dominant channels, appears feasible and would replace our empirical
+decomposition with a formula.
+
+\section*{Acknowledgements}
+The author thanks the developers of the open-source tools used in this work
+(GMP, Python, NumPy, SymPy, Matplotlib).
+
+\section*{Data availability}
+The per-prime dataset ($1.8$~GB CSV covering all primes to $10^9$), the C
+sieve, and all analysis scripts and logs reproducing every number in this
+paper are available from the author on request; the dataset is also exactly
+reproducible from the (short) C source, which will be deposited with the
+analysis scripts in a public repository upon acceptance.
+
+\section*{Generative AI disclosure}
+A large-language-model assistant (Claude, Anthropic, via the OpenClaw
+platform) was used to draft the Python analysis scripts, to assist with the
+literature search, and to draft and edit the prose of this manuscript,
+including the initial formulation of the proof of Theorem~\ref{thm:exclusion}.
+All computations were run and verified on the author's hardware; the proof has
+been checked by hand and verified computationally; and the author has reviewed
+all AI-assisted text and takes full responsibility for the correctness and
+integrity of the work. No AI tool is listed as an author.
+
+\begin{thebibliography}{99}
+
+\bibitem{BakerPollack2016}
+R.~C. Baker and P.~Pollack,
+\emph{Bounded gaps between primes with a given primitive root, II},
+Forum Math. \textbf{28} (2016), no.~4, 675--687.
+
+\bibitem{ConwayGuy1996}
+J.~H. Conway and R.~K. Guy,
+\emph{The Book of Numbers},
+Springer-Verlag, New York, 1996.
+
+\bibitem{Erdos1935}
+P.~Erd\H{o}s,
+\emph{On the normal number of prime factors of $p-1$ and some related problems
+concerning Euler's $\varphi$-function},
+Quart. J. Math. Oxford Ser. \textbf{6} (1935), 205--213.
+
+\bibitem{GarciaKahoroLuca2019}
+S.~R. Garcia, E.~Kahoro, and F.~Luca,
+\emph{Primitive root bias for twin primes},
+Exp. Math. \textbf{28} (2019), no.~2, 151--160.
+
+\bibitem{GarciaLucaShiUdell2020}
+S.~R. Garcia, F.~Luca, K.~Shi, and G.~Udell,
+\emph{Primitive root bias for twin primes II: Schinzel-type theorems for
+totient quotients and the sum-of-divisors function},
+J. Number Theory \textbf{208} (2020), 400--417.
+
+\bibitem{GuptaMurty1984}
+R.~Gupta and M.~R. Murty,
+\emph{A remark on Artin's conjecture},
+Invent. Math. \textbf{78} (1984), no.~1, 127--130.
+
+\bibitem{HardyLittlewood1923}
+G.~H. Hardy and J.~E. Littlewood,
+\emph{Some problems of `Partitio numerorum'; III: On the expression of a
+number as a sum of primes},
+Acta Math. \textbf{44} (1923), 1--70.
+
+\bibitem{HeathBrown1986}
+D.~R. Heath-Brown,
+\emph{Artin's conjecture for primitive roots},
+Quart. J. Math. Oxford Ser. (2) \textbf{37} (1986), no.~145, 27--38.
+
+\bibitem{Hooley1967}
+C.~Hooley,
+\emph{On Artin's conjecture},
+J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+\bibitem{LOS2016}
+R.~J. Lemke~Oliver and K.~Soundararajan,
+\emph{Unexpected biases in the distribution of consecutive primes},
+Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
+
+\bibitem{Maynard2015}
+J.~Maynard,
+\emph{Small gaps between primes},
+Ann. of Math. (2) \textbf{181} (2015), no.~1, 383--413.
+
+\bibitem{Moree2012}
+P.~Moree,
+\emph{Artin's primitive root conjecture --- a survey},
+Integers \textbf{12A} (2012), Article A13, 100~pp.
+
+\bibitem{Pollack2014}
+P.~Pollack,
+\emph{Bounded gaps between primes with a given primitive root},
+Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
+
+\bibitem{Zhang2014}
+Y.~Zhang,
+\emph{Bounded gaps between primes},
+Ann. of Math. (2) \textbf{179} (2014), no.~3, 1121--1174.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,9 @@
+======================================================================
+1) Condition on (m40_n, m40_q, gap): QR channel fully absorbed
+   chi2=96860.8 on 124 df, n=12,348,993, wdelta=+0.058011, degen=380
+2) Condition on (m840_n, m840_q): absorbs 2,3,5,7 channels
+   chi2=719.8 on 633 df, n=12,086,765, wdelta=-0.000473, degen=2055
+3) Split-half (mod 120 conditioning):
+   p < 5e8 : chi2=440.8 on 122 df, wdelta=-0.000963
+   p >= 5e8: chi2=439.7 on 127 df, wdelta=-0.000936
+DONE

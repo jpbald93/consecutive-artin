@@ -1,0 +1,8 @@
+======================================================================
+Residual after conditioning on (p_n mod 120, p_(n+1) mod 120)
+======================================================================
+cells used: 145  (degenerate/deterministic cells: 465)
+pairs covered: 12,255,203
+summed chi2 = 789.2 on 145 df
+weighted mean residual delta = -0.001055
+DONE
