@@ -26,6 +26,11 @@ Email: \texttt{jpbald93@gmail.com}. ORCID: \texttt{0000-0002-1317-6489}.}
 
 \date{\today}
 
+\subjclass[2020]{Primary 11A07; Secondary 11N05, 11N13, 11Y16, 11Y60}
+\keywords{Artin's primitive root conjecture, primitive roots, consecutive primes,
+Lemke Oliver--Soundararajan bias, quadratic residues, Legendre symbol,
+full reptend primes, computational number theory}
+
 \begin{abstract}
 Call a prime $p$ an \emph{Artin prime for base $10$} if $10$ is a primitive root
 modulo $p$. We study, for the first time, the dependence between the Artin
@@ -46,7 +51,9 @@ anticorrelation into arithmetically forced channels: conditioning on the joint
 residues of $(p_n, p_{n+1})$ modulo $120$ removes $93\%$ of the effect, and
 conditioning modulo $840$ removes $97\%$, with the residual dependence
 statistically compatible with the unabsorbed small-modulus channels
-($\chi^2/\mathrm{df} = 1.14$ on $633$ cells). The mechanism is the bias of
+($\chi^2/\mathrm{df} = 1.14$ on $633$ cells). That the decomposition closes so
+cleanly is itself a sharp consistency test, at $50$ million pairs, of the
+Hardy--Littlewood-based explanation of the consecutive-prime bias. The mechanism is the bias of
 Lemke Oliver and Soundararajan in consecutive prime residues, propagated
 through the factorisation of $p-1$ to the Artin property; as an intermediate
 link we measure the (apparently unreported) anticorrelation
@@ -109,6 +116,16 @@ primitive root within a bounded interval. These are existence results; the
 correlation statistics of Artin status along the sequence of primes appear to
 be unexamined, and the exclusion law of Theorem~\ref{thm:exclusion}, though
 elementary, seems to be unrecorded.
+
+Recent work has also sharpened the analytic understanding of Artin densities
+for \emph{individual} primes: Fan and Pollack~\cite{FanPollack2025} establish
+(under GRH) a version of the Artin--Hooley asymptotic that is uniform in the
+base, and Perucca and Shparlinski~\cite{PeruccaShparlinski2025} prove uniform
+upper and lower bounds for the Artin density relative to the corresponding
+Artin constant. These results concern the distribution of Artin primes one
+prime at a time; to our knowledge the \emph{joint} behaviour of the Artin
+property at consecutive primes, which is the subject of this paper, has not
+been considered.
 
 \subsection*{Summary of results}
 \begin{enumerate}
@@ -535,22 +552,42 @@ decomposition with a formula.
 The author thanks the developers of the open-source tools used in this work
 (GMP, Python, NumPy, SymPy, Matplotlib).
 
-\section*{Data availability}
-The per-prime dataset ($1.8$~GB CSV covering all primes to $10^9$), the C
-sieve, and all analysis scripts and logs reproducing every number in this
-paper are available from the author on request; the dataset is also exactly
-reproducible from the (short) C source, which will be deposited with the
-analysis scripts in a public repository upon acceptance.
+\subsection*{Use of generative AI}
+In accordance with the publisher's policy on generative AI, the author
+discloses the following. A large-language-model assistant, Claude
+(Anthropic; models Claude Opus 4.5 and Claude Opus 5), accessed via the
+OpenClaw platform, was used to draft the Python analysis scripts, to assist
+with the literature search, and to draft and edit the prose of this
+manuscript, including the initial formulation of the proof of
+Theorem~\ref{thm:exclusion}. The tool was used to accelerate routine
+scripting and exposition, not to generate research results: all computations
+reported here were executed and verified on the author's own hardware from
+source code the author has inspected, the proof of Theorem~\ref{thm:exclusion}
+has been checked by hand and independently confirmed computationally, and
+every reference in the bibliography has been verified by the author against
+the published record. No generative AI tool was used to create or manipulate
+any data, figure, or research output. No AI tool is listed as an author. The
+author has reviewed and edited all AI-assisted text and takes full
+responsibility for the content, correctness, and integrity of the work.
 
-\section*{Generative AI disclosure}
-A large-language-model assistant (Claude, Anthropic, via the OpenClaw
-platform) was used to draft the Python analysis scripts, to assist with the
-literature search, and to draft and edit the prose of this manuscript,
-including the initial formulation of the proof of Theorem~\ref{thm:exclusion}.
-All computations were run and verified on the author's hardware; the proof has
-been checked by hand and verified computationally; and the author has reviewed
-all AI-assisted text and takes full responsibility for the correctness and
-integrity of the work. No AI tool is listed as an author.
+\section*{Declaration of interest}
+No potential conflict of interest was reported by the author.
+
+\section*{Funding}
+This research received no specific grant from any funding agency in the
+public, commercial, or not-for-profit sectors.
+
+\section*{Data availability}
+All code required to reproduce every number in this paper is publicly
+available at \url{https://github.com/jpbald93/consecutive-artin} (archived at
+the time of submission). The repository contains the C segmented sieve that
+generates the per-prime dataset, the Python analysis scripts, the figure
+script, and the raw output logs. The per-prime dataset itself
+($1.8$~GB CSV covering all primes to $10^9$: gap, $\omega(p-1)$, Artin
+indicator, and small residues for each prime) is not deposited because of its
+size, but it is exactly and deterministically reproducible from the included
+C source in a few hours on a single machine; it is also available from the
+author on request.
 
 \begin{thebibliography}{99}
 
@@ -569,6 +606,11 @@ P.~Erd\H{o}s,
 \emph{On the normal number of prime factors of $p-1$ and some related problems
 concerning Euler's $\varphi$-function},
 Quart. J. Math. Oxford Ser. \textbf{6} (1935), 205--213.
+
+\bibitem{FanPollack2025}
+K.~(S.)~Fan and P.~Pollack,
+\emph{Counting primes with a given primitive root, uniformly},
+Mathematika \textbf{71} (2025), no.~4, Paper No.~e70055.
 
 \bibitem{GarciaKahoroLuca2019}
 S.~R. Garcia, E.~Kahoro, and F.~Luca,
@@ -616,6 +658,11 @@ Ann. of Math. (2) \textbf{181} (2015), no.~1, 383--413.
 P.~Moree,
 \emph{Artin's primitive root conjecture --- a survey},
 Integers \textbf{12A} (2012), Article A13, 100~pp.
+
+\bibitem{PeruccaShparlinski2025}
+A.~Perucca and I.~E. Shparlinski,
+\emph{Uniform bounds for the density in Artin's conjecture on primitive roots},
+Bull. Lond. Math. Soc. \textbf{57} (2025), 978--991.
 
 \bibitem{Pollack2014}
 P.~Pollack,
