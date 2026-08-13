@@ -4,7 +4,7 @@ Reproduction code and data-generation pipeline for the paper:
 
 > **Correlations between primitive root statuses of consecutive primes**
 > Josh Bald (Independent Researcher)
-> ORCID: [0000-0002-1317-6489](https://orcid.org/0000-0002-1317-6489)
+> ORCID: [0009-0002-1317-6489](https://orcid.org/0009-0002-1317-6489)
 
 The paper (`paper/consecutive_artin.pdf`) studies whether the Artin statuses of
 *consecutive* primes are correlated. Call a prime `p` an **Artin prime for base 10**
