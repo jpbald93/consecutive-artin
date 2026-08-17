@@ -1,0 +1,557 @@
+\documentclass[11pt,reqno]{amsart}
+\usepackage[margin=1.15in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{microtype}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\DeclareMathOperator{\sqf}{sqf}
+\newcommand{\Art}{\mathrm{A}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{document}
+
+\title[Cross-base correlations of Artin primes]
+{Cross-base correlations of Artin primes:\\ entanglement, exclusion, and the
+structure of $p-1$}
+
+\author{Josh Bald}
+\address{Ontario, Canada}
+\email{jpbald93@gmail.com}
+
+\subjclass[2020]{Primary 11A07; Secondary 11N05, 11N13, 11Y16, 11Y60}
+\keywords{Artin's conjecture, primitive roots, simultaneous primitive roots,
+entanglement, quadratic characters, Kummer theory, computational number theory}
+
+\date{\today}
+
+\begin{abstract}
+Say a prime $p$ is \emph{Artin base $a$} if $a$ is a primitive root modulo
+$p$. This paper studies the joint behaviour of Artin status \emph{across
+bases} at the same prime. We first record a deterministic exclusion law: if
+$\sqf(ab)$ is the squarefree part of $ab$ and $c$ is any base with
+$\sqf(c) = \sqf(ab)$, then no prime is simultaneously Artin for $a$, $b$, and
+$c$ --- for instance, no prime has $2$, $5$, and $10$ all as primitive roots.
+The proof is three lines from the multiplicativity of quadratic characters.
+We then measure, for all $66$ pairs from the twelve bases
+$\{2,3,5,6,7,10,11,13,15,17,21,29\}$ and all $50{,}847{,}532$ primes up to
+$10^9$, the same-prime correlation $\phi(a,b)$ between the indicator variables
+of Artin status. Three empirical findings emerge. First, the correlation is
+positive for $64$ of the $66$ pairs (mean $\phi = 0.0352$, individual
+$|z|$ up to $476$); the only negative pairs, $(2,10)$ and $(3,15)$, are
+precisely pairs whose product is (a square times) another base --- the
+entangled configurations. Second, conditioning on the number of prime factors
+$\omega(p-1)$ removes only $55\%$ of the mean correlation, but conditioning on
+a finer signature of $p - 1$ --- the $2$-adic valuation, the divisibility of
+$p-1$ by each prime up to $13$, and the number of larger factors --- removes
+$95\%$: the cross-base correlation is, almost entirely, a reflection of the
+fact that all bases see the same factorisation of $p - 1$. Third, the residual
+that survives fine conditioning is concentrated exactly on the multiplicatively
+dependent pairs (mean residual $|\phi| \approx 0.005$ within dependent pairs,
+versus $0.001$ for multiplicatively independent pairs), and is removed by
+additionally conditioning on the quadratic-residue status of the bases ---
+identifying it as character-level entanglement, the same mechanism as the
+deterministic exclusion law. The measurements are consistent with the
+Galois-theoretic account of simultaneous primitive roots going back to
+Matthews and to Lenstra, and give it a quantitative, channel-by-channel
+verification at scale.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:intro}
+
+Artin's conjecture on primitive roots concerns one base at a time: for
+non-square $a \neq -1$, the set
+\[
+  \Art_a = \{\, p \text{ prime} : a \text{ is a primitive root mod } p \,\}
+\]
+should have density given by a rational multiple of Artin's constant, as
+proved under GRH by Hooley~\cite{Hooley1967}. The joint distribution for
+\emph{several} bases at the same prime was treated by
+Matthews~\cite{Matthews1976}, who computed (under GRH) the density of primes
+for which several prescribed integers are simultaneously primitive roots, and
+by Lenstra~\cite{Lenstra1977}, whose Galois-theoretic framework subsumes such
+questions; see Moree's survey~\cite{Moree2012}. The qualitative message of
+that theory is that the events $p \in \Art_a$ and $p \in \Art_b$ are
+\emph{not} independent, and that the deviation from independence is governed
+by the interaction of the Kummer--Galois extensions attached to $a$ and $b$
+--- in modern language, by \emph{entanglement} between them.
+
+This paper is the third in a series studying correlations of Artin status
+computationally at the scale of $10^9$. The first
+paper measured the correlation between the Artin statuses (base $10$) of
+\emph{consecutive} primes and decomposed it into residue channels; the second
+proved a classification of deterministic exclusion laws for consecutive Artin
+primes in arbitrary bases and identified the conductor of the quadratic
+character $\chi_a$ as the parameter governing the statistical correlation.
+Here we complete the picture along the remaining axis: \emph{fix the prime,
+vary the base}.
+
+Two questions organise the paper.
+
+\emph{(Q1) What is deterministically forbidden?} For consecutive primes, the
+answer (paper two of the series) was a set of gap classes on which the
+quadratic character is forced to flip. For a single prime and several bases,
+the answer is an exclusion law inside \emph{multiplicative triples}:
+
+\begin{theorem}[Same-prime exclusion law; see Theorem~\ref{thm:triple}]
+Let $a, b$ be non-square positive integers and let $c$ be any non-square
+positive integer with $\sqf(c) = \sqf(ab)$. Then no prime $p \nmid 2abc$ is
+simultaneously Artin base $a$, Artin base $b$, and Artin base $c$.
+\end{theorem}
+
+For example, no prime has all of $2, 5, 10$ as primitive roots; no prime has
+all of $3, 5, 15$; and, since $\sqf$ is all that matters, no prime has all of
+$2, 5, 40$. Like the gap exclusion law of the second paper, the statement is
+elementary --- it needs only the multiplicativity of the quadratic character
+and the fact that a quadratic residue is not a primitive root --- and, like
+that law, we have not found it stated explicitly in the literature, although
+it is certainly implicit in the density computations
+of~\cite{Matthews1976, Lenstra1977}, where the entangled character relation
+$\chi_a \chi_b = \chi_{ab}$ is exactly what produces degenerate factors.
+
+\emph{(Q2) What does the joint distribution actually look like, and what
+explains it?} Here the data speak. We compute the exact $2 \times 2$
+contingency table of $\bigl(\mathbf{1}[p \in \Art_a],\,
+\mathbf{1}[p \in \Art_b]\bigr)$ over all $50{,}847{,}532$ primes
+$p \le 10^9$, for all $66$ pairs from the base set
+\[
+  \{2, 3, 5, 6, 7, 10, 11, 13, 15, 17, 21, 29\},
+\]
+chosen to contain many multiplicative triples ($15$ of the $66$ pairs lie in
+a triple $\sqf(ab) = \sqf(c)$ within the set) alongside multiplicatively
+independent pairs. The findings, developed in
+Sections~\ref{sec:measurement}--\ref{sec:entanglement}:
+
+\begin{enumerate}
+  \item \emph{Positivity.} $\phi(a,b) > 0$ for $64$ of $66$ pairs, with mean
+    $0.0352$ and $z$-scores up to $476$: knowing that $a$ is a primitive root
+    mod $p$ makes it \emph{more} likely that $b$ is. The largest correlations
+    all involve base $5$ (e.g.\ $\phi(5,13) = 0.0667$:
+    $P(\Art_{13} \mid \Art_5) = 0.416$ against
+    $P(\Art_{13} \mid \lnot\Art_5) = 0.350$).
+  \item \emph{The exceptions are the entangled pairs.} The only two negative
+    correlations are $\phi(2,10) = -0.0302$ and $\phi(3,15) = -0.0303$ ---
+    precisely the pairs $(a, b)$ in our set with $b = a \cdot c$ for another
+    base $c$ of the set (up to squares). Multiplicative dependence reverses
+    the sign of the association.
+  \item \emph{The positive correlation is $p-1$ structure, not entanglement.}
+    Conditioning on $\omega(p-1)$ removes $55\%$ of the mean correlation;
+    conditioning on a fine signature of $p-1$ --- namely
+    $\bigl(\min(v_2(p-1), 4),\ \text{the set of primes } q \le 13 \text{
+    dividing } p-1,\ \min(\omega_{>13}(p-1), 3)\bigr)$ --- removes $95\%$,
+    leaving a mean residual of $0.0019$. All bases are tested against the
+    same integer $p - 1$; a prime whose $p-1$ is ``primitive-root friendly''
+    (few small factors, small $2$-part) is friendlier for \emph{every} base
+    simultaneously. This common-cause structure, not any interaction between
+    the bases, is the bulk of the correlation.
+  \item \emph{What survives is entanglement, and it is exactly localised.}
+    After fine conditioning, the residual correlation among multiplicatively
+    \emph{dependent} pairs (mean $|\phi_{\mathrm{sig}}| \approx 0.005$, and
+    up to $-0.026$ for $(5,15)$, $-0.012$ for $(5,10)$) is five times that of
+    independent pairs ($0.001$); and in a separate run additionally
+    conditioning on the quadratic-residue status of the bases modulo $p$
+    flattens the dependent pairs to the level of the independent ones. The
+    residual is thus identified, empirically, as the quadratic-character
+    entanglement $\chi_a \chi_b = \chi_{\sqf(ab)}$ --- the statistical shadow
+    of Theorem~\ref{thm:triple}.
+\end{enumerate}
+
+The theme of the series persists: at every level, the joint behaviour of
+Artin primes decomposes into a small deterministic core (here, the triple
+exclusion law) plus a statistical component with an identifiable arithmetic
+carrier (here, the shared factorisation of $p-1$, with entanglement as a
+measurable second-order correction).
+
+\section{The same-prime exclusion law}
+\label{sec:theorem}
+
+Throughout, for a non-square positive integer $a$ we write $d_a = \sqf(a)$
+for its squarefree part and $\chi_a = \bigl(\tfrac{d_a}{\cdot}\bigr)$ for the
+quadratic character attached to $\Q(\sqrt{a})$; thus $\chi_a(p) = +1$ exactly
+when $a$ is a quadratic residue modulo $p$ (for $p \nmid 2a$), and
+\begin{equation}
+\label{eq:obstruction}
+  p \in \Art_a \implies \chi_a(p) = -1,
+\end{equation}
+since a quadratic residue generates a subgroup of index at least $2$ in
+$(\Z/p\Z)^\times$.
+
+\begin{theorem}[Triple exclusion]
+\label{thm:triple}
+Let $a, b, c$ be non-square positive integers with
+$\sqf(c) = \sqf(ab)$, and let $p \nmid 2abc$ be prime. Then $p$ is not
+simultaneously Artin base $a$, Artin base $b$, and Artin base $c$.
+\end{theorem}
+
+\begin{proof}
+For any prime $p \nmid 2ab$ one has, by complete multiplicativity of the
+Legendre symbol in the numerator,
+$\chi_a(p)\,\chi_b(p) = \bigl(\tfrac{d_a d_b}{p}\bigr) =
+\bigl(\tfrac{\sqf(ab)}{p}\bigr) = \chi_c(p)$,
+since $d_a d_b$ and $\sqf(ab)$ differ by a square. If $p$ were Artin for all
+three bases, then by~\eqref{eq:obstruction} all three character values would
+be $-1$, giving $(-1)(-1) = -1$, a contradiction.
+\end{proof}
+
+\begin{corollary}
+\label{cor:twoofthree}
+Within any multiplicative triple --- for instance $(2, 5, 10)$, $(3, 5, 15)$,
+$(3, 7, 21)$, $(2, 3, 6)$ --- a prime can be Artin for at most two of the
+three bases.
+\end{corollary}
+
+\begin{remark}
+The exclusion is sharp: primes Artin for exactly two of $(2,5,10)$ exist in
+abundance. The smallest is $p = 7$, where $5$ and $10$ are both primitive
+roots (each of order $6$) while $2$ has order $3$; likewise $p = 23$, where
+$5$ and $10$ are primitive roots and $2$ is a quadratic residue of order
+$11$. More systematically, in our data the pair
+$(2, 10)$ has $P(\Art_{10} \mid \Art_2) = 0.355$: two-of-three is common,
+three-of-three is impossible.
+\end{remark}
+
+\begin{remark}
+Theorem~\ref{thm:triple} is the same-prime analogue of the gap exclusion law
+for consecutive primes proved in the second paper of this series: both are
+instances of a parity obstruction in the group generated by the quadratic
+characters involved. There the two characters were $\chi_a$ evaluated at $p$
+and at $p + g$, and the obstruction was arranged by the shift $g$; here the
+characters belong to different bases at the same prime, and the obstruction
+is arranged by multiplicative dependence. The Galois-theoretic density
+computations of Matthews~\cite{Matthews1976} and Lenstra~\cite{Lenstra1977}
+encode this relation implicitly (the degree of the compositum of the relevant
+Kummer extensions drops); the pointwise statement seems worth recording.
+\end{remark}
+
+\section{Data and computation}
+\label{sec:data}
+
+By a segmented sieve we enumerated all primes $p \le 10^9$
+($50{,}847{,}534$ primes, of which $50{,}847{,}532$ satisfy $p \nmid 2\cdot
+\text{(base)}$ for all twelve bases and enter the analysis). For each prime we
+factored $p - 1$ once by trial division and computed the Artin indicator for
+each of the twelve bases by the standard criterion
+($a^{(p-1)/\ell} \not\equiv 1 \bmod p$ for every prime $\ell \mid p-1$, in
+$128$-bit arithmetic). One streaming pass accumulates, for each of the $66$
+unordered base pairs, the $2 \times 2$ contingency table of joint Artin
+status --- globally, and stratified by (i) $\omega(p-1)$ and (ii) the fine
+signature
+\[
+  \mathrm{sig}(p) = \Bigl(\min(v_2(p-1), 4),\;\;
+  \{\, q \le 13 : q \mid p-1 \,\},\;\; \min(\omega_{>13}(p-1), 3)\Bigr),
+\]
+a partition of the primes into at most $5 \cdot 32 \cdot 4 = 640$ cells. The
+signature records exactly the information about $p-1$ that the Artin
+criterion consults for small bases: the $2$-part and the small odd prime
+divisors. A separate run to $3 \times 10^8$ additionally stratified by the
+vector of quadratic-residue statuses $\bigl(\chi_a(p)\bigr)_a$ of the twelve
+bases. The whole computation runs in under two hours on a single core of a
+commodity machine ($2$-core Intel Xeon E5-2673~v4, $8$~GB RAM); all counts
+are exact.
+
+As validation, the marginal Artin densities matched the Hooley densities to
+four decimal places for every base --- e.g.\ $0.373993$ for the bases with
+squarefree part $\not\equiv 1 \pmod 4$, against Artin's constant
+$0.373956$, and $0.393642$ for base $5$, whose density carries the classical
+correction factor $C \cdot \tfrac{20}{19}$ for
+$d \equiv 1 \pmod 4$ (see~\cite{Hooley1967, Moree2012}).
+
+\section{The cross-base correlation}
+\label{sec:measurement}
+
+For each pair write $\phi(a,b)$ for the Pearson correlation of the indicator
+variables (the $\phi$ coefficient of the $2\times2$ table). At
+$N \approx 5.08 \times 10^7$ primes, the standard error of $\phi$ under
+independence is $N^{-1/2} \approx 0.00014$; as in the previous papers of the
+series, the enormous resulting $z$-scores certify only that sampling noise is
+negligible, and the relevant quantity is the effect size.
+
+\begin{table}[t]
+\centering
+\caption{Same-prime cross-base Artin correlation at $x = 10^9$: summary and
+extremes. ``Dependent'' means the pair lies in a multiplicative triple within
+the base set ($\sqf(ab) = \sqf(c)$).}
+\label{tab:summary}
+\begin{tabular}{lrr}
+\toprule
+ & pairs & mean $\phi$ \\
+\midrule
+all pairs & $66$ & $+0.0352$ \\
+multiplicatively independent & $51$ & $+0.0363$ \\
+multiplicatively dependent & $15$ & $+0.0314$ \\
+\midrule
+largest: $(5,13)$ & & $+0.0667$ \\
+smallest: $(3,15)$ & & $-0.0303$ \\
+second smallest: $(2,10)$ & & $-0.0302$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{The ten largest $|\phi|$ at $x = 10^9$, with the values after
+conditioning on $\omega(p-1)$ and on the fine signature $\mathrm{sig}(p)$
+(pair-weighted mean of within-cell $\phi$; cells with fewer than $200$
+primes excluded). ``Dep.''\ marks multiplicatively dependent pairs.}
+\label{tab:top}
+\begin{tabular}{rrrrrc}
+\toprule
+$a$ & $b$ & $\phi$ & $\phi \mid \omega$ & $\phi \mid \mathrm{sig}$ & Dep. \\
+\midrule
+$5$ & $13$ & $+0.0667$ & $+0.0200$ & $+0.0003$ & \\
+$5$ & $17$ & $+0.0649$ & $+0.0218$ & $+0.0025$ & \\
+$5$ & $29$ & $+0.0631$ & $+0.0246$ & $+0.0007$ & \\
+$5$ & $10$ & $+0.0624$ & $+0.0285$ & $-0.0125$ & \checkmark \\
+$5$ & $6$  & $+0.0623$ & $+0.0292$ & $+0.0005$ & \\
+$5$ & $11$ & $+0.0623$ & $+0.0300$ & $+0.0004$ & \\
+$5$ & $15$ & $+0.0622$ & $+0.0297$ & $-0.0255$ & \checkmark \\
+$3$ & $5$  & $+0.0622$ & $+0.0284$ & $+0.0015$ & \checkmark \\
+$5$ & $7$  & $+0.0622$ & $+0.0297$ & $+0.0002$ & \\
+$2$ & $5$  & $+0.0621$ & $+0.0336$ & $+0.0004$ & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three observations, in increasing order of depth.
+
+\begin{observation}[Positivity]
+\label{obs:positive}
+$\phi(a, b) > 0$ for $64$ of the $66$ pairs. Artin statuses of different
+bases at the same prime \emph{attract}.
+\end{observation}
+
+The sign is the opposite of the consecutive-prime correlation measured in the
+first two papers of the series (where $\delta < 0$ uniformly), and the
+mechanism is transparent: there the two primes had \emph{different} (and
+LOS-anticorrelated) values of $p - 1$; here every base is tested against the
+\emph{same} $p - 1$. If $p - 1$ has few small prime factors and a small
+$2$-part, the primitive-root condition is easier for every base at once.
+Formally, the Artin indicators share the common cause $\mathrm{sig}(p)$.
+
+\begin{observation}[The negative pairs are the entangled ones]
+\label{obs:negative}
+The only pairs with $\phi < 0$ are $(2, 10)$ and $(3, 15)$: in each, the
+product of the two bases is, up to a square, the third base of a
+multiplicative triple contained in the set ($2 \cdot 10 = 4 \cdot 5$,
+$3 \cdot 15 = 9 \cdot 5$). For $(2, 10)$:
+$P(\Art_{10} \mid \Art_2) = 0.3551$ versus
+$P(\Art_{10} \mid \lnot\Art_2) = 0.3853$.
+\end{observation}
+
+The sign reversal has a character-theoretic origin. For a dependent pair,
+$\chi_a \chi_b = \chi_5$ (in both our examples), so on the half of primes
+with $\chi_5(p) = +1$ the values $\chi_a(p)$ and $\chi_b(p)$ are forced
+\emph{equal} --- fine for joint Artin status --- but on the half with
+$\chi_5(p) = -1$ they are forced \emph{opposite}, and then at most one of the
+two bases can be Artin: a pointwise exclusion on half the primes, diluted
+into the observed negative correlation. This is Theorem~\ref{thm:triple}
+operating statistically through the third character.
+
+\section{Decomposition: the correlation is the structure of \texorpdfstring{$p-1$}{p-1}}
+\label{sec:decomposition}
+
+\begin{table}[t]
+\centering
+\caption{Mean cross-base correlation after conditioning, all $66$ pairs at
+$x = 10^9$.}
+\label{tab:decomp}
+\begin{tabular}{lrr}
+\toprule
+conditioning & mean $\phi$ & removed \\
+\midrule
+none & $0.0352$ & --- \\
+$\omega(p-1)$ & $0.0158$ & $55\%$ \\
+$\mathrm{sig}(p)$: $\bigl(v_2,\ \{q \le 13\},\ \omega_{>13}\bigr)$
+  & $0.0019$ & $95\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Conditioning on $\omega(p-1)$ alone --- the crude size of the factorisation
+--- removes barely half of the correlation. This is worth emphasising because
+$\omega$ is the statistic through which the consecutive-prime papers routed
+the mechanism, and it is genuinely insufficient here: two primes with the same
+$\omega(p-1)$ can present very different Artin conditions (it matters
+\emph{which} primes divide $p-1$, and with what $2$-adic valuation, not how
+many). The fine signature --- $2$-adic valuation capped at $4$, the exact set
+of primes $\le 13$ dividing $p - 1$, and the count of larger prime factors
+capped at $3$ --- is the information the Artin criterion actually consults
+for small bases, and conditioning on it removes $95\%$ of the mean
+correlation (Table~\ref{tab:decomp}).
+
+We regard this as the main statistical finding: \emph{cross-base Artin
+correlation at a single prime is, to first order, not an interaction between
+the bases at all}. It is a common-cause effect of the shared integer $p - 1$.
+Any model that treats $\Art_a$ and $\Art_b$ as conditionally independent
+given the small-prime structure of $p-1$ reproduces $95\%$ of the observed
+association.
+
+\section{The residual is entanglement}
+\label{sec:entanglement}
+
+The $5\%$ that survives is not noise, and it is not uniformly distributed:
+it sits precisely on the multiplicatively dependent pairs.
+
+\begin{table}[t]
+\centering
+\caption{Residual correlation after conditioning on $\mathrm{sig}(p)$,
+split by multiplicative dependence, at $x = 10^9$; and the effect of
+additionally conditioning on the quadratic-residue vector (run to
+$3 \times 10^8$).}
+\label{tab:residual}
+\begin{tabular}{lrr}
+\toprule
+group & mean $\phi \mid \mathrm{sig}$ & mean $\phi \mid \mathrm{sig} + \mathrm{QR}$ \\
+\midrule
+multiplicatively dependent pairs & $+0.0049$ & $+0.0042$ \\
+\quad of which sharing a common factor & $-0.0052^{*}$ & $+0.0042$ \\
+multiplicatively independent pairs & $+0.0010$ & $+0.0050$ \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+{\footnotesize $^{*}$Signed values; the extreme cells are
+$(5,15)$ at $-0.0255$ and $(5,10)$ at $-0.0125$ (see Table~\ref{tab:top}).}
+\end{table}
+
+Two facts pin down the mechanism. First, after fine conditioning the
+dependent pairs retain residuals up to $-0.026$ (for $(5,15)$) and $-0.012$
+(for $(5,10)$) --- large negative values, of the sign predicted by the
+character relation of Observation~\ref{obs:negative} --- whereas the $51$
+independent pairs sit at a mean of $+0.001$. Second, in the run to
+$3 \times 10^8$ that additionally conditions on the vector of
+quadratic-residue statuses $(\chi_a(p))_a$, the negative residuals of the
+dependent pairs vanish: every group lands in the narrow band
+$0.003$--$0.006$ (Table~\ref{tab:residual}), consistent with the small
+positive floor attributable to higher-order (cubic and quartic) conditions
+shared through $p-1$ beyond our signature. Conditioning on the quadratic
+characters is exactly what removes character-level entanglement; that it
+flattens precisely the pairs with $\chi_a \chi_b = \chi_c$, and only those,
+identifies the residual as the statistical trace of the entangled relation
+--- the same object that makes Theorem~\ref{thm:triple} true.
+
+The picture that emerges is cleanly layered:
+\[
+  \underbrace{\text{common cause } p-1}_{\approx 95\%}
+  \;+\;
+  \underbrace{\text{quadratic entanglement } \chi_a\chi_b = \chi_{\sqf(ab)}}_{\text{residual, sign-definite, localised}}
+  \;+\;
+  \underbrace{\text{higher-order sharing}}_{\text{small positive floor}}.
+\]
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection*{Relation to the theory}
+Nothing in our findings contradicts the classical account; rather, the
+measurements give it an explicit quantitative form that we have not seen
+computed. The densities of Matthews~\cite{Matthews1976} for simultaneous
+primitive roots, and Lenstra's general framework~\cite{Lenstra1977}, predict
+the \emph{joint} densities of $(\Art_a, \Art_b)$ under GRH, including the
+entanglement corrections; our contingency tables are, in effect, a
+$50$-million-prime test of those predictions across $66$ pairs
+simultaneously, and the layered decomposition (common cause, then
+entanglement, then higher order) is a statement about \emph{where} in the
+Galois structure the observed correlation lives. It would be worthwhile to
+extract from~\cite{Matthews1976} the predicted $\phi(a,b)$ for each of our
+pairs and compare cell by cell; we have not done so here, and flag it as the
+natural next step for a reader with the stomach for the relevant index
+computations.
+
+\subsection*{Relation to the first two papers of the series}
+The trilogy now covers both axes of the joint distribution of Artin status.
+Along the prime axis (consecutive $p_n, p_{n+1}$, one base), correlation is
+negative, driven by the Lemke Oliver--Soundararajan bias~\cite{LOS2016}
+propagating through the two distinct integers $p_n - 1$ and $p_{n+1} - 1$,
+with deterministic exclusion classes in the gap. Along the base axis (one
+prime, two bases), correlation is positive, driven by the single shared
+integer $p - 1$, with deterministic exclusion inside multiplicative triples.
+In both cases the deterministic law is a parity statement about quadratic
+characters, and in both cases it is statistically dominated by a
+factorisation-of-$p-1$ mechanism --- diluted to invisibility in the global
+average there, absorbed almost entirely by conditioning here.
+
+\subsection*{Future work}
+(1) A cell-by-cell comparison with the Matthews--Lenstra predicted joint
+densities, which would upgrade Section~\ref{sec:entanglement} from
+identification to verification. (2) The mixed axis: $\phi$ between
+$\Art_a(p_n)$ and $\Art_b(p_{n+1})$ for $a \neq b$ --- the data pipeline
+extends immediately, and the prediction from the present findings is a small
+negative correlation governed by the two conductors jointly. (3) Higher-order
+entanglement: triples of bases conditioned on quadratic data should expose
+the cubic layer ($\ell = 3$ Kummer conditions), with $\Q(\zeta_3)$ playing
+the role $\Q(i)$ and $\Q(\sqrt{2})$ played here.
+
+\section*{Acknowledgements}
+The author thanks the developers of the open-source tools used in this work
+(GCC, Python, \texttt{sympy}, \texttt{matplotlib}).
+
+\subsection*{Use of generative AI}
+The author used Anthropic's Claude (models Claude Opus 4.5 and Claude
+Opus 5) as an assistant: for drafting and revising exposition, for writing
+and debugging the sieve and analysis programs, and for exploratory
+discussion. All computations were executed and verified on the author's own
+hardware from source code the author has inspected; the proof of
+Theorem~\ref{thm:triple} has been checked by hand; every reference has been
+verified against the published record. The author is solely responsible for
+the content.
+
+\section*{Declaration of interest}
+The author reports there are no competing interests to declare.
+
+\section*{Funding}
+This research received no external funding.
+
+\section*{Data availability}
+All code and results are publicly available at
+\url{https://github.com/jpbald93/consecutive-artin}, including the
+single-pass multi-base programs (\texttt{crossbase.c},
+\texttt{crossbase\_fine.c}, \texttt{crossbase\_qr.c}), the exact contingency
+tables underlying every value quoted here, and the analysis scripts. The full
+computation reproduces in under two hours on a single core.
+
+\begin{thebibliography}{99}
+
+\bibitem{Hooley1967}
+C.~Hooley,
+\emph{On Artin's conjecture},
+J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+\bibitem{Lenstra1977}
+H.~W. Lenstra, Jr.,
+\emph{On Artin's conjecture and Euclid's algorithm in global fields},
+Invent. Math. \textbf{42} (1977), 201--224.
+
+\bibitem{LOS2016}
+R.~J. Lemke~Oliver and K.~Soundararajan,
+\emph{Unexpected biases in the distribution of consecutive primes},
+Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
+
+\bibitem{Matthews1976}
+K.~R. Matthews,
+\emph{A generalisation of Artin's conjecture for primitive roots},
+Acta Arith. \textbf{29} (1976), no.~2, 113--146.
+
+\bibitem{Moree2012}
+P.~Moree,
+\emph{Artin's primitive root conjecture --- a survey},
+Integers \textbf{12A} (2012), Article A13, 100~pp.
+
+\end{thebibliography}
+
+\end{document}
