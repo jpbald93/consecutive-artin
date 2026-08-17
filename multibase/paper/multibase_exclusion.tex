@@ -62,8 +62,8 @@ denser exclusion classes to exhibit stronger anticorrelation; they do not. The
 association with exclusion density is weak ($r = 0.23$), and base $5$, which
 admits no exclusion law whatsoever, has the \emph{largest} $|\delta|$ of the
 eleven. Instead $|\delta(a)|$ is governed by the size of the conductor $f$ of
-$\chi_a$, with $r(\log f, |\delta|) = -0.96$. We conclude that the two
-phenomena are genuinely distinct: the exclusion law is locally absolute but
+$\chi_a$, with $r(\log f, |\delta|) = -0.96$. The data strongly indicate that
+the two phenomena are distinct: the exclusion law is locally absolute but
 globally negligible, while the global correlation is a conductor-size effect
 inherited from the Lemke Oliver--Soundararajan bias.
 \end{abstract}
@@ -106,6 +106,27 @@ with $g' \equiv g \pmod f$ we get $\chi_a(q) = -\chi_a(p)$, so at least one of
 $\chi_a(p), \chi_a(q)$ equals $+1$ --- and that prime is not Artin base $a$.
 Two primes at such a gap can never \emph{both} be Artin base $a$. We call this
 an \emph{exclusion law} (Theorem~\ref{thm:exclusion}).
+
+Since the observation is elementary, we have searched the literature for it
+specifically before claiming novelty. Moree's hundred-page
+survey~\cite{Moree2012} uses the quadratic obstruction $\chi_a(p) = -1$
+throughout --- it is the source of the entanglement correction in Hooley's
+density --- but always as a condition on a \emph{single} prime; shifts of the
+argument of $\chi_a$, and the resulting constraints on \emph{pairs} of primes,
+do not appear. Garcia--Kahoro--Luca~\cite{GarciaKahoroLuca2019} and its
+sequel~\cite{GarciaLucaShiUdell2020} concern the single gap $g = 2$ and a
+different statistic (a bias in $\varphi(p-1)/(p-1)$ between twin-prime
+components), not the joint Artin status of the pair; the reversing mechanism
+plays no role there. Pollack~\cite{Pollack2014} and
+Baker--Pollack~\cite{BakerPollack2016} produce bounded-gap runs of primes
+sharing a primitive root, but impose no structure on the gap classes and do
+not identify forbidden ones. We likewise searched for forbidden-gap statements
+for quadratic characters in other contexts --- consecutive quadratic residues
+and non-residues have a classical literature --- and found constraints on
+character values along progressions, but no statement coupling a gap
+\emph{class} to the joint primitive-root status of a pair of primes, which is
+the content here. In that sense ``apparently unrecorded'' above is meant as
+the outcome of a search, not as an impression.
 
 Our main theorem determines, for every base, exactly which gap classes are
 exclusion classes.
@@ -501,8 +522,8 @@ class $g \equiv 0$.}
 $a$ & $f$ & exclusion classes & pairs & both Artin & control (preserving) \\
 \midrule
 $2$  & $8$  & $4$         & $13{,}404{,}106$ & $0$ & $27.5\%$ \\
-$3$  & $12$ & $4, 6, 8$   & $27{,}010{,}759$ & $0$ & $27.5\%$ \\
-$6$  & $24$ & $8, 12, 16$ & $12{,}419{,}039$ & $0$ & $27.8\%$ \\
+$3$  & $12$ & $4, 6, 8$   & $27{,}010{,}759$ & $0$ & $28.8\%$ \\
+$6$  & $24$ & $8, 12, 16$ & $12{,}419{,}039$ & $0$ & $29.3\%$ \\
 $7$  & $28$ & $14$        & $3{,}567{,}335$  & $0$ & $26.3\%$ \\
 $10$ & $40$ & $20$        & $2{,}214{,}511$  & $0$ & $26.7\%$ \\
 $11$ & $44$ & $22$        & $1{,}796{,}191$  & $0$ & $27.5\%$ \\
@@ -516,10 +537,20 @@ $21$ & $21$ & $14$        & $2{,}693{,}804$  & $0$ & --- \\
 There are $63{,}105{,}745$ pairs in exclusion classes and not a single
 doubly-Artin pair among them, while at preserving classes the doubly-Artin
 proportion lies between $26.3\%$ and $29.3\%$ throughout, as one expects from the square of
-the relevant Artin density. (Base $21$ has no preserving class, by
-Table~\ref{tab:classification}.) A supplementary check reproduced the
-same zero counts, independently, with \texttt{sympy} order computations for
-primes below $3 \times 10^6$.
+the relevant Artin density. (The control entry for base $21$ is blank because
+base $21$ has no preserving class at all, by
+Table~\ref{tab:classification}.) To calibrate how striking the zero count is:
+absent the exclusion law, treating Artin statuses as independent with the
+observed per-base densities ($\approx 0.374$ throughout), the expected number
+of doubly-Artin pairs in the exclusion classes would be
+$\sum_a (\text{density}_a)^2 \times (\text{pairs}_a) \approx 8{,}821{,}000$
+--- some $1.9$ million for base $2$ alone and $3.8$ million for base $3$. The
+observed count is $0$. Of course the theorem makes the zero certain, so this
+is a calibration of the \emph{verification}, not of the theorem: an
+implementation or classification error affecting even a tiny fraction of pairs
+would have surfaced against an expected background of nearly nine million. A
+supplementary check reproduced the same zero counts, independently, with
+\texttt{sympy} order computations for primes below $3 \times 10^6$.
 
 \section{The consecutive-pair correlation across bases}
 \label{sec:delta}
@@ -558,6 +589,14 @@ $7$  & $28$ & $1$ & $0.0702$ & $-0.013491$ & $-96.4$ \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+A remark on the $z$-scores in Table~\ref{tab:delta} is in order. With fifty
+million pairs, even a minute dependence produces an enormous $z$; the values up
+to $-479$ should not be read as hypothesis tests --- at this sample size the
+null of exact independence was never seriously in doubt --- but simply as
+confirmation that sampling noise is negligible at the fourth decimal of
+$\delta$. The scientifically relevant quantity throughout is the effect size
+$\delta(a)$ itself, not its significance.
 
 Two features stand out. First, $\delta(a) < 0$ for every base, with $|z| \ge
 96$: consecutive primes \emph{repel} in Artin status, uniformly in the base.
@@ -610,7 +649,12 @@ Over the eleven bases at $x = 10^9$,
 against $r(w, |\delta|) = +0.231$ for the exclusion density. Thus
 $|\delta(a)|$ is a decreasing function of the conductor of $\chi_a$, and this
 single parameter accounts for the observed ordering far better than any
-exclusion-based quantity.
+exclusion-based quantity. Since a correlation computed from eleven points can
+flatter, we also report a nonparametric bootstrap ($10^5$ resamples of the
+eleven bases): the $95\%$ interval for $r(\log f, |\delta|)$ is
+$[-0.99, -0.86]$, bounded well away from zero, though the reader should bear
+in mind that the eleven conductors are not a random sample from any
+population.
 \end{observation}
 
 The heuristic is that $\chi_a$ is determined modulo $f$, so the residue
@@ -619,6 +663,33 @@ $\varphi(f)$ classes in $(\Z/f\Z)^\times$. The transition bias
 of~\cite{LOS2016} is distributed across these channels; the fewer the channels,
 the less the cancellation between them, and the larger the surviving global
 correlation. Figure~\ref{fig:conductor} displays both associations.
+
+We stress that Observation~\ref{obs:conductor} is at present a purely empirical
+regularity, and we indicate what a derivation would involve. Write the
+consecutive-pair correlation as a sum over joint residue channels,
+\[
+  \delta(a) \;\approx\; \sum_{r, s \,\in\, (\Z/f\Z)^\times}
+     \Bigl( \pi(r, s) - \pi(r)\pi(s) \Bigr)\,
+     \alpha_a(r)\,\alpha_a(s),
+\]
+where $\pi(r, s)$ is the density of consecutive prime pairs with
+$p_n \equiv r$, $p_{n+1} \equiv s \pmod f$, and $\alpha_a(r)$ is the deviation
+of the Artin density in the class $r$ from its mean. The first factor is
+governed, conjecturally, by the Hardy--Littlewood singular
+series~\cite{HardyLittlewood1923} through the conjectural formula of Lemke
+Oliver--Soundararajan~\cite[Conj.~1.1]{LOS2016} for prime transitions in
+residue classes; the second by Hooley's conditional density
+computation~\cite{Hooley1967} restricted to residue classes, in which
+$\chi_a(r) = -1$ is the leading constraint. Carrying this out --- in particular
+extracting the $f$-dependence of the double sum, where the number of channels
+$\varphi(f)^2$ competes against the per-channel bias --- would replace the
+measured correlations above with a formula and settle the exponent question.
+We have not done this here: the LOS transition term for \emph{consecutive}
+(rather than merely distinct) primes in fixed residue classes involves a
+secondary term with no closed form, and the interaction with the
+$\omega(p-1)$ channel (through which the bias reaches Artin status) is not
+multiplicative. The calculation appears feasible but is a paper of its own,
+and we leave it as the first item of future work.
 
 \begin{figure}[t]
 \centering
@@ -773,95 +844,6 @@ R.~Gupta and M.~R. Murty,
 Invent. Math. \textbf{78} (1984), no.~1, 127--130.
 
 \bibitem{HardyLittlewood1923}
-G.~H. Hardy and J.~E. Littlewood,
-\emph{Some problems of `Partitio numerorum'; III: On the expression of a
-number as a sum of primes},
-Acta Math. \textbf{44} (1923), 1--70.
-
-\bibitem{HeathBrown1986}
-D.~R. Heath-Brown,
-\emph{Artin's conjecture for primitive roots},
-Quart. J. Math. Oxford Ser. (2) \textbf{37} (1986), no.~145, 27--38.
-
-\bibitem{Hooley1967}
-C.~Hooley,
-\emph{On Artin's conjecture},
-J. Reine Angew. Math. \textbf{225} (1967), 209--220.
-
-\bibitem{LOS2016}
-R.~J. Lemke~Oliver and K.~Soundararajan,
-\emph{Unexpected biases in the distribution of consecutive primes},
-Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
-
-\bibitem{Moree2012}
-P.~Moree,
-\emph{Artin's primitive root conjecture --- a survey},
-Integers \textbf{12A} (2012), Article A13, 100~pp.
-
-\bibitem{PeruccaShparlinski2025}
-A.~Perucca and I.~E. Shparlinski,
-\emph{Uniform bounds for the density in Artin's conjecture on primitive roots},
-Bull. Lond. Math. Soc. \textbf{57} (2025), 978--991.
-
-\bibitem{Pollack2014}
-P.~Pollack,
-\emph{Bounded gaps between primes with a given primitive root},
-Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
-
-\end{thebibliography}
-
-\end{document}
-ood1923}
-G.~H. Hardy and J.~E. Littlewood,
-\emph{Some problems of `Partitio numerorum'; III: On the expression of a
-number as a sum of primes},
-Acta Math. \textbf{44} (1923), 1--70.
-
-\bibitem{HeathBrown1986}
-D.~R. Heath-Brown,
-\emph{Artin's conjecture for primitive roots},
-Quart. J. Math. Oxford Ser. (2) \textbf{37} (1986), no.~145, 27--38.
-
-\bibitem{Hooley1967}
-C.~Hooley,
-\emph{On Artin's conjecture},
-J. Reine Angew. Math. \textbf{225} (1967), 209--220.
-
-\bibitem{LOS2016}
-R.~J. Lemke~Oliver and K.~Soundararajan,
-\emph{Unexpected biases in the distribution of consecutive primes},
-Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
-
-\bibitem{Moree2012}
-P.~Moree,
-\emph{Artin's primitive root conjecture --- a survey},
-Integers \textbf{12A} (2012), Article A13, 100~pp.
-
-\bibitem{PeruccaShparlinski2025}
-A.~Perucca and I.~E. Shparlinski,
-\emph{Uniform bounds for the density in Artin's conjecture on primitive roots},
-Bull. Lond. Math. Soc. \textbf{57} (2025), 978--991.
-
-\bibitem{Pollack2014}
-P.~Pollack,
-\emph{Bounded gaps between primes with a given primitive root},
-Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
-
-\end{thebibliography}
-
-\end{document}
-ts},
-Bull. Lond. Math. Soc. \textbf{57} (2025), 978--991.
-
-\bibitem{Pollack2014}
-P.~Pollack,
-\emph{Bounded gaps between primes with a given primitive root},
-Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
-
-\end{thebibliography}
-
-\end{document}
-ood1923}
 G.~H. Hardy and J.~E. Littlewood,
 \emph{Some problems of `Partitio numerorum'; III: On the expression of a
 number as a sum of primes},
