@@ -94,6 +94,23 @@ that theory is that the events $p \in \Art_a$ and $p \in \Art_b$ are
 by the interaction of the Kummer--Galois extensions attached to $a$ and $b$
 --- in modern language, by \emph{entanglement} between them.
 
+That framework remains actively developed.
+J\"arviniemi--Perucca--Sgobba~\cite{JarviniemiPeruccaSgobba2025} give a unified
+treatment of Artin-type problems for finitely generated groups in number
+fields; Kimmel~\cite{Kimmel2024} treats number-field and matrix variants;
+Klurman--Shparlinski--Ter\"av\"ainen~\cite{KlurmanShparlinskiTeravainen2025}
+obtain results on average over the base; Sgobba~\cite{Sgobba2025} establishes
+unconditional results in cases where GRH can be circumvented; and
+Goldmakher--Martin--P\'eringuey~\cite{GoldmakherMartinPeringuey2025} propose
+refined conjectures on the distribution of the multiplicative order, which
+bear on the structure of $p-1$ that plays the central role in
+Section~\ref{sec:decomposition} below. None of this work addresses the joint
+statistics of Artin status across several bases at a fixed prime, which is our
+subject; we take~\cite{Matthews1976, Lenstra1977} as the source of the density
+predictions tested in Section~\ref{sec:model}. As those predictions are
+conditional on GRH, so is every comparison we make with them; our measurements
+themselves are of course unconditional.
+
 This paper is the third in a series studying correlations of Artin status
 computationally at the scale of $10^9$~\cite{BaldI, BaldII}. The first
 paper~\cite{BaldI} measured the correlation between the Artin statuses (base $10$) of
@@ -404,7 +421,12 @@ many). The fine signature --- $2$-adic valuation capped at $4$, the exact set
 of primes $\le 13$ dividing $p - 1$, and the count of larger prime factors
 capped at $3$ --- is the information the Artin criterion actually consults
 for small bases, and conditioning on it removes $95\%$ of the mean
-correlation (Table~\ref{tab:decomp}).
+correlation (Table~\ref{tab:decomp}). That the fine structure of $p-1$, rather
+than its coarse size, is what governs Artin behaviour is consistent with the
+refined order-distribution conjectures
+of~\cite{GoldmakherMartinPeringuey2025}, where the same distinction between
+$\omega(p-1)$ and the actual divisor structure is what refines Artin's original
+heuristic.
 
 We regard this as the main statistical finding: \emph{cross-base Artin
 correlation at a single prime is, to first order, not an interaction between
@@ -657,10 +679,30 @@ J.~Bald,
 preprint (2026); code and data at
 \url{https://github.com/jpbald93/consecutive-artin}.
 
+\bibitem{GoldmakherMartinPeringuey2025}
+L.~Goldmakher, G.~Martin, and P.~P\'eringuey,
+\emph{Refinements of Artin's primitive root conjecture},
+preprint (2025), \texttt{arXiv:2502.19601}.
+
 \bibitem{Hooley1967}
 C.~Hooley,
 \emph{On Artin's conjecture},
 J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+\bibitem{JarviniemiPeruccaSgobba2025}
+O.~J\"arviniemi, A.~Perucca, and P.~Sgobba,
+\emph{Unified treatment of Artin-type problems II},
+Res. Number Theory \textbf{11} (2025), no.~42, 19~pp.
+
+\bibitem{Kimmel2024}
+N.~Kimmel,
+\emph{Artin's primitive root conjecture in number fields and for matrices},
+Acta Arith. \textbf{216} (2024), no.~4, 329--348.
+
+\bibitem{KlurmanShparlinskiTeravainen2025}
+O.~Klurman, I.~E. Shparlinski, and J.~Ter\"av\"ainen,
+\emph{On Artin's conjecture on average and short character sums},
+Bull. Lond. Math. Soc. \textbf{57} (2025), 2429--2443.
 
 \bibitem{Lenstra1977}
 H.~W. Lenstra, Jr.,
@@ -681,6 +723,11 @@ Acta Arith. \textbf{29} (1976), no.~2, 113--146.
 P.~Moree,
 \emph{Artin's primitive root conjecture --- a survey},
 Integers \textbf{12A} (2012), Article A13, 100~pp.
+
+\bibitem{Sgobba2025}
+P.~Sgobba,
+\emph{Unconditional results for Artin-type problems over number fields},
+preprint (2025), \texttt{arXiv:2508.08996}.
 
 \end{thebibliography}
 

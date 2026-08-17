@@ -68,7 +68,8 @@ quantitative conjectures and discuss extensions to general bases.
 
 Two classical themes in the theory of primes intersect in this paper.
 
-The first is Artin's primitive root conjecture (1927): for any integer
+The first is Artin's primitive root conjecture, communicated to Hasse in 1927
+(see~\cite{Artin1965} and the historical account in~\cite{Moree2012}): for any integer
 $a \notin \{-1, 0, 1\}$ that is not a perfect square, the set of primes $p$ for
 which $a$ is a primitive root modulo $p$ has positive density; for base
 $a = 10$ this density is Artin's constant
@@ -264,6 +265,25 @@ stratified by gap $g$, and stratified by joint residues of $(p_n, p_{n+1})$ to
 various moduli. All counts reported below are exact (no sampling), except
 where noted. Analysis scripts (Python) and their outputs are available with
 the data (see the Data Availability statement).
+
+\subsection*{Runtime, hardware, and validation}
+All computations were performed on a single machine with a $2$-core Intel Xeon
+E5-2673~v4 processor at $2.3$~GHz and $8$~GB of RAM, running Ubuntu Linux; no
+parallelism beyond a single core was used for any run reported here. The
+segmented sieve (segment length $2^{22}$, so the working set stays within
+cache) together with the per-prime computation --- trial-division
+factorisation of $p - 1$ and the Artin test by modular exponentiation ---
+generates the full dataset to $10^9$ in a few hours; peak memory usage is
+under $200$~MB, as only one segment and the small primes to $\sqrt{x}$ are
+held in memory. The streaming pair analysis reads the dataset once and runs in
+minutes. As validation we checked: (i) the prime count $\pi(10^9) =
+50{,}847{,}534$ against the known value; (ii) the Artin prime count
+$19{,}016{,}618$ (proportion $0.373993$) against Artin's constant
+$0.373956$, as discussed above; (iii) Theorem~\ref{thm:exclusion} on all
+$23{,}956$ pairs with gap $\equiv 20 \pmod{40}$ below $10^7$, with an
+independent \texttt{sympy} order computation on a subsample; and (iv) the
+mod-$12$ consecutive-residue transition matrix against the values reported
+in~\cite{LOS2016} at comparable scale.
 
 \section{The global anticorrelation}
 \label{sec:global}
@@ -481,8 +501,8 @@ motivates:
 \label{conj:decay}
 For primes up to $x$, the consecutive-pair Artin correlation
 $\delta(x) = P(\Art_{n+1} \mid \Art_n) - P(\Art_{n+1} \mid \lnot\Art_n)$
-is negative for all sufficiently large $x$, tends to $0$ as $x \to \infty$,
-and does so at the (slow) rate of the Lemke Oliver--Soundararajan bias, i.e.\
+is negative for all sufficiently large $x$ and tends to $0$ from below as
+$x \to \infty$, at the (slow) rate of the Lemke Oliver--Soundararajan bias, i.e.\
 $\delta(x) \asymp -\,1/\log x$ up to factors of $\log\log x$.
 \end{conjecture}
 
@@ -519,7 +539,7 @@ state it as an empirical proposition because that is what the data test.
 
 \subsection*{What is new here}
 The individual ingredients are classical: quadratic reciprocity, the
-QR-obstruction to primitive roots, and the consecutive-prime bias
+quadratic-residue obstruction to primitive roots, and the consecutive-prime bias
 of~\cite{LOS2016}. The contributions of this paper are (i) the observation
 that these combine into a deterministic exclusion law for prime pairs at gaps
 $\equiv 20 \pmod{40}$ (Theorem~\ref{thm:exclusion}) --- elementary, but we have
@@ -634,6 +654,11 @@ S.~R. Garcia, F.~Luca, K.~Shi, and G.~Udell,
 totient quotients and the sum-of-divisors function},
 J. Number Theory \textbf{208} (2020), 400--417.
 
+\bibitem{GoldmakherMartinPeringuey2025}
+L.~Goldmakher, G.~Martin, and P.~P\'eringuey,
+\emph{Refinements of Artin's primitive root conjecture},
+preprint (2025), \texttt{arXiv:2502.19601}.
+
 \bibitem{GuptaMurty1984}
 R.~Gupta and M.~R. Murty,
 \emph{A remark on Artin's conjecture},
@@ -649,46 +674,6 @@ Acta Math. \textbf{44} (1923), 1--70.
 D.~R. Heath-Brown,
 \emph{Artin's conjecture for primitive roots},
 Quart. J. Math. Oxford Ser. (2) \textbf{37} (1986), no.~145, 27--38.
-
-\bibitem{Hooley1967}
-C.~Hooley,
-\emph{On Artin's conjecture},
-J. Reine Angew. Math. \textbf{225} (1967), 209--220.
-
-\bibitem{LOS2016}
-R.~J. Lemke~Oliver and K.~Soundararajan,
-\emph{Unexpected biases in the distribution of consecutive primes},
-Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
-
-\bibitem{Maynard2015}
-J.~Maynard,
-\emph{Small gaps between primes},
-Ann. of Math. (2) \textbf{181} (2015), no.~1, 383--413.
-
-\bibitem{Moree2012}
-P.~Moree,
-\emph{Artin's primitive root conjecture --- a survey},
-Integers \textbf{12A} (2012), Article A13, 100~pp.
-
-\bibitem{PeruccaShparlinski2025}
-A.~Perucca and I.~E. Shparlinski,
-\emph{Uniform bounds for the density in Artin's conjecture on primitive roots},
-Bull. Lond. Math. Soc. \textbf{57} (2025), 978--991.
-
-\bibitem{Pollack2014}
-P.~Pollack,
-\emph{Bounded gaps between primes with a given primitive root},
-Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
-
-\bibitem{Zhang2014}
-Y.~Zhang,
-\emph{Bounded gaps between primes},
-Ann. of Math. (2) \textbf{179} (2014), no.~3, 1121--1174.
-
-\end{thebibliography}
-
-\end{document}
-.
 
 \bibitem{Hooley1967}
 C.~Hooley,
