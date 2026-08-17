@@ -515,7 +515,7 @@ $21$ & $21$ & $14$        & $2{,}693{,}804$  & $0$ & --- \\
 
 There are $63{,}105{,}745$ pairs in exclusion classes and not a single
 doubly-Artin pair among them, while at preserving classes the doubly-Artin
-proportion lies between $26.3\%$ and $27.8\%$ throughout, as one expects from the square of
+proportion lies between $26.3\%$ and $29.3\%$ throughout, as one expects from the square of
 the relevant Artin density. (Base $21$ has no preserving class, by
 Table~\ref{tab:classification}.) A supplementary check reproduced the
 same zero counts, independently, with \texttt{sympy} order computations for
@@ -624,10 +624,12 @@ correlation. Figure~\ref{fig:conductor} displays both associations.
 \centering
 \includegraphics[width=\textwidth]{fig_delta_conductor.pdf}
 \caption{Left: $|\delta(a)|$ against the conductor $f$ of $\chi_a$ at
-$x = 10^9$, with the least-squares curve $C/\sqrt{f}$, $C = 0.132$. Right:
-$|\delta(a)|$ against the weighted fraction of consecutive pairs lying in
-exclusion classes. Bases admitting no exclusion law are shown in red; one of
-them has the largest $|\delta|$ of all.}
+$x = 10^9$. The data points are the content of the figure; the faint dotted
+curve $C/\sqrt{f}$ ($C = 0.132$) is a guide to the eye only --- as discussed
+after Observation~\ref{obs:conductor}, the data do not identify an exponent and
+no power law is asserted. Right: $|\delta(a)|$ against the weighted fraction of
+consecutive pairs lying in exclusion classes. Bases admitting no exclusion law
+are shown in red; one of them has the largest $|\delta|$ of all.}
 \label{fig:conductor}
 \end{figure}
 
@@ -692,12 +694,12 @@ in base $a$ must avoid every exclusion class of $a$, and for $a = 3$ this
 excludes half of the available even gaps.
 
 \subsection*{Future work}
-Three directions suggest themselves. First, a derivation of
-Observation~\ref{obs:conductor} from the singular series
-of~\cite{HardyLittlewood1923} together with Hooley's density
-computation~\cite{Hooley1967}, summed over the $\varphi(f)$ residue channels,
-would replace an empirical regularity with a formula and settle the exponent
-question. Second, the decay of $\delta(a)$ in $x$ should be measured for several
+Three directions suggest themselves. First, the channel decomposition displayed
+after Observation~\ref{obs:conductor} should be carried out: a derivation from
+the singular series of~\cite{HardyLittlewood1923} together with Hooley's
+density computation~\cite{Hooley1967}, summed over the $\varphi(f)$ residue
+channels, would replace an empirical regularity with a formula and settle the
+exponent question. Second, the decay of $\delta(a)$ in $x$ should be measured for several
 bases at once; for base $10$ a decay of order $1/\log x$ was conjectured, and
 the present pipeline extends to $10^{12}$ without difficulty. Third, the
 classification invites an analogue for higher-order obstructions: membership in
@@ -771,6 +773,95 @@ R.~Gupta and M.~R. Murty,
 Invent. Math. \textbf{78} (1984), no.~1, 127--130.
 
 \bibitem{HardyLittlewood1923}
+G.~H. Hardy and J.~E. Littlewood,
+\emph{Some problems of `Partitio numerorum'; III: On the expression of a
+number as a sum of primes},
+Acta Math. \textbf{44} (1923), 1--70.
+
+\bibitem{HeathBrown1986}
+D.~R. Heath-Brown,
+\emph{Artin's conjecture for primitive roots},
+Quart. J. Math. Oxford Ser. (2) \textbf{37} (1986), no.~145, 27--38.
+
+\bibitem{Hooley1967}
+C.~Hooley,
+\emph{On Artin's conjecture},
+J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+\bibitem{LOS2016}
+R.~J. Lemke~Oliver and K.~Soundararajan,
+\emph{Unexpected biases in the distribution of consecutive primes},
+Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
+
+\bibitem{Moree2012}
+P.~Moree,
+\emph{Artin's primitive root conjecture --- a survey},
+Integers \textbf{12A} (2012), Article A13, 100~pp.
+
+\bibitem{PeruccaShparlinski2025}
+A.~Perucca and I.~E. Shparlinski,
+\emph{Uniform bounds for the density in Artin's conjecture on primitive roots},
+Bull. Lond. Math. Soc. \textbf{57} (2025), 978--991.
+
+\bibitem{Pollack2014}
+P.~Pollack,
+\emph{Bounded gaps between primes with a given primitive root},
+Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
+
+\end{thebibliography}
+
+\end{document}
+ood1923}
+G.~H. Hardy and J.~E. Littlewood,
+\emph{Some problems of `Partitio numerorum'; III: On the expression of a
+number as a sum of primes},
+Acta Math. \textbf{44} (1923), 1--70.
+
+\bibitem{HeathBrown1986}
+D.~R. Heath-Brown,
+\emph{Artin's conjecture for primitive roots},
+Quart. J. Math. Oxford Ser. (2) \textbf{37} (1986), no.~145, 27--38.
+
+\bibitem{Hooley1967}
+C.~Hooley,
+\emph{On Artin's conjecture},
+J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+\bibitem{LOS2016}
+R.~J. Lemke~Oliver and K.~Soundararajan,
+\emph{Unexpected biases in the distribution of consecutive primes},
+Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
+
+\bibitem{Moree2012}
+P.~Moree,
+\emph{Artin's primitive root conjecture --- a survey},
+Integers \textbf{12A} (2012), Article A13, 100~pp.
+
+\bibitem{PeruccaShparlinski2025}
+A.~Perucca and I.~E. Shparlinski,
+\emph{Uniform bounds for the density in Artin's conjecture on primitive roots},
+Bull. Lond. Math. Soc. \textbf{57} (2025), 978--991.
+
+\bibitem{Pollack2014}
+P.~Pollack,
+\emph{Bounded gaps between primes with a given primitive root},
+Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
+
+\end{thebibliography}
+
+\end{document}
+ts},
+Bull. Lond. Math. Soc. \textbf{57} (2025), 978--991.
+
+\bibitem{Pollack2014}
+P.~Pollack,
+\emph{Bounded gaps between primes with a given primitive root},
+Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
+
+\end{thebibliography}
+
+\end{document}
+ood1923}
 G.~H. Hardy and J.~E. Littlewood,
 \emph{Some problems of `Partitio numerorum'; III: On the expression of a
 number as a sum of primes},

@@ -4,9 +4,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-import os
-_c=[os.path.join(os.path.dirname(__file__),p) for p in ("delta_summary.json","../results/delta_summary.json","../delta_summary.json")]
-rows = json.load(open(next(p for p in _c if os.path.exists(p))))
+rows = json.load(open("../delta_summary.json"))
 rows.sort(key=lambda r: r["conductor"])
 f  = [r["conductor"] for r in rows]
 ad = [abs(r["delta"]) for r in rows]
@@ -23,8 +21,9 @@ for x, y, b in zip(f, ad, bs):
                    xytext=(5, 4), fontsize=8)
 xs = [x/10 for x in range(45, 460)]
 C = sum(a*math.sqrt(x) for a, x in zip(ad, f))/len(ad)
-ax[0].plot(xs, [C/math.sqrt(x) for x in xs], "k--", lw=1,
-           label=r"$C/\sqrt{f}$ (least-squares $C$)")
+ax[0].plot(xs, [C/math.sqrt(x) for x in xs], color="gray", ls=":", lw=0.8,
+           alpha=0.6, zorder=1,
+           label=r"$C/\sqrt{f}$ (guide to the eye only)")
 ax[0].set_xlabel(r"conductor $f$")
 ax[0].set_ylabel(r"$|\delta(a)|$")
 ax[0].set_title(r"(a) $|\delta|$ decreases with conductor ($r_{\log f}=-0.96$)")
