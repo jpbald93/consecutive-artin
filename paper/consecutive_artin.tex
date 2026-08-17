@@ -112,9 +112,13 @@ under the Bateman--Horn conjecture. Pollack~\cite{Pollack2014} and Baker and
 Pollack~\cite{BakerPollack2016} proved, by combining Hooley's method with the
 Maynard--Tao sieve~\cite{Maynard2015,Zhang2014}, that (under GRH) there are
 infinitely many runs of $m$ \emph{consecutive} primes all having a prescribed
-primitive root within a bounded interval. These are existence results; the
-correlation statistics of Artin status along the sequence of primes appear to
-be unexamined, and the exclusion law of Theorem~\ref{thm:exclusion}, though
+primitive root within a bounded interval. We emphasise that these are
+\emph{existence} results, produced by sieve constructions that select rare
+favourable configurations; they make no statement about the typical joint
+behaviour of Artin status along the sequence of primes. The present paper asks
+the complementary \emph{statistical} question --- how the Artin statuses of
+consecutive primes are correlated on average --- which appears to be
+unexamined; and the exclusion law of Theorem~\ref{thm:exclusion}, though
 elementary, seems to be unrecorded.
 
 Recent work has also sharpened the analytic understanding of Artin densities
@@ -394,7 +398,9 @@ How much of the global $\delta = -0.0141$ do the explicit residue channels
 account for? We condition on the \emph{joint} residue class of
 $(p_n, p_{n+1})$ to modulus $m$ and measure the residual within-cell
 dependence, aggregating cells by Cochran--Mantel--Haenszel-style summation of
-per-cell $\chi^2$ and by the pair-weighted mean of per-cell $\delta$.
+per-cell $\chi^2$ (that is, testing the within-cell association jointly across
+all cells, so that dependence explained by the conditioning variable itself
+contributes nothing) and by the pair-weighted mean of per-cell $\delta$.
 
 Conditioning on $m = 120 = \mathrm{lcm}(8,3,5)$ fixes the quadratic character
 $\Lsym{10}{\cdot}$ of both primes (its conductor $40$ divides $120$) and the
@@ -591,6 +597,11 @@ author on request.
 
 \begin{thebibliography}{99}
 
+\bibitem{Artin1965}
+E.~Artin,
+\emph{The Collected Papers of Emil Artin} (S.~Lang and J.~T. Tate, eds.),
+Addison--Wesley, Reading, MA, 1965.
+
 \bibitem{BakerPollack2016}
 R.~C. Baker and P.~Pollack,
 \emph{Bounded gaps between primes with a given primitive root, II},
@@ -638,6 +649,46 @@ Acta Math. \textbf{44} (1923), 1--70.
 D.~R. Heath-Brown,
 \emph{Artin's conjecture for primitive roots},
 Quart. J. Math. Oxford Ser. (2) \textbf{37} (1986), no.~145, 27--38.
+
+\bibitem{Hooley1967}
+C.~Hooley,
+\emph{On Artin's conjecture},
+J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+\bibitem{LOS2016}
+R.~J. Lemke~Oliver and K.~Soundararajan,
+\emph{Unexpected biases in the distribution of consecutive primes},
+Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
+
+\bibitem{Maynard2015}
+J.~Maynard,
+\emph{Small gaps between primes},
+Ann. of Math. (2) \textbf{181} (2015), no.~1, 383--413.
+
+\bibitem{Moree2012}
+P.~Moree,
+\emph{Artin's primitive root conjecture --- a survey},
+Integers \textbf{12A} (2012), Article A13, 100~pp.
+
+\bibitem{PeruccaShparlinski2025}
+A.~Perucca and I.~E. Shparlinski,
+\emph{Uniform bounds for the density in Artin's conjecture on primitive roots},
+Bull. Lond. Math. Soc. \textbf{57} (2025), 978--991.
+
+\bibitem{Pollack2014}
+P.~Pollack,
+\emph{Bounded gaps between primes with a given primitive root},
+Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
+
+\bibitem{Zhang2014}
+Y.~Zhang,
+\emph{Bounded gaps between primes},
+Ann. of Math. (2) \textbf{179} (2014), no.~3, 1121--1174.
+
+\end{thebibliography}
+
+\end{document}
+.
 
 \bibitem{Hooley1967}
 C.~Hooley,
