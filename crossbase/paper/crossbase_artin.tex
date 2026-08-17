@@ -60,10 +60,10 @@ $95\%$: the cross-base correlation is, almost entirely, a reflection of the
 fact that all bases see the same factorisation of $p - 1$. Third, the residual
 that survives fine conditioning is concentrated exactly on the multiplicatively
 dependent pairs (mean residual $|\phi| \approx 0.005$ within dependent pairs,
-versus $0.001$ for multiplicatively independent pairs), and is removed by
-additionally conditioning on the quadratic-residue status of the bases ---
-identifying it as character-level entanglement, the same mechanism as the
-deterministic exclusion law. The measurements are consistent with the
+versus $0.001$ for multiplicatively independent pairs), and is removed
+completely by additionally conditioning on the quadratic-residue statuses of
+the two bases --- identifying it as character-level entanglement, the same
+mechanism as the deterministic exclusion law. The measurements are consistent with the
 Galois-theoretic account of simultaneous primitive roots going back to
 Matthews and to Lenstra, and give it a quantitative, channel-by-channel
 verification at scale.
@@ -162,10 +162,11 @@ Sections~\ref{sec:measurement}--\ref{sec:entanglement}:
   \item \emph{What survives is entanglement, and it is exactly localised.}
     After fine conditioning, the residual correlation among multiplicatively
     \emph{dependent} pairs (mean $|\phi_{\mathrm{sig}}| \approx 0.005$, and
-    up to $-0.026$ for $(5,15)$, $-0.012$ for $(5,10)$) is five times that of
-    independent pairs ($0.001$); and in a separate run additionally
-    conditioning on the quadratic-residue status of the bases modulo $p$
-    flattens the dependent pairs to the level of the independent ones. The
+    mean absolute residual $0.0179$, with individual values reaching
+    $-0.034$ for $(2,10)$ and $-0.026$ for $(5,15)$) is eighteen times that of
+    independent pairs ($0.0010$); and additionally conditioning on the
+    quadratic-residue statuses $(\chi_a(p), \chi_b(p))$ removes it entirely,
+    flattening dependent and independent pairs to a common $+0.005$. The
     residual is thus identified, empirically, as the quadratic-character
     entanglement $\chi_a \chi_b = \chi_{\sqf(ab)}$ --- the statistical shadow
     of Theorem~\ref{thm:triple}.
@@ -258,9 +259,10 @@ signature
 a partition of the primes into at most $5 \cdot 32 \cdot 4 = 640$ cells. The
 signature records exactly the information about $p-1$ that the Artin
 criterion consults for small bases: the $2$-part and the small odd prime
-divisors. A separate run to $3 \times 10^8$ additionally stratified by the
-vector of quadratic-residue statuses $\bigl(\chi_a(p)\bigr)_a$ of the twelve
-bases. The whole computation runs in under two hours on a single core of a
+divisors. A separate run, also to $10^9$ ($50{,}847{,}524$ primes), stratified
+each pair additionally by the quadratic-residue statuses
+$\bigl(\chi_a(p), \chi_b(p)\bigr)$ of the two bases on top of the signature.
+The whole computation runs in under two hours on a single core of a
 commodity machine ($2$-core Intel Xeon E5-2673~v4, $8$~GB RAM); all counts
 are exact.
 
@@ -409,41 +411,58 @@ it sits precisely on the multiplicatively dependent pairs.
 
 \begin{table}[t]
 \centering
-\caption{Residual correlation after conditioning on $\mathrm{sig}(p)$,
-split by multiplicative dependence, at $x = 10^9$; and the effect of
-additionally conditioning on the quadratic-residue vector (run to
-$3 \times 10^8$).}
+\caption{Residual correlation after conditioning on $\mathrm{sig}(p)$ and
+after additionally conditioning on the pair of quadratic-residue statuses
+$(\chi_a(p), \chi_b(p))$, split by multiplicative dependence. All values at
+$x = 10^9$ over $50{,}847{,}524$ primes.}
 \label{tab:residual}
-\begin{tabular}{lrr}
+\begin{tabular}{lrrr}
 \toprule
-group & mean $\phi \mid \mathrm{sig}$ & mean $\phi \mid \mathrm{sig} + \mathrm{QR}$ \\
+group & mean $\phi$ & mean $\phi \mid \mathrm{sig}$
+      & mean $\phi \mid \mathrm{sig}, \mathrm{QR}$ \\
 \midrule
-multiplicatively dependent pairs & $+0.0049$ & $+0.0042$ \\
-\quad of which sharing a common factor & $-0.0052^{*}$ & $+0.0042$ \\
-multiplicatively independent pairs & $+0.0010$ & $+0.0050$ \\
+multiplicatively dependent ($15$ pairs)   & $+0.0314$ & $+0.0049$ & $+0.0049$ \\
+\quad mean \emph{absolute} residual        &           & $\;\;0.0179$ & \\
+multiplicatively independent ($51$ pairs) & $+0.0363$ & $+0.0010$ & $+0.0052$ \\
+\quad mean \emph{absolute} residual        &           & $\;\;0.0010$ & \\
+\midrule
+all $66$ pairs                            & $+0.0352$ & $+0.0019$ & $+0.0052$ \\
 \bottomrule
 \end{tabular}
-
-\smallskip
-{\footnotesize $^{*}$Signed values; the extreme cells are
-$(5,15)$ at $-0.0255$ and $(5,10)$ at $-0.0125$ (see Table~\ref{tab:top}).}
 \end{table}
 
-Two facts pin down the mechanism. First, after fine conditioning the
-dependent pairs retain residuals up to $-0.026$ (for $(5,15)$) and $-0.012$
-(for $(5,10)$) --- large negative values, of the sign predicted by the
-character relation of Observation~\ref{obs:negative} --- whereas the $51$
-independent pairs sit at a mean of $+0.001$. Second, in the run to
-$3 \times 10^8$ that additionally conditions on the vector of
-quadratic-residue statuses $(\chi_a(p))_a$, the negative residuals of the
-dependent pairs vanish: every group lands in the narrow band
-$0.003$--$0.006$ (Table~\ref{tab:residual}), consistent with the small
-positive floor attributable to higher-order (cubic and quartic) conditions
-shared through $p-1$ beyond our signature. Conditioning on the quadratic
-characters is exactly what removes character-level entanglement; that it
-flattens precisely the pairs with $\chi_a \chi_b = \chi_c$, and only those,
-identifies the residual as the statistical trace of the entangled relation
---- the same object that makes Theorem~\ref{thm:triple} true.
+Two facts pin down the mechanism, both measured over the full $10^9$ range.
+
+First, after fine conditioning the dependent pairs retain substantial
+residuals of the sign predicted by the character relation of
+Observation~\ref{obs:negative}: their mean \emph{absolute} residual is
+$0.0179$, eighteen times the $0.0010$ of the $51$ independent pairs. Indeed
+the six most negative residuals in the entire collection are \emph{exactly}
+six dependent pairs and nothing else:
+\[
+  (2,10)\!:\, -0.0343, \quad (5,15)\!:\, -0.0255, \quad (6,10)\!:\, -0.0144,
+  \quad (5,10)\!:\, -0.0125, \quad (7,21)\!:\, -0.0060, \quad (10,15)\!:\, -0.0049 .
+\]
+Note that $(2,10)$ and $(5,15)$ are more negative \emph{after} conditioning
+than before, and that $(5,10)$, $(5,15)$, $(6,10)$, $(10,15)$ and $(7,21)$
+change sign under conditioning: the common-cause channel had been masking an
+underlying repulsion.
+
+Second, additionally conditioning on the pair of quadratic-residue statuses
+$(\chi_a(p), \chi_b(p))$ removes this residual completely. Every one of the
+six negative values above becomes positive and small
+($+0.0031$, $+0.0066$, $+0.0045$, $+0.0065$, $+0.0040$, $+0.0048$
+respectively), and the dependent and independent groups become
+indistinguishable at $+0.0049$ and $+0.0052$ (Table~\ref{tab:residual}).
+That common small positive floor of about $+0.005$ is present for all $66$
+pairs and is plausibly attributable to higher-order (cubic and quartic)
+conditions shared through $p - 1$ beyond what our signature records.
+
+Conditioning on the quadratic characters is precisely what removes
+character-level entanglement; that it flattens exactly the pairs with
+$\chi_a \chi_b = \chi_{\sqf(ab)}$, and only those, identifies the residual as
+the statistical trace of the entangled relation --- the same object that makes
+Theorem~\ref{thm:triple} true.
 
 The picture that emerges is cleanly layered:
 \[
