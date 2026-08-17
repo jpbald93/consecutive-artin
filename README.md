@@ -107,3 +107,9 @@ squarefree part is `10 ≢ 1 mod 4`, so no correction factor applies.)
 
 Code released under the MIT License (see `LICENSE`). The manuscript text and
 figures are © the author, all rights reserved.
+
+## Multi-base extension
+
+See [`multibase/`](multibase/) for the generalization to arbitrary bases:
+a general exclusion law, its complete classification via prime discriminants,
+and an 11-base measurement of the correlation at 10^9.

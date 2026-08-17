@@ -4,3 +4,5 @@ data_1e9.csv
 *.log
 *.out
 !results/*_log.txt
+!multibase/results/*.log
+__pycache__/
