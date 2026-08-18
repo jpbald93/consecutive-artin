@@ -1,0 +1,538 @@
+\documentclass[11pt,reqno]{amsart}
+\usepackage[margin=1.15in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{microtype}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\DeclareMathOperator{\sqf}{sqf}
+\newcommand{\Art}{\mathrm{A}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{document}
+
+\title[Mixed correlations of Artin primes]
+{Artin status across consecutive primes and distinct bases:\\
+mixed exclusion laws and the completion of a $2 \times 2$ programme}
+
+\author{Josh Bald}
+\address{Ontario, Canada}
+\email{jpbald93@gmail.com}
+
+\subjclass[2020]{Primary 11A07; Secondary 11N05, 11N13, 11Y16, 11Y60}
+\keywords{Artin's conjecture, primitive roots, consecutive primes, quadratic
+characters, exclusion laws, Lemke Oliver--Soundararajan bias}
+
+\date{\today}
+
+\begin{abstract}
+Say a prime $p$ is Artin base $a$ if $a$ is a primitive root modulo $p$. This
+paper completes a two-axis programme on the joint statistics of Artin status:
+having previously treated one base at consecutive primes, and several bases at
+one prime, we now measure the \emph{mixed} correlations
+$\delta(a \to b) = P\bigl(p_{n+1} \in \Art_b \mid p_n \in \Art_a\bigr) -
+P\bigl(p_{n+1} \in \Art_b \mid p_n \notin \Art_a\bigr)$ for all $144$ ordered
+pairs from twelve bases, over all $50{,}847{,}531$ consecutive prime pairs
+below $10^9$. On the deterministic side we classify the \emph{mixed exclusion
+classes}: gap classes $g$ modulo $\mathrm{lcm}(f_a, f_b)$ at which no
+admissible residue permits $\chi_a(p) = \chi_b(p+g) = -1$, so that $p_n$
+Artin base $a$ and $p_{n+1}$ Artin base $b$ can never co-occur. Genuinely
+mixed instances exist --- for the ordered pairs $(2, 6)$ and $(6, 2)$ the
+classes $g \equiv 10, 14 \pmod{24}$ are excluded although neither base
+excludes them alone --- and the classification is verified on
+$104{,}972{,}810$ pairs with zero exceptions and confirmed complete by a
+data-driven converse scan. On the statistical side, the off-diagonal
+correlations are small but overwhelmingly significant ($124$ of $132$ with
+$|z| > 3$), negative for $101$ of $132$ ordered pairs (mean $-0.0035$), an
+order of magnitude weaker than the diagonal ones --- and \emph{asymmetric}:
+$\delta(a \to b) \neq \delta(b \to a)$, with differences up to $0.05$,
+reflecting the asymmetric conditioning through two distinct integers
+$p_n - 1$ and $p_{n+1} - 1$. The strongest organising variable for
+$|\delta(a \to b)|$ is the entanglement of the base pair, followed by the
+conductor of the \emph{second} base. As a byproduct of extending the base set
+we exhibit base $15$ as the first known base whose consecutive-prime Artin
+correlation is globally \emph{positive} ($\delta = +0.0122$, $z = 87$): its
+three exclusion classes are outweighed by strongly coupled classes, resolving
+in the negative the natural conjecture that $\delta(a) < 0$ for every base.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:intro}
+
+Let $\Art_a$ denote the set of primes for which the integer $a$ is a
+primitive root. Artin's conjecture describes the density of $\Art_a$; Hooley
+proved it under GRH~\cite{Hooley1967}. This is the fourth paper in a series
+studying the \emph{joint} statistics of Artin status computationally at the
+scale $x = 10^9$, and it completes a $2 \times 2$ programme:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & same base & different bases \\
+\midrule
+same prime & (trivial) & paper III~\cite{BaldIII} \\
+consecutive primes & papers I, II~\cite{BaldI, BaldII} & \textbf{this paper} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Papers I and II found that Artin status of a fixed base $a$ at consecutive
+primes is anticorrelated, identified deterministic \emph{exclusion laws} ---
+gap classes at which two consecutive primes can never both be Artin base $a$
+--- and classified them via two mechanisms: reversal of the quadratic
+character $\chi_a$, and inadmissibility of the residues that would be needed
+for a doubly-negative configuration. Paper III found that Artin statuses of
+\emph{different} bases at the \emph{same} prime attract (the shared
+factorisation of $p-1$ is a common cause), except on multiplicatively
+dependent pairs, where quadratic entanglement produces repulsion and, inside
+multiplicative triples, a deterministic three-way exclusion.
+
+The remaining axis --- base $a$ at $p_n$ against base $b$ at $p_{n+1}$ ---
+mixes the two settings: the conditioning passes through two \emph{distinct}
+integers $p_n - 1$ and $p_{n+1} - 1$ (as in papers I--II), but the two events
+involve \emph{distinct} quadratic characters $\chi_a, \chi_b$ (as in paper
+III). Both the deterministic and the statistical questions have new content
+here.
+
+\subsection*{Deterministic part}
+Call a residue class $g$ modulo $L = \mathrm{lcm}(f_a, f_b)$ (where $f_a$ is
+the conductor of $\chi_a$) a \emph{mixed exclusion class} for the ordered pair
+$(a, b)$ if there is no residue $r$ with $r$ and $r + g$ admissible
+(coprime to $L$) and $\chi_a(r) = \chi_b(r + g) = -1$. Since the Artin
+property forces the character value $-1$, primes $p_n \equiv r$,
+$p_{n+1} = p_n + g'$ with $g' \equiv g \pmod L$ can then never satisfy both
+``$a$ is a primitive root of $p_n$'' and ``$b$ is a primitive root of
+$p_{n+1}$''. Diagonal instances ($a = b$) are the exclusion laws of papers
+I--II. The classification here (Section~\ref{sec:theory}) yields genuinely
+mixed instances; the simplest is:
+
+\begin{theorem}[see Section~\ref{sec:theory}]
+\label{thm:mixedintro}
+For the ordered pairs $(2, 6)$ and $(6, 2)$, the gap classes
+$g \equiv 10, 14 \pmod{24}$ are mixed exclusion classes: no consecutive
+primes $p_n, p_{n+1} = p_n + g$ with $g \equiv 10, 14 \pmod{24}$ have $2$ a
+primitive root of one and $6$ a primitive root of the other. Neither base
+excludes these classes by itself.
+\end{theorem}
+
+At $x = 10^9$ the predicted mixed exclusion classes across all $144$ ordered
+pairs contain $104{,}972{,}810$ consecutive prime pairs and exactly zero
+co-occurrences, and a data-driven converse scan (every class of every pair
+with at least $5 \times 10^5$ pairs and a zero count) finds nothing the
+classification misses.
+
+\subsection*{Statistical part}
+Define the mixed correlation
+\[
+  \delta(a \to b) \;=\;
+  P\bigl(p_{n+1} \in \Art_b \mid p_n \in \Art_a\bigr) -
+  P\bigl(p_{n+1} \in \Art_b \mid p_n \notin \Art_a\bigr).
+\]
+The diagonal $\delta(a \to a)$ reproduces papers I--II exactly (a useful
+end-to-end validation, since the present computation is an independent
+implementation). Off the diagonal we find
+(Section~\ref{sec:stats}):
+
+\begin{enumerate}
+\item \emph{Sign and size.} $101$ of the $132$ ordered off-diagonal pairs
+  have $\delta(a \to b) < 0$, with mean $-0.0035$ --- repulsion persists
+  across bases, but at an order of magnitude weaker than on the diagonal
+  (mean $-0.034$ over the eleven bases with negative diagonal). The residue channels that transmit the
+  Lemke Oliver--Soundararajan bias~\cite{LOS2016} are mostly \emph{different}
+  for $\chi_a$ and $\chi_b$, so most of the effect cancels.
+\item \emph{Significance.} $124$ of $132$ off-diagonal correlations have
+  $|z| > 3$; the structure is small but real.
+\item \emph{Asymmetry.} $\delta(a \to b) \neq \delta(b \to a)$: the mean
+  absolute difference is $0.009$ and the maximum $0.051$ (attained by
+  $(6, 10)$ versus $(10, 6)$). No same-prime analogue of this exists ---
+  Paper III's $\phi(a,b)$ is symmetric by construction --- and the asymmetry
+  witnesses the ordered conditioning through $p_n - 1$ versus
+  $p_{n+1} - 1$.
+\item \emph{Extremes are entangled or share structure.} The most negative
+  mixed correlations are $\delta(6 \to 2) = -0.0354$ and
+  $\delta(21 \to 5) = -0.0330$; the most positive are
+  $\delta(6 \to 10) = +0.0415$ and $\delta(3 \to 15) = +0.0314$. All four
+  involve multiplicatively dependent pairs. Across all $132$ ordered pairs,
+  entanglement of $\{a, b\}$ correlates with $|\delta(a \to b)|$ at
+  $r = 0.36$, the strongest single organising variable we find, followed by
+  the conductor of the \emph{second} base ($r(\log f_b, |\delta|) = -0.29$);
+  the conductor of the first base is essentially irrelevant
+  ($r = 0.07$).
+\end{enumerate}
+
+\subsection*{A base with positive diagonal correlation}
+Extending the base set to include $a = 15$ (absent from papers I--II)
+produced a surprise worth reporting on its own: base $15$ has
+\[
+  \delta(15 \to 15) = +0.0122 \qquad (z = 87.0),
+\]
+the first known base whose consecutive-prime Artin correlation is globally
+\emph{positive}. Papers I--II measured $\delta < 0$ for all eleven bases
+examined and conjectured persistence of the negative sign; base $15$ refutes
+the natural extension of that conjecture to all bases. The mechanism is the
+class-competition phenomenon identified in paper II: base $15$ has three
+exclusion classes modulo $60$ (forcing $\delta$ negative on $9.4\%$ of
+pairs), but its remaining gap classes are dominated by strongly positively
+coupled ones (e.g.\ $\delta = +0.64$ at $g \equiv 10 \pmod{60}$, $+0.26$ at
+$g \equiv 18$), and at conductor $60$ --- the largest in our set --- the
+negative within-class residue effect is too weak to overcome them. The sign
+of $\delta(a)$ is thus not universal: it is the resolution of a competition
+that either side can win, and $15$ is the smallest base where the positive
+side wins.
+
+\section{The mixed exclusion classification}
+\label{sec:theory}
+
+Throughout, $d_a = \sqf(a)$, $f_a$ is the conductor of
+$\chi_a = \bigl(\tfrac{d_a}{\cdot}\bigr)$ (namely $d_a$ if
+$d_a \equiv 1 \bmod 4$, else $4 d_a$), and $L = \mathrm{lcm}(f_a, f_b)$.
+Admissibility of $r$ means $\gcd(r, L) = 1$; residues attained by primes
+$p \nmid 2ab$ are exactly the admissible ones.
+
+\begin{definition}
+\label{def:mixed}
+The class $g \bmod L$ is a \emph{mixed exclusion class} for the ordered pair
+$(a, b)$ if no admissible $r$ with $r + g$ admissible has
+$\chi_a(r) = -1$ and $\chi_b(r + g) = -1$.
+\end{definition}
+
+\begin{proposition}
+\label{prop:mixedlaw}
+If $g$ is a mixed exclusion class for $(a, b)$, then there are no primes
+$p, q = p + g'$ with $p \nmid 2ab$, $q \nmid 2ab$, $g' \equiv g \pmod L$,
+such that $a$ is a primitive root modulo $p$ and $b$ is a primitive root
+modulo $q$.
+\end{proposition}
+
+\begin{proof}
+$\chi_a(p)$ depends only on $p \bmod f_a$, hence on $p \bmod L$; similarly
+for $\chi_b(q)$. If both primitive-root conditions held, then
+$\chi_a(p) = \chi_b(q) = -1$ with $p \bmod L$ admissible and
+$q \equiv p + g$, contradicting Definition~\ref{def:mixed}.
+\end{proof}
+
+The classification of mixed exclusion classes reduces, exactly as in paper
+II, to the behaviour of the prime-discriminant components of $\chi_a$ and
+$\chi_b$ under the shift, together with the inadmissibility counting at odd
+prime conductors; we do not repeat the component analysis, but record the
+outcome of the exhaustive scan for our twelve bases
+$\{2, 3, 5, 6, 7, 10, 11, 13, 15, 17, 21, 29\}$: the ordered pairs
+possessing mixed exclusion classes are the twelve diagonal pairs (with the
+classes found in papers I--II, including the base-$5$ inadmissibility classes
+and both classes of base $21$), together with exactly one unordered
+off-diagonal pair:
+
+\begin{theorem}
+\label{thm:mixed26}
+The ordered pairs $(2, 6)$ and $(6, 2)$ have the mixed exclusion classes
+$g \equiv 10, 14 \pmod{24}$; no other off-diagonal pair from the twelve bases
+admits any mixed exclusion class.
+\end{theorem}
+
+\begin{proof}[Proof for $(2,6)$; the converse half is the exhaustive scan]
+$\chi_2$ has conductor $8$ with $\chi_2(r) = -1$ exactly for
+$r \equiv 3, 5 \pmod 8$; $\chi_6$ has conductor $24$ with
+$\chi_6(r) = -1$ exactly for $r \equiv 7, 11, 13, 17 \pmod{24}$. Fix
+$g \equiv 10 \pmod{24}$. The residues $r \bmod 24$ with $\chi_2(r) = -1$ are
+$r \equiv 3, 5, 11, 13, 19, 21$; discarding those not coprime to $24$ leaves
+$r \equiv 5, 11, 13, 19$. Their shifts $r + 10$ are
+$15, 21, 23, 5 \pmod{24}$; the first two are inadmissible ($3 \mid 15, 21$),
+and $\chi_6(23) = \chi_6(5) = +1$. So no admissible configuration has both
+characters $-1$. The case $g \equiv 14$ is symmetric ($r + 14 \equiv
+19, 1, 3, 9$; admissible ones are $19, 1$, and $\chi_6(19) = \chi_6(1) =
++1$). Note the essential role of inadmissibility: on the full residue system
+the configurations would exist, but they land on multiples of $3$.
+\end{proof}
+
+\begin{remark}
+The pair $(2, 6)$ is multiplicatively dependent ($\sqf(2 \cdot 6) = 3$,
+present in the ambient set), and the mechanism visibly mixes the two
+ingredients of paper II: a character shift (as in reversal) and residue
+inadmissibility (as at base $5$). That the same two mechanisms exhaust the
+mixed case as well --- confirmed by the converse scan below --- supports the
+view of papers II and III that quadratic-character parity and admissibility
+are the only deterministic constraints at this level, with all further
+structure being statistical.
+\end{remark}
+
+\subsection*{Verification at $10^9$ and completeness}
+For every ordered pair and every predicted class we counted, among the
+$50{,}847{,}531$ consecutive prime pairs below $10^9$, the pairs whose gap
+lies in the class and, among them, those with $a$ a primitive root of $p_n$
+and $b$ of $p_{n+1}$. Table~\ref{tab:verification} reports the nonzero rows.
+The predicted classes contain $104{,}972{,}810$ pairs in total and the
+co-occurrence count is zero in every row. Conversely, a data-driven scan of
+\emph{all} classes of \emph{all} $144$ ordered pairs (modulo the appropriate
+$L$) for zero counts supported by at least $5 \times 10^5$ pairs returns
+exactly the predicted classes and nothing else: the classification is
+complete at the resolution of the data.
+
+\begin{table}[t]
+\centering
+\caption{Verification of mixed exclusion classes at $x = 10^9$. Ordered pairs
+$(a, b)$: $a$ tested at $p_n$, $b$ at $p_{n+1}$. Diagonal rows reproduce
+papers I--II (including the inadmissibility classes of base $5$); the
+$(2,6)/(6,2)$ rows are the genuinely mixed law of Theorem~\ref{thm:mixed26}.}
+\label{tab:verification}
+\begin{tabular}{llrrr}
+\toprule
+$(a, b)$ & classes mod $L$ & $L$ & pairs & co-occurrences \\
+\midrule
+$(2,2)$   & $4$          & $8$  & $13{,}404{,}106$ & $0$ \\
+$(3,3)$   & $4, 6, 8$    & $12$ & $27{,}010{,}759$ & $0$ \\
+$(5,5)$   & $2, 3$       & $5$  & $20{,}523{,}554$ & $0$ \\
+$(6,6)$   & $8, 12, 16$  & $24$ & $12{,}419{,}039$ & $0$ \\
+$(7,7)$   & $14$         & $28$ & $3{,}567{,}335$  & $0$ \\
+$(10,10)$ & $20$         & $40$ & $2{,}214{,}511$  & $0$ \\
+$(11,11)$ & $22$         & $44$ & $1{,}796{,}191$  & $0$ \\
+$(15,15)$ & $20, 30, 40$ & $60$ & $4{,}782{,}744$  & $0$ \\
+$(21,21)$ & $7, 14$      & $21$ & $4{,}046{,}375$  & $0$ \\
+$(2,6)$   & $10, 14$     & $24$ & $7{,}604{,}098$  & $0$ \\
+$(6,2)$   & $10, 14$     & $24$ & $7{,}604{,}098$  & $0$ \\
+\midrule
+\emph{total} & & & $104{,}972{,}810$ & $\mathbf{0}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Data and computation}
+\label{sec:data}
+
+The computation is one streaming pass of a segmented sieve to $10^9$
+($50{,}847{,}532$ primes $\ge 5$; $50{,}847{,}531$ consecutive pairs). For
+each prime, $p - 1$ is factored once by trial division and the Artin
+indicator computed for all twelve bases by the standard criterion
+($a^{(p-1)/\ell} \not\equiv 1$ for all prime $\ell \mid p-1$, $128$-bit
+arithmetic); for each ordered base pair $(a, b)$ we accumulate the
+$2 \times 2$ table of $\bigl(\mathbf{1}[p_n \in \Art_a],
+\mathbf{1}[p_{n+1} \in \Art_b]\bigr)$, globally and per gap $g \le 300$. All
+counts are exact. Hardware and validation are as in the companion papers
+($2$-core Xeon E5-2673~v4, $8$~GB RAM; single core); the run takes under an
+hour. Beyond the usual checks (prime counts; marginal densities matching the
+Hooley values to four decimals, including $0.393642$ for base $5$ against
+$C \cdot 20/19 = 0.393638$), the twelve diagonal correlations reproduce the
+values of papers I--II to all reported digits from an independently written
+accumulator, and the verification of Table~\ref{tab:verification} doubles as
+a check of the classification.
+
+\section{The mixed correlation matrix}
+\label{sec:stats}
+
+\begin{table}[t]
+\centering
+\caption{Extremes of the off-diagonal mixed correlation
+$\delta(a \to b)$ at $x = 10^9$. ``Dep.''\ marks multiplicatively dependent
+$\{a, b\}$ (the product is a square times a third base of the set).}
+\label{tab:extremes}
+\begin{tabular}{rrrrc}
+\toprule
+$a$ & $b$ & $\delta(a \to b)$ & $z$ & Dep. \\
+\midrule
+$6$  & $2$  & $-0.0354$ & $-252.6$ & \checkmark \\
+$21$ & $5$  & $-0.0330$ & $-233.1$ & \checkmark \\
+$3$  & $7$  & $-0.0233$ & $-165$ & \checkmark \\
+$11$ & $3$  & $-0.0201$ & $-142$ & \\
+$7$  & $3$  & $-0.0193$ & $-137$ & \checkmark \\
+\midrule
+$2$  & $6$  & $+0.0094$ & $+67.2$ & \checkmark \\
+$15$ & $3$  & $+0.0222$ & $+158.4$ & \checkmark \\
+$3$  & $15$ & $+0.0314$ & $+224.2$ & \checkmark \\
+$6$  & $10$ & $+0.0415$ & $+295.8$ & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The full $12 \times 12$ matrix is available with the data; we summarise its
+structure.
+
+\begin{observation}[Weak, mostly negative, highly significant]
+\label{obs:offdiag}
+Of the $132$ ordered off-diagonal pairs, $101$ have $\delta(a \to b) < 0$;
+the mean is $-0.0035$, one order of magnitude below the mean $-0.034$ of
+the eleven negative diagonal values; and $124$ of $132$ have $|z| > 3$. As in the companion papers, at
+this sample size the $z$-scores certify only that the values are real; the
+relevant magnitudes are the effect sizes.
+\end{observation}
+
+The interpretation follows the channel picture of papers I--II: the
+Lemke Oliver--Soundararajan repulsion acts on the joint residues of
+$(p_n, p_{n+1})$, and transmits to the pair
+$(\Art_a(p_n), \Art_b(p_{n+1}))$ only through residue classes that both
+characters (and both $\omega$-channels) see. For $a = b$ every channel is
+shared; for $a \neq b$ only the common structure --- the mutual conductor
+divisors and the universal $\omega(p-1)$ channel --- survives, and the
+correlation drops by the factor observed.
+
+\begin{observation}[Asymmetry]
+\label{obs:asym}
+$\delta(a \to b) \neq \delta(b \to a)$ in general: the mean of
+$|\delta(a \to b) - \delta(b \to a)|$ over unordered pairs is $0.0090$ and
+the maximum is $0.0511$, attained by $\{6, 10\}$
+($\delta(6 \to 10) = +0.0415$ versus $\delta(10 \to 6) = -0.0096$).
+\end{observation}
+
+The asymmetry has no analogue in paper III (where the same-prime $\phi(a,b)$
+is symmetric by definition) and directly witnesses the ordering of the
+conditioning: $\delta(a \to b)$ conditions on the arithmetic of $p_n - 1$
+and measures on $p_{n+1} - 1$. Its size --- comparable to the off-diagonal
+effects themselves --- shows that the mixed correlation is not a symmetric
+``base similarity'' but a directed transition statistic.
+
+\begin{observation}[What organises the magnitudes]
+\label{obs:organise}
+Over the $132$ ordered pairs: multiplicative dependence of $\{a, b\}$
+correlates with $|\delta(a \to b)|$ at $r = +0.36$; the conductor of the
+second base at $r(\log f_b, |\delta|) = -0.29$ (and
+$r(\log \mathrm{lcm}(f_a, f_b), |\delta|) = -0.32$); the conductor of the
+first base is negligible ($r = +0.07$). All four extreme values of
+Table~\ref{tab:extremes} involve dependent pairs.
+\end{observation}
+
+That $f_b$ matters and $f_a$ does not is consistent with the conductor law
+of paper II acting at the \emph{measured} prime: the size of
+$|\delta(a \to b)|$ is controlled by how concentrated the $\chi_b$-channels
+are at $p_{n+1}$, while the conditioning event at $p_n$ enters mainly
+through whether its channels overlap those of $b$ --- which is what
+multiplicative dependence measures.
+
+\section{Base 15: a positive diagonal}
+\label{sec:base15}
+
+Base $15$ was not among the eleven bases of papers I--II. Its diagonal
+correlation at $x = 10^9$ is
+\[
+  \delta(15 \to 15) = +0.012196, \qquad z = +87.0,
+\]
+positive --- the first base known to us with globally positive
+consecutive-prime Artin correlation, against the uniform negativity of the
+other twelve measured so far (this paper adds $15$; papers I--II measured
+eleven others, all negative).
+
+The decomposition by gap class modulo $60$ (conductor of $\chi_{15}$)
+explains the sign. The exclusion classes $g \equiv 20, 30, 40 \pmod{60}$
+contain $9.4\%$ of all pairs and force $P(\text{both Artin}) = 0$ there; but
+among the populous non-excluded classes the coupling is strongly positive:
+$\delta = +0.64$ at $g \equiv 10$, $+0.26$ at $g \equiv 18$, $+0.24$ at
+$g \equiv 6, 8$, against $-0.20$ at $g \equiv 2$ and $-0.19$ at
+$g \equiv 12$. In the class-competition language of paper II, base $15$ is
+the first base whose positively coupled classes outweigh the forced zeros
+and the within-class repulsion. Two structural facts make this possible: the
+conductor $60$ is the largest in the set (so the within-class
+Lemke Oliver--Soundararajan residue effect, which scales down with
+conductor, is the weakest), while the character $\chi_{15} = \chi_{-3}
+\chi_{5} \chi_{-4}$ has three prime-discriminant components whose joint
+preservation classes ($g \equiv 0, 10, 50 \pmod{60}$, plus partial
+preservation elsewhere) are unusually rich. We conjecture that
+$\delta(a) > 0$ for infinitely many bases --- specifically for bases whose
+conductor is large and whose preserving classes are dense --- and note that
+the sign of $\delta(a)$ is therefore not an intrinsic feature of the Artin
+property but an arithmetic accident of the base.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection*{The programme completed}
+Across the four papers the picture is uniform. On every axis the joint
+behaviour of Artin status splits into a deterministic part --- parity and
+admissibility constraints on quadratic characters, now classified in all
+three non-trivial settings (diagonal consecutive, same-prime cross-base,
+mixed) --- and a statistical part carried by the arithmetic of $p - 1$: the
+LOS bias through residue channels for consecutive primes, the shared
+factorisation for same-prime pairs, and their directed, mostly cancelling
+combination in the mixed case. The deterministic laws are absolute but
+concentrated on sparse gap classes; the statistical effects are small but
+global; and which of them dominates a headline number like the sign of
+$\delta(a)$ is a competition, as base $15$ now demonstrates.
+
+\subsection*{Future work}
+(1) The channel-by-channel derivation of the conductor law (paper II)
+extends naturally to the mixed setting and would predict the $f_b$-dominance
+of Observation~\ref{obs:organise}; the mixed data provide $132$ constraints
+for such a derivation rather than eleven. (2) A systematic search for further
+positive-$\delta$ bases (candidates: large conductor, many prime-discriminant
+components --- e.g.\ $a = 30, 35, 39, 105$) would test the conjecture of
+Section~\ref{sec:base15}. (3) The decay in $x$ of the mixed correlations,
+and of $\delta(15)$ in particular, remains unmeasured; the sign of
+$\delta(15)$ at $10^{12}$ is an especially clean question, since the
+LOS-driven within-class repulsion decays like $1/\log x$ while the
+class-composition effect does not.
+
+\section*{Acknowledgements}
+The author thanks the developers of the open-source tools used in this work
+(GCC, Python, \texttt{sympy}, \texttt{matplotlib}).
+
+\subsection*{Use of generative AI}
+The author used Anthropic's Claude (models Claude Opus 4.5 and Claude
+Opus 5) as an assistant: for drafting and revising exposition, for writing
+and debugging the sieve and analysis programs, and for exploratory
+discussion. The mixed exclusion classification was generated by an
+exhaustive symbolic scan and verified both by hand (Theorem~\ref{thm:mixed26})
+and against the full dataset; it was this scan, run in preparation for the
+present paper, that uncovered the incompleteness of the original
+classification of paper II (since corrected there and acknowledged in that
+paper). All computations were executed and verified on the author's own
+hardware; every reference has been verified against the published record.
+The author is solely responsible for the content.
+
+\section*{Declaration of interest}
+The author reports there are no competing interests to declare.
+
+\section*{Funding}
+This research received no external funding.
+
+\section*{Data availability}
+All code and results are publicly available at
+\url{https://github.com/jpbald93/consecutive-artin}: the one-pass program
+(\texttt{mixed\_axis.c}), the symbolic classification scripts, the full
+$12 \times 12$ correlation matrix and per-gap contingency tables, and
+scripts reproducing every number in this paper. The computation reproduces
+in under an hour on a single core.
+
+\begin{thebibliography}{9}
+
+\bibitem{BaldI}
+J.~Bald,
+\emph{Correlations between primitive root statuses of consecutive primes},
+preprint (2026); code and data at
+\url{https://github.com/jpbald93/consecutive-artin}.
+
+\bibitem{BaldII}
+J.~Bald,
+\emph{Exclusion laws for consecutive Artin primes in arbitrary bases},
+preprint (2026); code and data at
+\url{https://github.com/jpbald93/consecutive-artin}.
+
+\bibitem{BaldIII}
+J.~Bald,
+\emph{Cross-base correlations of Artin primes: entanglement, exclusion, and
+the structure of $p-1$},
+preprint (2026); code and data at
+\url{https://github.com/jpbald93/consecutive-artin}.
+
+\bibitem{Hooley1967}
+C.~Hooley,
+\emph{On Artin's conjecture},
+J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+\bibitem{LOS2016}
+R.~J. Lemke~Oliver and K.~Soundararajan,
+\emph{Unexpected biases in the distribution of consecutive primes},
+Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
+
+\end{thebibliography}
+
+\end{document}
