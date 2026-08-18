@@ -39,33 +39,42 @@ characters, prime discriminants, Lemke Oliver--Soundararajan bias}
 
 \begin{abstract}
 Say that a prime $p$ is \emph{Artin base $a$} if $a$ is a primitive root modulo
-$p$. We prove that for every non-square base $a$ there is an explicit set of
-gap classes at which two primes can \emph{never} both be Artin base $a$: if the
-gap $g = q - p$ lies in one of these classes, the quadratic character
-$\chi_a$ satisfies $\chi_a(q) = -\chi_a(p)$, so one of the two primes is a
-quadratic residue base $a$ and hence not a primitive root. We classify these
-\emph{exclusion classes} completely in terms of the factorization of the
-discriminant of $\Q(\sqrt{a})$ into prime discriminants, and we deduce a clean
-dichotomy: base $a$ admits an exclusion law if and only if the squarefree part
-$d$ of $a$ satisfies $d \equiv 0 \pmod 2$, $d \equiv 3 \pmod 4$, or
-$3 \mid d$. In particular bases with $d \equiv 1 \pmod 4$ odd and $3 \nmid d$
---- the smallest being $d = 5, 13, 17, 29$ --- admit \emph{no} exclusion law at
-all. The classification is verified by exhaustive computation for all
-non-square $2 \le a \le 30$, and the exclusion law itself is verified on
-$63{,}105{,}745$ consecutive prime pairs below $10^9$ across seven bases, with
-zero exceptions.
+$p$. We determine, for every non-square base $a$, the exact set of gap classes at
+which two primes can \emph{never} both be Artin base $a$. Two distinct
+mechanisms produce such \emph{exclusion classes}. The first is
+\emph{reversal}: the quadratic character $\chi_a$ satisfies
+$\chi_a(q) = -\chi_a(p)$ for all admissible $p \equiv q - g$, so one of the
+two primes is a quadratic residue base $a$ and hence not a primitive root; we
+classify the reversing classes completely in terms of the factorization of the
+discriminant of $\Q(\sqrt{a})$ into prime discriminants. The second, which
+operates even when no reversing class exists, is \emph{inadmissibility}: for
+$d = 5$ (uniquely among squarefree parts $d \equiv 1 \bmod 4$ coprime to $6$)
+the residue classes carrying $\chi_5 = -1$ are so sparse that for
+$g \equiv 2, 3 \pmod 5$ every consecutive configuration with both characters
+$-1$ would force $5 \mid p$ or $5 \mid q$; we prove an exact count
+$\#\{r \bmod d : \chi(r) = \chi(r+g) = -1\} = (d - 3 + 2\chi(g))/4$ for
+prime $d \equiv 1 \bmod 4$, which vanishes precisely at $d = 5$,
+$\chi(g) = -1$. The resulting complete dichotomy is: base $a$ admits an
+exclusion law if and only if $d$ is even, $d \equiv 3 \pmod 4$, $3 \mid d$,
+or $d = 5$; the smallest bases with no exclusion law are $d = 13, 17, 29$. The
+classification is verified by exhaustive computation for all non-square
+$2 \le a \le 80$, and the exclusion laws are verified on $84{,}981{,}870$
+consecutive prime pairs below $10^9$ across eight bases, with zero
+exceptions.
 
 We then measure, for eleven bases, the consecutive-pair Artin correlation
 $\delta(a)$ over all $50{,}847{,}531$ consecutive prime pairs below $10^9$.
-Here the outcome is negative in an instructive way. One might expect bases with
-denser exclusion classes to exhibit stronger anticorrelation; they do not. The
-association with exclusion density is weak ($r = 0.23$), and base $5$, which
-admits no exclusion law whatsoever, has the \emph{largest} $|\delta|$ of the
-eleven. Instead $|\delta(a)|$ is governed by the size of the conductor $f$ of
-$\chi_a$, with $r(\log f, |\delta|) = -0.96$. The data strongly indicate that
-the two phenomena are distinct: the exclusion law is locally absolute but
-globally negligible, while the global correlation is a conductor-size effect
-inherited from the Lemke Oliver--Soundararajan bias.
+Here the exclusion weight $w$ (the fraction of consecutive pairs whose gap
+lies in an exclusion class, now including the inadmissibility classes of base
+$5$) correlates with $|\delta|$ at $r = 0.65$ --- but this association is
+confounded with the conductor: $r(\log f, |\delta|) = -0.96$, the partial
+correlation of $w$ given $\log f$ is only $0.14$, and the three bases with no
+exclusion classes at all ($13, 17, 29$) still carry $|\delta|$ up to $0.043$.
+Decomposing $\delta$ by gap class shows directly that the exclusion classes
+and the remaining classes make comparable contributions of opposite
+tendencies for most bases. The data indicate that the conductor of $\chi_a$,
+not the exclusion structure, is the parameter organising the global
+correlation, which is inherited from the Lemke Oliver--Soundararajan bias.
 \end{abstract}
 
 \maketitle
@@ -131,30 +140,53 @@ the outcome of a search, not as an impression.
 Our main theorem determines, for every base, exactly which gap classes are
 exclusion classes.
 
-\begin{theorem}[Classification; see Theorem~\ref{thm:classification}]
+\begin{theorem}[Classification of reversing classes; see
+Theorem~\ref{thm:classification}]
 Let $a$ be a non-square positive integer with squarefree part $d$, let $D$ be
 the discriminant of $\Q(\sqrt{d})$, and factor $D = D_1 D_2 \cdots D_k$ into
-prime discriminants. Then an even shift $g$ is an exclusion class for base $a$
+prime discriminants. Then an even shift $g$ is a reversing class for base $a$
 if and only if no component $D_i$ is \emph{indeterminate} at $g$ and an odd
 number of the components \emph{reverse} at $g$, where the behaviour of each
 component is given by Table~\ref{tab:components}.
 \end{theorem}
 
+Reversal is not the only route to exclusion. Exclusion of doubly-Artin pairs
+at a gap class requires only that \emph{no admissible residue} $r$ have
+$\chi_a(r) = \chi_a(r+g) = -1$; reversal is the generic way this happens, but
+it can also happen because the offending configurations are ruled out by
+admissibility, i.e.\ they would force $p$ or $p+g$ to be divisible by an odd
+prime factor of the conductor. This second mechanism is rare --- we show it
+occurs for exactly one squarefree class among the ``reversal-free'' bases:
+
+\begin{theorem}[Inadmissibility exclusion; see Theorem~\ref{thm:inadmissible}]
+Let $d \equiv 1 \pmod 4$ be a prime, so that $\chi_a$ for $\sqf(a) = d$ has
+odd conductor $d$ and no reversing classes exist. The number of residues
+$r \bmod d$ with $r, r+g \not\equiv 0$ and $\chi(r) = \chi(r+g) = -1$ equals
+$\bigl(d - 3 + 2\chi(g)\bigr)/4$. This vanishes if and only if $d = 5$ and
+$\chi(g) = -1$, i.e.\ $g \equiv 2, 3 \pmod 5$. Consequently base $5$ (and any
+$a$ with $\sqf(a) = 5$) admits the exclusion classes $g \equiv 2, 3 \pmod 5$
+--- which together contain $40.4\%$ of all consecutive prime pairs --- while
+for prime $d \equiv 1 \pmod 4$, $d \ge 13$, no exclusion class exists.
+\end{theorem}
+
 The classification is sharp enough to answer the qualitative question
 completely.
 
-\begin{corollary}[Dichotomy; see Corollary~\ref{cor:dichotomy}]
+\begin{corollary}[Complete dichotomy; see Corollary~\ref{cor:dichotomy}]
 Base $a$ admits at least one exclusion class if and only if $d$ is even, or
-$d \equiv 3 \pmod 4$, or $3 \mid d$. Equivalently, if and only if the
-prime-discriminant factorization of $D$ contains one of $-4$, $\pm 8$, $-3$.
+$d \equiv 3 \pmod 4$, or $3 \mid d$ (these give reversing classes), or
+$d = 5$ (inadmissibility classes).
 \end{corollary}
 
-Thus for $d \in \{5, 13, 17, 29, 37, 41, 53, 61, \dots\}$ there is no exclusion
+Thus for $d \in \{13, 17, 29, 37, 41, 53, 61, \dots\}$ there is no exclusion
 law at all, while for $d = 3$ (and $d = 12, 27, \dots$) fully half of the even
-gap classes modulo $12$ are exclusion classes. This is a genuine structural
-dichotomy, not an artifact of small conductors, and its source is a
-degeneration of a Jacobi-sum obstruction at the single prime $3$
-(Remark~\ref{rem:three}).
+gap classes modulo $12$ are exclusion classes, and for $d = 5$ two of the four
+odd-conductor classes are excluded. The reversing dichotomy is a genuine
+structural phenomenon whose source is a degeneration of a Jacobi-sum
+obstruction at the single prime $3$ (Remark~\ref{rem:three}); the
+inadmissibility phenomenon is a second, independent degeneration, this time of
+a counting bound at the single prime $5$
+(Theorem~\ref{thm:inadmissible}).
 
 In the second half of the paper we turn from the deterministic statement to a
 statistical one. For a base $a$ define the consecutive-pair correlation
@@ -170,33 +202,37 @@ $p - 1$, into Artin status, so one expects $\delta(a) \neq 0$; and indeed we
 find $\delta(a) < 0$ for all eleven bases examined, with $|z| \ge 96$
 throughout.
 
-The natural guess is that the exclusion law drives this anticorrelation: bases
+The natural guess is that the exclusion laws drive this anticorrelation: bases
 whose exclusion classes capture a larger share of consecutive pairs should
-display a more negative $\delta$. \emph{This guess is false}, and we regard its
-refutation as one of the contributions of this paper. Over all
-$50{,}847{,}531$ consecutive prime pairs below $10^9$ we find
+display a more negative $\delta$. The data complicate this guess in an
+instructive way. Over all $50{,}847{,}531$ consecutive prime pairs below
+$10^9$ we find
 
 \begin{itemize}
-\item base $5$, which admits \emph{no} exclusion law, has the largest
-      $|\delta|$ of the eleven bases;
-\item base $3$, whose exclusion classes capture $53\%$ of all consecutive pairs
-      by weight, ranks only third;
-\item the mean $|\delta|$ over bases \emph{with} an exclusion law is $0.0296$,
-      versus $0.0411$ over bases \emph{without} one --- a ratio of $0.72$, in
-      the direction opposite to the guess;
-\item $r(\text{exclusion weight}, |\delta|) = 0.23$, whereas
-      $r(\log f, |\delta|) = -0.96$.
+\item the raw association is substantial, $r(w, |\delta|) = 0.65$ over the
+      eleven bases, where $w$ is the weighted fraction of pairs in exclusion
+      classes --- but it is confounded with the conductor, since large $w$
+      occurs only at small $f$: $r(w, \log f) = -0.64$, and the partial
+      correlation of $w$ with $|\delta|$ given $\log f$ collapses to $0.14$;
+\item the three bases with no exclusion classes at all ($a = 13, 17, 29$)
+      still exhibit $|\delta|$ from $0.022$ to $0.043$ --- larger than five of
+      the eight bases \emph{with} exclusion laws;
+\item $r(\log f, |\delta|) = -0.96$: conductor size orders the data far
+      better than exclusion weight does;
+\item decomposing $\delta$ by gap class (Table~\ref{tab:outside}) shows that
+      for most bases the correlation \emph{outside} the exclusion classes has
+      the opposite sign: the global negative $\delta$ arises as a competition
+      between forced-zero classes and strongly positive coupled classes, not
+      as a simple dilution of the exclusion effect.
 \end{itemize}
 
-The explanation is a matter of scale rather than of mechanism. An exclusion
-class imposes an absolute constraint, but only on a restricted set of gap
-classes; averaged over all pairs, the constraint is diluted. What survives in
-the average is the number of residue channels available to $\chi_a$, which is
-controlled by $f$: the smaller the conductor, the fewer the classes over which
-the Lemke Oliver--Soundararajan transition bias is distributed, and the larger
-the resulting per-base correlation. We state this as a measured empirical law
-(Observation~\ref{obs:conductor}) rather than a conjectured exact power of $f$,
-because the data do not support a clean exponent.
+What organises the data is the number of residue channels available to
+$\chi_a$, which is controlled by $f$: the smaller the conductor, the fewer the
+classes over which the Lemke Oliver--Soundararajan transition bias is
+distributed, and the larger the resulting per-base correlation. We state this
+as a measured empirical law (Observation~\ref{obs:conductor}) rather than a
+conjectured exact power of $f$, because the data do not support a clean
+exponent.
 
 \subsection*{Summary of results}
 Section~\ref{sec:exclusion} proves the exclusion law and the classification and
@@ -252,7 +288,15 @@ $p \nmid 2d$. For an even integer $g$, say that $g$ is
 \item \emph{preserving} for $a$ if $\chi_a(r+g) = +\chi_a(r)$ for all such $r$;
 \item \emph{indeterminate} otherwise.
 \end{itemize}
-A reversing class $g \bmod f$ is called an \emph{exclusion class} for base $a$.
+\end{definition}
+
+\begin{definition}
+\label{def:exclusion}
+A class $g \bmod f$ is an \emph{exclusion class} for base $a$ if there is no
+residue $r \in R_f$ with $r + g \in R_f$ and
+$\chi_a(r) = \chi_a(r+g) = -1$. Every reversing class is an exclusion class
+(Theorem~\ref{thm:exclusion}); Theorem~\ref{thm:inadmissible} below exhibits
+exclusion classes that are not reversing.
 \end{definition}
 
 \begin{theorem}[Exclusion law]
@@ -397,9 +441,9 @@ two residues $r, r' \in R_f$ at which $\chi_a$ is respectively reversed and
 preserved. Hence $g$ is neither reversing nor preserving.
 \end{proof}
 
-\begin{corollary}[Dichotomy]
+\begin{corollary}[Dichotomy for reversing classes]
 \label{cor:dichotomy}
-Base $a$ admits at least one exclusion class if and only if
+Base $a$ admits at least one \emph{reversing} class if and only if
 \[
   d \equiv 0 \!\!\pmod 2, \qquad\text{or}\qquad d \equiv 3 \!\!\pmod 4,
   \qquad\text{or}\qquad 3 \mid d,
@@ -424,12 +468,100 @@ not arise). By Theorem~\ref{thm:classification}, $g$ is reversing.
 \end{proof}
 
 \begin{remark}
-The smallest bases with no exclusion law are therefore those with
+The bases without reversing classes are those with
 $d \in \{5, 13, 17, 29, 37, 41, 53, 61, \dots\}$, i.e.\ $d \equiv 1 \pmod 4$,
 $d$ odd, $3 \nmid d$. Among $2 \le a \le 30$ these are $a = 5, 13, 17, 20, 29$
 (note $\sqf(20) = 5$). At the other extreme, $d \equiv 3 \pmod{4}$ with
 $3 \mid d$ gives $f = 12$ and \emph{three} of the six even classes modulo $12$
-are exclusion classes; this occurs for $a = 3, 12, 27, \dots$.
+are reversing; this occurs for $a = 3, 12, 27, \dots$.
+\end{remark}
+
+\subsection*{The inadmissibility mechanism}
+
+For the reversal-free bases the conductor $f = d$ is odd, and one might expect
+--- as an earlier version of this paper asserted --- that no exclusion of any
+kind is possible. That is wrong, for exactly one squarefree class, and the
+data flagged it before we understood it: at $x = 10^9$ base $5$ has
+\emph{zero} doubly-Artin consecutive pairs at every gap
+$g \equiv 2, 3 \pmod 5$, across $20{,}523{,}554$ pairs. The explanation is not
+reversal but a counting degeneration.
+
+\begin{theorem}[Inadmissibility exclusion]
+\label{thm:inadmissible}
+Let $d \equiv 1 \pmod 4$ be prime, $\chi = \bigl(\tfrac{\cdot}{d}\bigr)$ the
+quadratic character of conductor $d$, and $g \not\equiv 0 \pmod d$. Then
+\[
+  N_{--}(g) \;:=\; \#\bigl\{\, r \bmod d \;:\; r \not\equiv 0,\;
+  r + g \not\equiv 0,\; \chi(r) = \chi(r+g) = -1 \,\bigr\}
+  \;=\; \frac{d - 3 + 2\chi(g)}{4}.
+\]
+In particular $N_{--}(g) = 0$ if and only if $d = 5$ and $\chi(g) = -1$,
+i.e.\ $g \equiv 2, 3 \pmod 5$. For every prime $d \equiv 1 \pmod 4$ with
+$d \ge 13$, and every $g$, we have $N_{--}(g) \ge 2$, so no exclusion class
+exists.
+\end{theorem}
+
+\begin{proof}
+Write $\mathbf{1}[\chi(r) = -1] = \tfrac{1 - \chi(r)}{2}$ for
+$r \not\equiv 0$. Then
+\[
+  N_{--}(g) = \sum_{\substack{r \bmod d \\ r,\, r+g \not\equiv 0}}
+  \frac{(1 - \chi(r))(1 - \chi(r+g))}{4}
+  = \frac{1}{4}\Bigl[ (d - 2) - \Sigma_1 - \Sigma_2 + \Sigma_3 \Bigr],
+\]
+where $\Sigma_1 = \sum \chi(r)$, $\Sigma_2 = \sum \chi(r+g)$, and
+$\Sigma_3 = \sum \chi(r)\chi(r+g)$, all sums over the $d-2$ admissible $r$.
+Since $\sum_{r \bmod d} \chi(r) = 0$ and the excluded terms are $r \equiv 0$
+(where $\chi = 0$) and $r \equiv -g$ (where $\chi(r) = \chi(-g)$), we get
+$\Sigma_1 = -\chi(-g) = -\chi(g)$, using $\chi(-1) = 1$ as
+$d \equiv 1 \pmod 4$. Symmetrically $\Sigma_2 = -\chi(g)$. The complete sum
+$\sum_{r} \chi(r)\chi(r+g) = -1$ (the Jacobi-type evaluation
+of~\eqref{eq:jacobi}, valid for all $g \not\equiv 0$), and the terms excluded
+from it vanish; hence $\Sigma_3 = -1$. Therefore
+\[
+  N_{--}(g) = \frac{(d-2) + \chi(g) + \chi(g) - 1}{4}
+            = \frac{d - 3 + 2\chi(g)}{4}.
+\]
+This is zero iff $d - 3 = -2\chi(g)$, i.e.\ $d = 5, \chi(g) = -1$; and for
+$d \ge 13$ it is at least $(13 - 3 - 2)/4 = 2$.
+\end{proof}
+
+\begin{corollary}[Complete dichotomy]
+\label{cor:complete}
+Base $a$ with squarefree part $d$ admits at least one exclusion class
+(Definition~\ref{def:exclusion}) if and only if
+\[
+  d \equiv 0 \pmod 2, \qquad d \equiv 3 \pmod 4, \qquad 3 \mid d,
+  \qquad\text{or}\qquad d = 5.
+\]
+\end{corollary}
+
+\begin{proof}
+The first three cases give reversing classes
+(Corollary~\ref{cor:dichotomy}), and $d = 5$ gives the inadmissibility
+classes of Theorem~\ref{thm:inadmissible}. Conversely, suppose $d \equiv 1
+\pmod 4$, $3 \nmid d$, $d$ odd, $d \neq 5$. If $d$ is prime,
+Theorem~\ref{thm:inadmissible} gives $N_{--} \ge 2 > 0$ for every class. If
+$d$ is composite, write $\chi = \prod_{q \mid d} \chi_{q^*}$; by CRT it
+suffices to exhibit, for each $g$, a residue $r$ with
+$\chi_{q^*}(r) \,\chi_{q^*}(r + g)$ patterns multiplying to $(-1, -1)$ at $r$
+and $r+g$; since each prime factor $q \ge 5$ of $d$ has $N^{(q)}_{--}(g) \ge
+\bigl(q - 3 - 2\bigr)/4 \ge 0$ with equality only at $q = 5$, and even in the
+$q = 5$, $\chi_5(g) = -1$ case the mixed sign-patterns $(+,-)$ and $(-,+)$ are
+available with multiplicity at least $(q+1)/4 \ge 1$ at every component, a
+CRT choice realising $\chi(r) = \chi(r+g) = -1$ exists whenever $d$ has at
+least two prime factors. (Exhaustive verification for all non-square
+$a \le 80$, reported below, confirms the composite case.)
+\end{proof}
+
+\begin{remark}
+The exact count explains the phenomenon structurally: the constraint
+``both characters $-1$'' costs a factor of roughly $4$ in density, and the two
+inadmissible residues $r \equiv 0, -g$ cost $\chi(g)$-dependent boundary
+terms; only at $d = 5$, where only $(d-1)/2 = 2$ residues carry $\chi = -1$ at
+all, can the boundary terms consume the entire count. It is a degeneration at
+small conductor, exactly parallel to --- but independent of --- the $q = 3$
+degeneration of Remark~\ref{rem:three}.
 \end{remark}
 
 \subsection*{Computational confirmation of the classification}
@@ -438,33 +570,42 @@ preserving sets directly, by evaluating $\chi_a$ on every residue class in
 $R_f$ attained by a prime below $2 \times 10^5$ and testing
 Definition~\ref{def:shift} exhaustively over all even $g$ modulo $f$. The
 resulting sets agree \emph{exactly}, in every case, with the prediction of
-Theorem~\ref{thm:classification}; and the criterion of
-Corollary~\ref{cor:dichotomy} was confirmed for all non-square $2 \le a \le 79$.
+Theorem~\ref{thm:classification}; the exact count of
+Theorem~\ref{thm:inadmissible} was verified for all primes
+$d \equiv 1 \pmod 4$, $d \le 41$, and all shifts; and the criterion of the
+complete dichotomy (Corollary~\ref{cor:complete}) was confirmed by exhaustive
+scan --- over all residue classes modulo $f$, odd classes included --- for all
+non-square $2 \le a \le 80$.
 Table~\ref{tab:classification} records a representative sample.
 
 \begin{table}[t]
 \centering
 \caption{Exclusion classes for selected bases. ``Prime discs.'' lists the
-factorization~\eqref{eq:primedisc}; the exclusion classes are those predicted by
-Theorem~\ref{thm:classification} and confirmed by exhaustive search.}
+factorization~\eqref{eq:primedisc}. Reversing classes are those predicted by
+Theorem~\ref{thm:classification}; inadmissibility classes by
+Theorem~\ref{thm:inadmissible}; all confirmed by exhaustive search. For odd
+conductors the residues are odd numbers realised by even gaps (e.g.\
+$g \equiv 7 \pmod{21}$ via $g = 28, 70, \dots$); an earlier version of this
+table, which scanned only even residues, missed the class $7$ of base $21$
+and all classes of base $5$.}
 \label{tab:classification}
 \begin{tabular}{rrlll}
 \toprule
-$a$ & $f$ & prime discs. & exclusion classes mod $f$ & preserving classes \\
+$a$ & $f$ & prime discs. & reversing & inadmissibility & preserving \\
 \midrule
-$2$  & $8$   & $8$          & $4$          & $0$ \\
-$3$  & $12$  & $-3, -4$     & $4, 6, 8$    & $0, 2, 10$ \\
-$5$  & $5$   & $5$          & \emph{none}  & \emph{none} \\
-$6$  & $24$  & $-3, -8$     & $8, 12, 16$  & $0, 4, 20$ \\
-$7$  & $28$  & $-7, -4$     & $14$         & $0$ \\
-$10$ & $40$  & $5, 8$       & $20$         & $0$ \\
-$11$ & $44$  & $-11, -4$    & $22$         & $0$ \\
-$13$ & $13$  & $13$         & \emph{none}  & \emph{none} \\
-$15$ & $60$  & $-3, 5, -4$  & $20, 30, 40$ & $0, 10, 50$ \\
-$17$ & $17$  & $17$         & \emph{none}  & \emph{none} \\
-$21$ & $21$  & $-3, -7$     & $14$         & \emph{none} \\
-$29$ & $29$  & $29$         & \emph{none}  & \emph{none} \\
-$30$ & $120$ & $-3, 5, -8$  & $40, 60, 80$ & $0, 20, 100$ \\
+$2$  & $8$   & $8$          & $4$          & ---      & $0$ \\
+$3$  & $12$  & $-3, -4$     & $4, 6, 8$    & ---      & $0, 2, 10$ \\
+$5$  & $5$   & $5$          & \emph{none}  & $2, 3$   & $0$ \\
+$6$  & $24$  & $-3, -8$     & $8, 12, 16$  & ---      & $0, 4, 20$ \\
+$7$  & $28$  & $-7, -4$     & $14$         & ---      & $0$ \\
+$10$ & $40$  & $5, 8$       & $20$         & ---      & $0$ \\
+$11$ & $44$  & $-11, -4$    & $22$         & ---      & $0$ \\
+$13$ & $13$  & $13$         & \emph{none}  & \emph{none} & $0$ \\
+$15$ & $60$  & $-3, 5, -4$  & $20, 30, 40$ & ---      & $0, 10, 50$ \\
+$17$ & $17$  & $17$         & \emph{none}  & \emph{none} & $0$ \\
+$21$ & $21$  & $-3, -7$     & $7, 14$      & ---      & $0$ \\
+$29$ & $29$  & $29$         & \emph{none}  & \emph{none} & $0$ \\
+$30$ & $120$ & $-3, 5, -8$  & $40, 60, 80$ & ---      & $0, 20, 100$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -489,10 +630,11 @@ writes no intermediate table, accumulating instead the $2\times 2$ contingency
 counts of (Artin status of $p_n$, Artin status of $p_{n+1}$), both globally and
 separately for each gap $g \le 300$.
 
-The base set was chosen to span the dichotomy of
-Corollary~\ref{cor:dichotomy}: $a = 5, 13, 17, 29$ admit no exclusion law,
-$a = 3$ and $a = 6$ have three exclusion classes each, and
-$a = 2, 7, 10, 11, 21$ have one. All counts reported below are exact; no
+The base set was chosen to span the dichotomy as we then understood it. In
+the corrected classification (Corollary~\ref{cor:complete}): $a = 13, 17, 29$
+admit no exclusion law; $a = 3$ and $a = 6$ have three reversing classes each;
+$a = 2, 7, 10, 11$ have one reversing class; $a = 21$ has two; and $a = 5$ has
+the two inadmissibility classes of Theorem~\ref{thm:inadmissible}. All counts reported below are exact; no
 sampling is involved. The implementation, together with an independent and
 slower verification in \texttt{sympy} used to cross-check the exclusion counts
 at $3 \times 10^6$, is available at the repository cited in the data
@@ -521,36 +663,39 @@ class $g \equiv 0$.}
 \toprule
 $a$ & $f$ & exclusion classes & pairs & both Artin & control (preserving) \\
 \midrule
-$2$  & $8$  & $4$         & $13{,}404{,}106$ & $0$ & $27.5\%$ \\
-$3$  & $12$ & $4, 6, 8$   & $27{,}010{,}759$ & $0$ & $28.8\%$ \\
-$6$  & $24$ & $8, 12, 16$ & $12{,}419{,}039$ & $0$ & $29.3\%$ \\
-$7$  & $28$ & $14$        & $3{,}567{,}335$  & $0$ & $26.3\%$ \\
-$10$ & $40$ & $20$        & $2{,}214{,}511$  & $0$ & $26.7\%$ \\
-$11$ & $44$ & $22$        & $1{,}796{,}191$  & $0$ & $27.5\%$ \\
-$21$ & $21$ & $14$        & $2{,}693{,}804$  & $0$ & --- \\
+$2$  & $8$  & $4$ (rev.)          & $13{,}404{,}106$ & $0$ & $27.5\%$ \\
+$3$  & $12$ & $4, 6, 8$ (rev.)    & $27{,}010{,}759$ & $0$ & $28.8\%$ \\
+$5$  & $5$  & $2, 3$ (inadm.)     & $20{,}523{,}554$ & $0$ & $29.8\%$ \\
+$6$  & $24$ & $8, 12, 16$ (rev.)  & $12{,}419{,}039$ & $0$ & $29.3\%$ \\
+$7$  & $28$ & $14$ (rev.)         & $3{,}567{,}335$  & $0$ & $26.3\%$ \\
+$10$ & $40$ & $20$ (rev.)         & $2{,}214{,}511$  & $0$ & $26.7\%$ \\
+$11$ & $44$ & $22$ (rev.)         & $1{,}796{,}191$  & $0$ & $27.5\%$ \\
+$21$ & $21$ & $7, 14$ (rev.)      & $4{,}046{,}375$ & $0$ & $27.5\%$ \\
 \midrule
-\multicolumn{3}{l}{\emph{total}} & $63{,}105{,}745$ & $\mathbf{0}$ & \\
+\multicolumn{3}{l}{\emph{total}} & $84{,}981{,}870$ & $\mathbf{0}$ & \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-There are $63{,}105{,}745$ pairs in exclusion classes and not a single
-doubly-Artin pair among them, while at preserving classes the doubly-Artin
-proportion lies between $26.3\%$ and $29.3\%$ throughout, as one expects from the square of
-the relevant Artin density. (The control entry for base $21$ is blank because
-base $21$ has no preserving class at all, by
-Table~\ref{tab:classification}.) To calibrate how striking the zero count is:
-absent the exclusion law, treating Artin statuses as independent with the
-observed per-base densities ($\approx 0.374$ throughout), the expected number
-of doubly-Artin pairs in the exclusion classes would be
-$\sum_a (\text{density}_a)^2 \times (\text{pairs}_a) \approx 8{,}821{,}000$
---- some $1.9$ million for base $2$ alone and $3.8$ million for base $3$. The
-observed count is $0$. Of course the theorem makes the zero certain, so this
-is a calibration of the \emph{verification}, not of the theorem: an
-implementation or classification error affecting even a tiny fraction of pairs
-would have surfaced against an expected background of nearly nine million. A
-supplementary check reproduced the same zero counts, independently, with
-\texttt{sympy} order computations for primes below $3 \times 10^6$.
+There are $84{,}981{,}870$ pairs in exclusion classes --- reversing classes
+for eight bases (including the class $g \equiv 7 \pmod{21}$ of base $21$,
+which is odd as a residue but is realised by even gaps $g = 28, 70, \dots$
+since the conductor $21$ is odd), together with the inadmissibility classes
+$g \equiv 2, 3 \pmod 5$ of base $5$ --- and not a single
+doubly-Artin pair among them, while at the preserving classes
+$g \equiv 0 \pmod f$ the doubly-Artin proportion lies between $26.3\%$ and
+$29.8\%$ throughout, as one expects from the square of the relevant Artin
+density. To calibrate how striking the zero count is: absent the exclusion
+laws, treating Artin statuses as independent with the observed per-base
+densities, the expected number of doubly-Artin pairs in the exclusion classes
+would be $\sum_a (\text{density}_a)^2 \times (\text{pairs}_a) \approx
+12{,}189{,}000$ --- some $3.8$ million for base $3$ alone and $3.2$ million
+for base $5$. The observed count is $0$. Of course the theorems make the zero
+certain, so this is a calibration of the \emph{verification}, not of the
+theorems: an implementation or classification error affecting even a tiny
+fraction of pairs would have surfaced against an expected background of twelve
+million. A supplementary check reproduced the same zero counts, independently,
+with \texttt{sympy} order computations for primes below $3 \times 10^6$.
 
 \section{The consecutive-pair correlation across bases}
 \label{sec:delta}
@@ -568,18 +713,19 @@ proportions. Table~\ref{tab:delta} collects the results.
 \centering
 \caption{Consecutive-pair Artin correlation at $x = 10^9$, over all
 $50{,}847{,}531$ consecutive prime pairs, sorted by $|\delta|$. Here
-$\#\mathrm{exc}$ is the number of exclusion classes and $w$ the fraction of all
-consecutive pairs whose gap lies in one.}
+$\#\mathrm{exc}$ is the number of exclusion classes (complete classification,
+reversing and inadmissibility) and $w$ the fraction of all consecutive pairs
+whose gap lies in one.}
 \label{tab:delta}
 \begin{tabular}{rrrrrr}
 \toprule
 $a$ & $f$ & $\#\mathrm{exc}$ & $w$ & $\widehat{\delta}(a)$ & $z$ \\
 \midrule
-$5$  & $5$  & $0$ & $0.0000$ & $-0.066563$ & $-478.9$ \\
+$5$  & $5$  & $2$ & $0.4036$ & $-0.066563$ & $-478.9$ \\
 $2$  & $8$  & $1$ & $0.2636$ & $-0.050199$ & $-361.0$ \\
 $3$  & $12$ & $3$ & $0.5312$ & $-0.046676$ & $-335.4$ \\
 $13$ & $13$ & $0$ & $0.0000$ & $-0.042573$ & $-305.6$ \\
-$21$ & $21$ & $1$ & $0.0530$ & $-0.038345$ & $-275.2$ \\
+$21$ & $21$ & $2$ & $0.0796$ & $-0.038345$ & $-275.2$ \\
 $17$ & $17$ & $0$ & $0.0000$ & $-0.033025$ & $-236.7$ \\
 $6$  & $24$ & $3$ & $0.2442$ & $-0.025205$ & $-180.4$ \\
 $29$ & $29$ & $0$ & $0.0000$ & $-0.022422$ & $-160.4$ \\
@@ -609,32 +755,67 @@ themselves anticorrelated --- into Artin status.
 Second, and contrary to what the first half of this paper might suggest, the
 ordering of $|\delta(a)|$ has almost nothing to do with the exclusion law.
 
-\begin{observation}[Refutation of the exclusion-density hypothesis]
+\begin{observation}[The exclusion weight does not drive the correlation]
 \label{obs:refutation}
-The hypothesis that $|\delta(a)|$ increases with the density $w$ of exclusion
-classes is false. At $x = 10^9$:
+With the complete classification (including the inadmissibility classes of
+base $5$), the exclusion weight $w$ and $|\delta|$ correlate at
+$r(w, |\delta|) = 0.65$ at $x = 10^9$ --- but the association is not causal:
 \begin{enumerate}
-\item base $5$, for which Corollary~\ref{cor:dichotomy} shows no exclusion class
-      exists, has the largest $|\delta|$ among the eleven bases;
-\item base $3$, whose exclusion classes contain $53\%$ of all consecutive pairs,
-      ranks third;
-\item the mean of $|\delta|$ over the seven bases with an exclusion law is
-      $0.0296$, against $0.0411$ over the four without, a ratio of $0.72$ ---
-      opposite in direction to the hypothesis;
-\item $r(w, |\delta|) = 0.23$ over the eleven bases, and the apparent weak
-      positive association is confounded, since small conductors are exactly the
-      even and $3$-divisible ones.
+\item it is confounded with the conductor, $r(w, \log f) = -0.64$, and the
+      partial correlation of $w$ with $|\delta|$ given $\log f$ is $0.14$;
+      a nonparametric bootstrap ($10^5$ resamples) gives the $95\%$ interval
+      $[-0.00,\, 0.89]$ for $r(w, |\delta|)$ itself, against
+      $[-0.99, -0.86]$ for $r(\log f, |\delta|)$;
+\item the three bases with no exclusion classes at all ($a = 13, 17, 29$)
+      carry $|\delta| = 0.043, 0.033, 0.022$ --- the first exceeding eight of
+      the eleven bases, so exclusion structure is certainly not necessary for
+      strong anticorrelation;
+\item restricting $\delta$ to the pairs \emph{outside} the exclusion classes
+      (Table~\ref{tab:outside}) reverses its sign for seven of the eight bases
+      possessing such classes (e.g.\ base $3$: $-0.047$ globally, $+0.578$
+      outside; base $5$: $-0.067$ globally, $+0.002$ outside), while the
+      no-exclusion bases are untouched by construction. The global negative
+      $\delta$ of the exclusion-law bases is thus an average of forced-zero
+      classes against positively coupled ones, whereas for $a = 13, 17, 29$
+      it is a genuine within-class residue effect.
 \end{enumerate}
 \end{observation}
 
-The reason is one of scale rather than of mechanism, and in hindsight it is
-clear. An exclusion class is an absolute prohibition, but it applies only to
-certain gap classes; the statistic $\delta(a)$ averages over all consecutive
-pairs, in which those classes are a minority, so the prohibition is diluted.
-Indeed the exclusion classes contribute to $\delta$ only through the pairs they
-contain, and their effect is bounded by $w$ times a quantity of order the Artin
-density --- for base $10$, where $w = 0.044$, this bound is already smaller than
-the observed $|\delta|$.
+\begin{table}[t]
+\centering
+\caption{Global $\delta$ versus $\delta$ restricted to gap classes outside
+the exclusion set, at $x = 10^9$. $w$ is the weighted fraction of pairs in
+exclusion classes (complete classification).}
+\label{tab:outside}
+\begin{tabular}{rrrr}
+\toprule
+$a$ & $w$ & $\delta$ (global) & $\delta$ (outside exclusion) \\
+\midrule
+$5$  & $0.4036$ & $-0.0666$ & $+0.0020$ \\
+$2$  & $0.2636$ & $-0.0502$ & $+0.1442$ \\
+$3$  & $0.5312$ & $-0.0467$ & $+0.5783$ \\
+$13$ & $0$      & $-0.0426$ & $-0.0426$ \\
+$21$ & $0.0796$ & $-0.0383$ & $+0.0107$ \\
+$17$ & $0$      & $-0.0330$ & $-0.0330$ \\
+$6$  & $0.2442$ & $-0.0252$ & $+0.1581$ \\
+$29$ & $0$      & $-0.0224$ & $-0.0224$ \\
+$11$ & $0.0353$ & $-0.0189$ & $+0.0020$ \\
+$10$ & $0.0436$ & $-0.0141$ & $+0.0131$ \\
+$7$  & $0.0702$ & $-0.0135$ & $+0.0319$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The mechanism-level picture is clarified by Table~\ref{tab:outside}. For a
+base with exclusion classes, $\delta$ is an average over classes of two
+competing tendencies: the forced-zero classes push it negative, and the
+remaining classes --- within which quadratic-residue status is often positively
+coupled --- push it positive, in some cases enormously so (base $3$ outside its
+exclusion classes has $\delta = +0.578$). The magnitude of the global
+$\delta$ is therefore not proportional to $w$, and for the bases with no
+exclusion classes at all the anticorrelation must be, and is, carried entirely
+by within-class residue effects. What the exclusion structure does control is
+the \emph{composition} of $\delta$, not its size.
 
 What does organise the data is the conductor.
 
@@ -699,8 +880,11 @@ $x = 10^9$. The data points are the content of the figure; the faint dotted
 curve $C/\sqrt{f}$ ($C = 0.132$) is a guide to the eye only --- as discussed
 after Observation~\ref{obs:conductor}, the data do not identify an exponent and
 no power law is asserted. Right: $|\delta(a)|$ against the weighted fraction of
-consecutive pairs lying in exclusion classes. Bases admitting no exclusion law
-are shown in red; one of them has the largest $|\delta|$ of all.}
+consecutive pairs lying in exclusion classes (complete classification,
+including the inadmissibility classes of base $5$). The three bases with no
+exclusion classes ($a = 13, 17, 29$) are shown in red; the apparent
+association in this panel is confounded with the conductor (see
+Observation~\ref{obs:refutation}).}
 \label{fig:conductor}
 \end{figure}
 
@@ -729,23 +913,26 @@ of $f$ alone.
 The ingredients are classical: the quadratic obstruction to being a primitive
 root, quadratic reciprocity, the decomposition of a discriminant into prime
 discriminants, and the elementary evaluation of a Jacobi-type character sum. The
-contributions are (i) the observation that these combine into a
-\emph{deterministic exclusion law} for consecutive Artin primes, valid in every
-base (Theorem~\ref{thm:exclusion}); (ii) a \emph{complete classification} of
-the exclusion classes in terms of prime discriminants
-(Theorem~\ref{thm:classification}), with the resulting dichotomy
-(Corollary~\ref{cor:dichotomy}) identifying exactly which bases admit no such
-law; and (iii) the first cross-base measurement of the consecutive-pair Artin
-correlation, which refutes the natural hypothesis that the exclusion law drives
-that correlation and identifies conductor size as the operative parameter
-instead.
+contributions are (i) the observation that these combine into
+\emph{deterministic exclusion laws} for consecutive Artin primes
+(Theorem~\ref{thm:exclusion}); (ii) the identification of \emph{two distinct
+mechanisms} producing them --- reversal, classified completely in terms of prime
+discriminants (Theorem~\ref{thm:classification}), and inadmissibility,
+governed by the exact count of Theorem~\ref{thm:inadmissible}, which
+degenerates precisely at $d = 5$ --- together with the complete dichotomy
+(Corollary~\ref{cor:complete}); and (iii) the first cross-base measurement of
+the consecutive-pair Artin correlation, which shows that conductor size, not
+exclusion weight, is the parameter organising the global anticorrelation.
 
-We regard (iii) as no less useful than (i) and (ii). The exclusion law is
-visually striking --- tens of millions of pairs with an exact zero count --- and
-it would be easy to assume that it dominates the statistics of Artin primes in
-pairs. It does not. Separating a locally absolute but globally negligible
-constraint from the globally operative conductor effect seems to us the right
-conclusion to draw, and it is one we reached only by measuring.
+We call attention to a corrective aspect of (ii): an earlier version of this
+paper classified only the reversing mechanism and asserted that base $5$
+admits no exclusion law. The data refuted the assertion --- twenty million
+consecutive pairs at gaps $g \equiv 2, 3 \pmod 5$ with a zero doubly-Artin
+count is not a subtle signal --- and the inadmissibility mechanism was found
+by asking what the classification had missed. We record this because the
+episode is a good illustration of the value of exhaustive verification
+against exact counts: the check of Table~\ref{tab:verification} was designed
+to catch implementation errors, and instead caught a theorem-level gap.
 
 \subsection*{Relation to earlier work}
 For base $10$ the exclusion class $g \equiv 20 \pmod{40}$ and a measurement of
