@@ -1,0 +1,437 @@
+\documentclass[11pt,reqno]{amsart}
+\usepackage[margin=1.15in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{microtype}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\DeclareMathOperator{\sqf}{sqf}
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\Art}{\mathrm{A}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\legs}[2]{\left(\tfrac{#1}{#2}\right)}
+
+\begin{document}
+
+\title[The layers of the consecutive-prime Artin correlation]
+{The layers of the consecutive-prime Artin correlation:\\
+only the abelian one correlates}
+
+\author{Josh Bald}
+\address{Ontario, Canada}
+\email{jpbald93@gmail.com}
+
+\subjclass[2020]{Primary 11A07; Secondary 11N05, 11R32, 11Y16}
+\keywords{Artin's conjecture, primitive roots, consecutive primes, power
+residues, Kummer extensions, Lemke Oliver--Soundararajan bias}
+
+\date{\today}
+
+\begin{abstract}
+The primitive-root (``Artin'') condition for a base $a$ at a prime $p$
+factors into layers: for each prime $\ell \mid p - 1$, the element $a$ must
+not be an $\ell$-th power residue. Earlier papers in this series measured a
+systematic correlation between the Artin statuses of consecutive primes and
+traced it, empirically, to the quadratic layer and to the joint distribution
+of $p - 1$'s factorizations. This paper closes the remaining question: do the
+higher layers ($\ell \ge 3$) contribute correlation of their own? We show
+that they cannot contribute through gap classes --- for $\ell \ge 3$ the
+$\ell$-th power residue symbol of a fixed base is not determined by any
+congruence condition on $p$, because $\Q(\zeta_\ell, a^{1/\ell})$ is
+non-abelian over $\Q$, so no analogue of the quadratic exclusion laws exists
+--- and we verify computationally that they do not contribute at all: over
+all consecutive prime pairs below $10^9$ where the $\ell$-th condition binds
+at both primes, the $\ell$-th symbol statuses are statistically independent
+for every $\ell \in \{3,5,7,11,13\}$ and every base tested, while the
+\emph{binding events} $\ell \mid p_n - 1$ and $\ell \mid p_{n+1} - 1$ are
+strongly anticorrelated (e.g.\ $\phi = -0.133$, $z = -150$, for $\ell = 3$ at
+$2\times 10^7$) --- the Lemke Oliver--Soundararajan bias modulo $\ell$. The
+consecutive-prime Artin correlation is therefore carried entirely by the
+abelian ($\ell = 2$) layer and by the binding structure of $p-1$: a
+dichotomy aligned exactly with the abelian/non-abelian dichotomy of the
+Kummer extensions. As a corollary, the conditional model of the sixth paper
+in this series, which uses only quadratic and binding data, is not an
+approximation that happens to work: no further layer terms exist to add.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:intro}
+
+Let $a \ge 2$ be a non-square integer. A prime $p \nmid a$ has $a$ as a
+primitive root if and only if, for every prime $\ell \mid p - 1$, the element
+$a$ is not an $\ell$-th power residue modulo $p$:
+\begin{equation}
+\label{eq:layers}
+  p \in \Art_a
+  \iff
+  a^{(p-1)/\ell} \not\equiv 1 \pmod p
+  \quad \text{for every prime } \ell \mid p - 1 .
+\end{equation}
+We refer to the condition at $\ell$ as the \emph{$\ell$-th layer}. The
+layer at $\ell$ \emph{binds} at $p$ when $\ell \mid p - 1$; the layer at
+$\ell = 2$ binds at every odd prime, and its condition is exactly
+$\chi_a(p) = -1$ for the quadratic character $\chi_a = \legs{\sqf(a)}{\cdot}$.
+
+Earlier papers in this series measured the correlation
+\[
+  \delta(a; x) = P\bigl(p_{n+1} \in \Art_a \mid p_n \in \Art_a\bigr)
+               - P\bigl(p_{n+1} \in \Art_a \mid p_n \notin \Art_a\bigr)
+\]
+over consecutive primes up to $x = 10^9$ and found it nonzero for every base
+tested ($|z|$ up to $479$), organised by the conductor of $\chi_a$, with
+unconditional \emph{exclusion laws} in the quadratic layer: gap classes
+modulo the conductor in which two consecutive primes can never both be Artin.
+A companion paper constructed a conditional Hardy--Littlewood model from the
+quadratic layer and the factorization structure of $p-1$ alone, and found it
+reproduces $\delta(a)$ to within $4\%$ for twelve bases, with channel-level
+$R^2 > 0.999$.
+
+That success poses a question the model cannot answer for itself: \emph{why
+is nothing missing?} The Artin condition~\eqref{eq:layers} involves every
+layer. If the cubic layer, say, carried its own consecutive-prime
+correlation --- an analogue of the quadratic exclusion laws, or any gap-class
+structure --- the model would be incomplete and its agreement partly
+accidental. The present paper shows that the higher layers can carry no such
+structure, in two steps:
+
+\begin{itemize}
+\item \textbf{No exclusion laws above $\ell = 2$}
+      (Section~\ref{sec:noexclusion}). The quadratic exclusion laws exist
+      because $\chi_a(p)$ is periodic in $p$. For $\ell \ge 3$ the $\ell$-th
+      power residue status of a fixed integer $a$ is \emph{not} a congruence
+      condition on $p$: the splitting field $\Q(\zeta_\ell, a^{1/\ell})$ is
+      non-abelian over $\Q$, and a Chebotarev-style argument shows its
+      splitting behaviour cannot be captured by residue classes. Gauss's
+      classical criterion --- $2$ is a cubic residue mod $p$ iff
+      $p = L^2 + 27M^2$ --- is the concrete face of this obstruction.
+\item \textbf{Empirically, no correlation at all}
+      (Section~\ref{sec:measurement}). Across all consecutive prime pairs
+      below $10^9$ at which the $\ell$-th layer binds at both primes, the
+      symbol statuses are statistically independent, for every
+      $\ell \in \{3, 5, 7, 11, 13\}$ and every base
+      $a \in \{2,3,5,6,7,10,11,13,15\}$. The \emph{binding events}
+      themselves, by contrast, are strongly anticorrelated --- pure Lemke
+      Oliver--Soundararajan bias modulo $\ell$ \cite{LOS2016}.
+\end{itemize}
+
+The conclusion (Section~\ref{sec:discussion}) is a dichotomy that matches
+the Galois theory exactly: \emph{the abelian layer correlates; the
+non-abelian layers are independent}. All consecutive-prime structure in the
+Artin property flows through (i) the quadratic character and (ii) which
+layers bind --- both of which are congruence data --- and none through the
+non-abelian symbols. In particular the companion model's completeness is
+structural, not fortuitous.
+
+\section{No exclusion laws above the quadratic layer}
+\label{sec:noexclusion}
+
+The quadratic exclusion laws of the second paper rest on one fact: $\chi_a$
+is a Dirichlet character modulo the conductor $f$, so $\chi_a(p)$ depends
+only on $p \bmod f$, and a gap class that forces $\chi_a(q) = -\chi_a(p)$
+forces one of the two primes out of $\Art_a$. The following proposition
+shows this mechanism is exclusive to $\ell = 2$.
+
+\begin{proposition}
+\label{prop:nonabelian}
+Let $\ell \ge 3$ be prime and let $a \ge 2$ be an integer that is not a
+perfect $\ell$-th power. There is no modulus $M$ and set
+$S \subseteq (\Z/M\Z)^\times$ such that, for all sufficiently large primes
+$p \equiv 1 \pmod \ell$,
+\[
+  a \text{ is an $\ell$-th power residue mod } p
+  \iff p \bmod M \in S .
+\]
+\end{proposition}
+
+\begin{proof}
+Let $K = \Q(\zeta_\ell, a^{1/\ell})$. For a prime
+$p \equiv 1 \pmod \ell$ not dividing $a\ell$, the condition ``$a$ is an
+$\ell$-th power residue mod $p$'' is equivalent to $p$ splitting completely
+in $K$ (standard Kummer theory: $p$ splits completely in $\Q(\zeta_\ell)$
+because $p \equiv 1 \pmod \ell$, and then splits completely in $K$ iff
+$x^\ell - a$ has a root --- equivalently all roots --- mod $p$).
+
+Suppose such $M$ and $S$ existed. Then the set of rational primes splitting
+completely in $K$ would be, up to finitely many exceptions, a union of
+arithmetic progressions modulo $\mathrm{lcm}(M, \ell)$. A number field whose
+set of completely-split primes is (up to density-zero exceptions) a union of
+arithmetic progressions mod $N$ has the same completely-split set as some
+subfield of $\Q(\zeta_N)$; since the completely-split set determines the
+Galois closure (a standard consequence of the Chebotarev density theorem),
+the Galois closure of $K$ would be contained in $\Q(\zeta_N)$ and hence
+\emph{abelian} over $\Q$.
+
+But $K$ is its own Galois closure ($\zeta_\ell \in K$), with
+$\mathrm{Gal}(K/\Q) \cong \Z/\ell\Z \rtimes (\Z/\ell\Z)^\times$ of order
+$\ell(\ell-1)$: it is non-abelian for every $\ell \ge 3$, because the
+subgroup fixing $\Q(\zeta_\ell)$ (translations $a^{1/\ell} \mapsto
+\zeta_\ell^j a^{1/\ell}$) is normal and acted on nontrivially by
+$(\Z/\ell\Z)^\times$, which has order $\ell - 1 \ge 2$. (Non-degeneracy of
+the action requires $a$ not an $\ell$-th power, which we assumed; the
+semidirect product is then genuinely non-abelian.) Contradiction.
+\end{proof}
+
+\begin{corollary}
+\label{cor:noexclusion}
+For $\ell \ge 3$ there is no gap-class exclusion law at the $\ell$-th layer:
+no modulus $M$ and residue class $g_0$ such that consecutive primes
+$p, q = p + g$ with $g \equiv g_0 \pmod M$, both $\equiv 1 \pmod \ell$, are
+forbidden from both having $a$ as an $\ell$-th power non-residue (or any
+other fixed pair of symbol statuses).
+\end{corollary}
+
+\begin{proof}
+A gap-class law forcing symbol statuses would, applied to the pairs
+$(p, p+g)$ ranging over all admissible $p$, determine the symbol status of
+$p + g$ from congruence data of $p$ and $g$ alone --- in particular the
+symbol status at a prime $q$ would be a congruence condition on $q$
+(intersect over the available $p$; the LOS equidistribution of $p$ over
+admissible classes makes every class available). This contradicts
+Proposition~\ref{prop:nonabelian}.
+\end{proof}
+
+\begin{remark}
+The classical criteria make the obstruction tangible. $2$ is a cubic residue
+modulo $p \equiv 1 \pmod 3$ iff $p = L^2 + 27M^2$ (Gauss); $2$ is a quartic
+residue modulo $p \equiv 1 \pmod 8$ iff $p = L^2 + 64M^2$. Representation by
+a quadratic form of discriminant $-108$ or $-256$ is class-field data over
+$\Q(\zeta_3)$ resp.\ $\Q(i)$ --- abelian over the quadratic field, but not
+over $\Q$ --- and is well known not to reduce to congruences in $p$.
+\end{remark}
+
+\begin{remark}
+Proposition~\ref{prop:nonabelian} does not by itself force statistical
+independence of the symbols at consecutive primes; it only removes the
+congruence mechanism that produces exclusion laws and, more generally, any
+correlation \emph{mediated by joint residue classes} of
+$(p_n, p_{n+1}, g)$ --- which is precisely the mechanism (Hardy--Littlewood
+singular series, LOS bias) known to govern consecutive-prime dependence.
+Whether some other mechanism correlates the non-abelian symbols across
+consecutive primes is an empirical question, which we now settle at scale.
+\end{remark}
+
+\section{Measurement: the higher symbols are independent}
+\label{sec:measurement}
+
+\subsection{Setup}
+For each prime $\ell \in \{3,5,7,11,13\}$ and base
+$a \in \{2,3,5,6,7,10,11,13,15\}$, define at each prime $p$ with
+$\ell \mid p - 1$ the symbol status
+$s_\ell(a, p) = 1$ if $a^{(p-1)/\ell} \equiv 1 \pmod p$, else $0$. We
+accumulate, over consecutive prime pairs $(p_n, p_{n+1})$ below $10^9$:
+(i) the $2\times2$ table of binding events
+$(\ell \mid p_n - 1,\ \ell \mid p_{n+1} - 1)$;
+(ii) for pairs binding at both primes, the $2\times2$ table of
+$(s_\ell(a, p_n),\ s_\ell(a, p_{n+1}))$;
+(iii) for the $\ell = 2$ layer, the table of quadratic-character signs; and
+(iv) the Artin-status table, as a consistency anchor to the earlier papers.
+We report the $\phi$ coefficient (Pearson correlation of the two indicators)
+and $z = \phi\sqrt{n}$.
+
+The computation factors each $p - 1$ once and evaluates all layers and bases
+in a single pass (the scheme of the second paper); a full run to $10^9$
+takes about an hour on one core. The pilot stage was implemented
+independently in \texttt{sympy} and agrees with the C implementation to all
+reported digits at $2\times10^7$.
+
+\subsection{Results}
+
+\begin{table}[t]
+\centering
+\caption{Binding correlations at $x = 10^9$: $\phi$ for the events
+$\ell \mid p_n - 1$ versus $\ell \mid p_{n+1} - 1$ over all consecutive
+pairs. All entries are exact counts over $50{,}847{,}527$ pairs.}
+\label{tab:bind}
+\begin{tabular}{rrr}
+\toprule
+$\ell$ & $\phi$ & $z$ \\
+\midrule
+$3$  & $-0.10977$  & $-782.7$ \\
+$5$  & $-0.08909$  & $-635.2$ \\
+$7$  & $-0.07884$  & $-562.2$ \\
+$11$ & $-0.05954$ & $-424.6$ \\
+$13$ & $-0.05763$ & $-411.0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Symbol correlations at $x = 10^9$, conditional on binding at both
+primes: $\phi$ (with $z$ in parentheses) for
+$s_\ell(a, p_n)$ versus $s_\ell(a, p_{n+1})$.
+Maximum $|z|$ over all 45 combinations: $2.4$, consistent with 45 null tests.}
+\label{tab:sym}
+\begin{tabular}{rrrrrr}
+\toprule
+$a$ & $\ell=3$ & $\ell=5$ & $\ell=7$ & $\ell=11$ & $\ell=13$ \\
+\midrule
+$2$ & $-0.00024$ ($-0.8$) & $+0.00080$ ($+1.2$) & $-0.00034$ ($-0.3$) & $-0.00028$ ($-0.1$) & $-0.00077$ ($-0.3$) \\
+$3$ & $+0.00015$ ($+0.5$) & $+0.00047$ ($+0.7$) & $+0.00150$ ($+1.4$) & $-0.00137$ ($-0.7$) & $-0.00020$ ($-0.1$) \\
+$5$ & $-0.00008$ ($-0.3$) & $-0.00140$ ($-2.1$) & $+0.00035$ ($+0.3$) & $+0.00155$ ($+0.8$) & $+0.00192$ ($+0.7$) \\
+$6$ & $-0.00002$ ($-0.1$) & $+0.00031$ ($+0.5$) & $+0.00000$ ($+0.0$) & $+0.00413$ ($+2.0$) & $+0.00141$ ($+0.5$) \\
+$7$ & $-0.00026$ ($-0.9$) & $+0.00063$ ($+1.0$) & $+0.00045$ ($+0.4$) & $+0.00179$ ($+0.9$) & $+0.00061$ ($+0.2$) \\
+$10$ & $+0.00023$ ($+0.8$) & $+0.00080$ ($+1.2$) & $+0.00237$ ($+2.2$) & $+0.00138$ ($+0.7$) & $-0.00051$ ($-0.2$) \\
+$11$ & $-0.00031$ ($-1.0$) & $+0.00017$ ($+0.3$) & $-0.00174$ ($-1.6$) & $-0.00418$ ($-2.0$) & $-0.00302$ ($-1.1$) \\
+$13$ & $-0.00012$ ($-0.4$) & $+0.00011$ ($+0.2$) & $-0.00126$ ($-1.2$) & $-0.00084$ ($-0.4$) & $-0.00023$ ($-0.1$) \\
+$15$ & $-0.00027$ ($-0.9$) & $-0.00002$ ($-0.0$) & $-0.00124$ ($-1.1$) & $-0.00207$ ($-1.0$) & $+0.00668$ ($+2.4$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two facts, in deliberate contrast:
+
+\begin{observation}[Binding layer: strong anticorrelation]
+\label{obs:bind}
+The binding events are anticorrelated for every $\ell$, at overwhelming
+significance. This is the Lemke Oliver--Soundararajan bias modulo $\ell$ in
+its purest form: a prime $\equiv 1 \pmod \ell$ repels a successor in its own
+residue class, and $1 \bmod \ell$ is a single class among $\ell - 1$.
+\end{observation}
+
+\begin{observation}[Symbol layer: independence]
+\label{obs:sym}
+Conditional on binding at both primes, the symbol statuses are independent:
+across all $45$ (base, $\ell$) combinations, no $|z|$ exceeds the range
+expected from $45$ null tests. The marginal symbol frequencies are
+$1/\ell$ to high accuracy, as they must be (Kummer--Chebotarev
+equidistribution), and the joint frequencies factor.
+\end{observation}
+
+\subsection{Consistency anchor}
+The same run reproduces the Artin-status correlations $\delta(a)$ of the
+earlier papers to the last digit for all nine bases
+(e.g.\ $\delta(2) = -0.050199$, $\delta(15) = +0.012196$, matching to six decimals), confirming that the layer data and the Artin data come from
+the identical prime stream.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection*{The dichotomy}
+Assemble the three findings: (i) the quadratic symbol is periodic in $p$,
+inherits the consecutive-prime residue bias, and produces exclusion laws and
+the conductor-organised correlation of the earlier papers; (ii) the binding
+events at every $\ell$ are congruence data ($p \bmod \ell$) and are strongly
+anticorrelated; (iii) the non-abelian symbols at every $\ell \ge 3$ carry no
+consecutive-prime correlation at all. The split is exactly the
+abelian/non-abelian split of the splitting fields: $\Q(\sqrt{\sqf a})$ and
+$\Q(\zeta_\ell)$ are abelian over $\Q$, so their splitting data are
+congruence conditions, and consecutive primes are biased in congruence data;
+$\Q(\zeta_\ell, a^{1/\ell})$ for $\ell \ge 3$ is non-abelian, its splitting
+data are invisible to residue classes, and consecutive primes appear to
+carry no bias in them whatsoever.
+
+We find the cleanliness of (iii) worth emphasising. Nothing in
+Proposition~\ref{prop:nonabelian} \emph{forbids} a correlation of
+non-abelian symbols --- it only rules out the congruence mechanism. The
+Hardy--Littlewood/LOS framework, as far as it is understood, biases exactly
+the joint congruence data of consecutive primes; our measurement is
+consistent with the sharpest reading of that framework: \emph{consecutive
+primes are dependent only through congruence data}. Symbol independence at
+$45$ combinations, with the binding channels simultaneously showing
+$|z| > 100$ in the same data stream, is a strong internal control: the
+pipeline demonstrably detects correlation where correlation exists.
+
+\subsection*{Consequences for the series}
+First, the conditional model of the sixth paper is structurally complete:
+its inputs (quadratic layer, binding structure, gap classes) exhaust the
+channels through which consecutive-prime dependence can enter the Artin
+property, so its $R^2 > 0.999$ channel agreement is not a fortunate
+truncation. Second, the ``cubic or quartic sharing'' speculation recorded in
+the third paper as a possible source of a small residual floor is now
+implausible: the cubic symbols themselves are uncorrelated, so any residual
+in that paper's cross-base analysis must come from the binding structure or
+from finite-size effects, not from a cubic analogue of quadratic
+entanglement. Third, the exclusion-law programme of the second paper is
+complete as stated: there are no higher-layer exclusion laws to find.
+
+\subsection*{Limitations}
+The independence claim is statistical, bounded by the resolution of the
+census ($\approx 6\times10^{-4}$ in $\phi$ at $z = 4$ for $\ell = 3$;
+weaker for larger $\ell$, where binding pairs are scarcer). A correlation of
+order $10^{-4}$ at $\ell = 3$ would evade us. We see no mechanism that would
+produce one, but the bound is what the data give. Second,
+Proposition~\ref{prop:nonabelian} is stated for prime $\ell$ and non-$\ell$-th-power
+$a$; composite indices add nothing new (the layers of \eqref{eq:layers} are
+prime), but bases that are perfect $\ell$-th powers have degenerate layers
+and are excluded throughout, as in the earlier papers.
+
+\section*{Acknowledgements}
+The author thanks the developers of the open-source tools used in this work
+(GCC, Python, \texttt{sympy}, \texttt{matplotlib}).
+
+\subsection*{Use of generative AI}
+The author used Anthropic's Claude (models Claude Opus 4.5 and Claude
+Opus 5) as an assistant: for drafting and revising exposition, for writing
+and debugging the sieve and analysis programs, and for exploratory
+discussion. It is recorded, in the interest of transparency, that this paper
+began as a search for \emph{cubic exclusion laws}; the structural obstruction
+of Proposition~\ref{prop:nonabelian} and the null measurement replaced that
+plan --- the third time in this series that an initially proposed mechanism
+was corrected by the data. All mathematical claims were verified
+computationally from exact counts; the proofs were checked by hand; the
+author is solely responsible for the content.
+
+\section*{Declaration of interest}
+The author reports there are no competing interests to declare.
+
+\section*{Funding}
+This research received no external funding.
+
+\section*{Data availability}
+All code and results are publicly available at
+\url{https://github.com/jpbald93/consecutive-artin}, including the one-pass
+layer census (C), the independent \texttt{sympy} pilot, the exact
+contingency tables for every (base, $\ell$) combination, and the scripts
+reproducing every table.
+
+\begin{thebibliography}{99}
+
+\bibitem{Gauss}
+C.~F. Gauss,
+\emph{Disquisitiones Arithmeticae},
+Leipzig, 1801; \S358 (cubic), see also the criterion for biquadratic residues
+in the Comm. Soc. Reg. Sci. G\"ottingen (1828/1832).
+
+\bibitem{Hooley1967}
+C.~Hooley,
+\emph{On Artin's conjecture},
+J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+\bibitem{Lemmermeyer}
+F.~Lemmermeyer,
+\emph{Reciprocity Laws: From Euler to Eisenstein},
+Springer Monographs in Mathematics, Springer-Verlag, Berlin, 2000.
+
+\bibitem{LOS2016}
+R.~J. Lemke~Oliver and K.~Soundararajan,
+\emph{Unexpected biases in the distribution of consecutive primes},
+Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
+
+\bibitem{Lenstra1977}
+H.~W. Lenstra, Jr.,
+\emph{On Artin's conjecture and Euclid's algorithm in global fields},
+Invent. Math. \textbf{42} (1977), 201--224.
+
+\bibitem{Moree2012}
+P.~Moree,
+\emph{Artin's primitive root conjecture --- a survey},
+Integers \textbf{12A} (2012), Article A13, 100~pp.
+
+\end{thebibliography}
+
+\end{document}
