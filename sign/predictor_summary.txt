@@ -1,0 +1,11 @@
+OLS: delta = 1.0530 * delta_model + (-0.002869)  n=64
+R^2 = 0.9584
+sign(fitted) matches sign(delta): 60/64
+misclassified: [(26, 0.0016144186881370537, -0.0015800689077719015), (38, 0.0007308246068244428, -0.0006865129651820339), (102, 0.00042470666879090846, -6.14759855358353e-05), (91, -0.001067603126575667, 0.0013480130653093624)]
+r(T_HL, delta) = 0.9706
+sign(fitted T_HL) matches: 60/64
+best threshold on T_HL: t=0.00062 concordance 60/64
+r(log f, delta) = 0.8118
+positive bases: [30, 15, 39, 105, 70, 55, 42, 66, 51, 35, 87, 95, 26, 78, 38, 102]
+min conductor among positive: 60
+max conductor among negative: 412
