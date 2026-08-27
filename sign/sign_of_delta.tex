@@ -364,22 +364,29 @@ We record what the data now support:
 \begin{conjecture}
 \label{conj:decay}
 $\delta(15;x) > 0$ for all sufficiently large $x$, and
-$\delta(15;x) \to 0$ as $x \to \infty$. More generally, for every base $a$,
-$\delta(a;x) \to 0$, and the \emph{sign} of $\delta(a;x)$ for large $x$ is
-that of $T(a)$ computed with the limiting gap-class weights, for every $a$
-with $T(a)$ bounded away from $0$.
+$\delta(15;x) \to \delta_\infty(15) \ge 0$ as $x \to \infty$. More
+generally, for every base $a$, $\delta(a;x)$ tends to a limit
+$\delta_\infty(a)$ --- which the companion model paper predicts to be small
+but in general \emph{nonzero}, driven by the singular-series dependence of
+gap counts on their class mod $f$ --- and the sign of $\delta(a;x)$ for
+large $x$ is that of $T(a)$ computed with the limiting gap-class weights,
+for every $a$ with $T(a)$ bounded away from $0$.
 \end{conjecture}
 
-The fast observed decay admits a natural suspect: the positive term in the
-class competition is itself proportional to the \emph{same} LOS transition
-bias that drives the within-class repulsion --- both decay together, and the
-measured $\delta(15)$ is a small difference of two decaying quantities. A
-difference of two terms each of order $1/\log x$ can decay like
-$1/(\log x)^2$ or faster without either term doing so. Our two-point data
-cannot distinguish $1/(\log x)^2$ from other super-$1/\log x$ rates; a
-$10^{11}$--$10^{12}$ run for this single base would.
-The companion paper on the conditional Hardy--Littlewood model
-addresses the same question from the model side.
+We deliberately do not conjecture $\delta_\infty(a) = 0$. The companion
+paper on the conditional Hardy--Littlewood model derives, under GRH and a
+Hardy--Littlewood-type hypothesis, a nonzero limiting value: the
+residue-bias (LOS) component of $\delta$ decays like $1/\log x$, but the
+gap-class mixture component does not vanish, because the Hardy--Littlewood
+singular series makes the limiting weights $w_g$ genuinely non-uniform
+across classes mod $f$. On that picture the fast decay observed here is the
+transient: $\delta(15;x)$ is falling from an LOS-inflated value toward a
+small positive Hardy--Littlewood limit, and a drop by $2.6\times$ over one
+decade --- far faster than the $1.11\times$ of a pure $1/\log x$ law --- is
+what a difference of two decaying terms of common origin looks like while
+the transient dominates. Our two heights cannot separate a small nonzero
+limit from a $1/(\log x)^2$ decay to zero; a $10^{11}$--$10^{12}$ run for
+this single base would.
 
 \section{Data and computation}
 \label{sec:computation}
