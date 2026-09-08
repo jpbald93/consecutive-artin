@@ -13,12 +13,27 @@ So we expect a SMALL positive/negative correlation, and crucially it should
 VANISH after conditioning on (omega_n, omega_{n+1}) or (pmod12_n, pmod12_{n+1})
 if the mod-structure channel is the only mechanism.
 
-Streams data_1e9.csv (50.8M rows) in one pass.
+Streams the per-prime CSV in one pass.
+
+Usage:
+    python3 pilot_consecutive_artin.py DATA.csv [OUTPUT_DIR]
+    # DATA.csv defaults to ../data_1e9.csv (repository-relative)
+    # OUTPUT_DIR defaults to ../results/
 """
-import sys, math, json
+import sys, os, math, json
 from collections import defaultdict
 
-PATH = "/home/work/.openclaw/workspace/Prime Math/data_1e9.csv"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT  = os.path.dirname(SCRIPT_DIR)
+
+PATH = sys.argv[1] if len(sys.argv) > 1 else os.path.join(REPO_ROOT, "data_1e9.csv")
+OUT_DIR = sys.argv[2] if len(sys.argv) > 2 else os.path.join(REPO_ROOT, "results")
+os.makedirs(OUT_DIR, exist_ok=True)
+
+if not os.path.isfile(PATH):
+    print(f"Error: CSV file not found: {PATH}", file=sys.stderr)
+    print(f"Usage: {sys.argv[0]} DATA.csv [OUTPUT_DIR]", file=sys.stderr)
+    sys.exit(1)
 
 # Accumulators
 # overall 2x2: [a_n][a_{n+1}]
@@ -54,7 +69,7 @@ with open(PATH) as f:
         if prev is not None:
             p0, om0, a0, m0 = prev
             if p == p0:
-                # duplicate row guard (p=7 appears twice)
+                # duplicate row guard
                 prev = (p, omega, artin, m12)
                 continue
             g = p - p0
@@ -88,10 +103,11 @@ def table_stats(t):
     phi = num/den if den else 0.0
     chi2 = n * phi * phi
     return dict(n=n, p_next=p_next, p_given_a=p_a, p_given_na=p_na,
-                delta=delta, phi=phi, chi2=chi2)
+                delta=delta, phi=phi, chi2=chi2,
+                table=[[t[0][0], t[0][1]], [t[1][0], t[1][1]]])
 
 print("="*70)
-print("PILOT: consecutive-prime Artin correlation, primes <= 1e9")
+print("PILOT: consecutive-prime Artin correlation")
 print("="*70)
 
 ov = table_stats(joint)
@@ -105,7 +121,9 @@ print(f"chi2 (1 df)               = {ov['chi2']:.1f}   (3.84 = 5% sig, 6.63 = 1%
 
 # z-score for delta ~ sqrt(n) scale
 se = math.sqrt(ov['p_next']*(1-ov['p_next']) * (1/ (joint[1][0]+joint[1][1]) + 1/(joint[0][0]+joint[0][1])))
-print(f"delta z-score             = {ov['delta']/se:+.2f}")
+z_score = ov['delta']/se
+print(f"delta z-score             = {z_score:+.2f}")
+print(f"  (nominal, under independent-status reference model)")
 
 # omega chain link
 n = n_pairs
@@ -158,6 +176,7 @@ print(f"  Summed chi2 = {chi2_tot2:.1f} on {df_tot2} df  ({n_tot2:,} pairs)")
 print(f"  Weighted mean residual delta = {wd2n/wd2d:+.6f}")
 
 # save
+json_path = os.path.join(OUT_DIR, "pilot_results.json")
 out = {
     "overall": ov, "r_omega": r_om,
     "gap": {str(g): table_stats(t) for g, t in sorted(gap_joint.items()) if table_stats(t) and table_stats(t)['n'] >= 100_000},
@@ -165,7 +184,7 @@ out = {
     "residual_m12": {"chi2": chi2_tot2, "df": df_tot2, "wdelta": wd2n/wd2d},
     "m12_trans": {f"{k[0]}->{k[1]}": v for k, v in sorted(m12_trans.items())},
 }
-with open("/home/work/.openclaw/workspace/Prime Math/consecutive/pilot_results.json", "w") as f:
+with open(json_path, "w") as f:
     json.dump(out, f, indent=2)
-print("\nSaved: consecutive/pilot_results.json")
+print(f"\nSaved: {json_path}")
 print("DONE")

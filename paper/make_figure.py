@@ -1,11 +1,24 @@
 #!/usr/bin/env python3
-"""Figure 1: delta(g) = P(A|A) - P(A|~A) by gap, colored by residue class of g mod 40."""
-import json
+"""Figure 1: delta(g) = P(A|A) - P(A|~A) by gap, colored by residue class of g mod 40.
+
+Usage:
+    python3 make_figure.py [RESULTS_JSON] [OUTPUT_DIR]
+    # RESULTS_JSON defaults to ../results/pilot_results.json
+    # OUTPUT_DIR defaults to ./ (the paper directory)
+"""
+import sys, os, json
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-res = json.load(open("/home/work/.openclaw/workspace/Prime Math/consecutive/pilot_results.json"))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT  = os.path.dirname(SCRIPT_DIR)
+
+RESULTS = sys.argv[1] if len(sys.argv) > 1 else os.path.join(REPO_ROOT, "results", "pilot_results.json")
+OUT_DIR = sys.argv[2] if len(sys.argv) > 2 else SCRIPT_DIR
+os.makedirs(OUT_DIR, exist_ok=True)
+
+res = json.load(open(RESULTS))
 gaps, deltas, colors = [], [], []
 for gs, st in res["gap"].items():
     g = int(gs)
@@ -36,6 +49,6 @@ handles = [
 ax.legend(handles=handles, fontsize=9, loc="lower right")
 ax.set_title("Conditional Artin dependence by prime gap, $p \\leq 10^9$ (gaps with $N \\geq 10^5$ pairs)")
 plt.tight_layout()
-plt.savefig("/home/work/.openclaw/workspace/Prime Math/consecutive/paper/fig_gap_delta.png", dpi=200)
-plt.savefig("/home/work/.openclaw/workspace/Prime Math/consecutive/paper/fig_gap_delta.pdf")
-print("saved fig_gap_delta.{png,pdf}")
+plt.savefig(os.path.join(OUT_DIR, "fig_gap_delta.png"), dpi=200)
+plt.savefig(os.path.join(OUT_DIR, "fig_gap_delta.pdf"))
+print(f"saved fig_gap_delta.{{png,pdf}} in {OUT_DIR}")

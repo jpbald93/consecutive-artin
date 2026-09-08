@@ -1,3 +1,22 @@
+Reading: Prime Math/data_1e9.csv
+Mode: corrected CSV (no auto-repair)
+  ...10M rows
+  ...20M rows
+  ...30M rows
+  ...40M rows
+  ...50M rows
+
+CSV stats after reading:
+  Total rows: 50847531
+  Duplicate rows skipped: 0
+  Unique primes: 50847531
+  Artin primes: 19016617
+  First prime: 7
+  Last prime: 999999937
+  Pairs: 50847530
+Saved log: Prime Math/Paper 1 Full file/results/pilot_log.txt
+
+DONE
 ======================================================================
 RESULTS: consecutive-prime Artin correlation
   Input: data_1e9.csv (corrected CSV (clean input))

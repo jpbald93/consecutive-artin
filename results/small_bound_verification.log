@@ -1,0 +1,15 @@
+Verifying 9589 rows...
+  ...verified 1000/9589 rows, 0 errors so far
+  ...verified 2000/9589 rows, 0 errors so far
+  ...verified 3000/9589 rows, 0 errors so far
+  ...verified 4000/9589 rows, 0 errors so far
+  ...verified 5000/9589 rows, 0 errors so far
+  ...verified 6000/9589 rows, 0 errors so far
+  ...verified 7000/9589 rows, 0 errors so far
+  ...verified 8000/9589 rows, 0 errors so far
+  ...verified 9000/9589 rows, 0 errors so far
+
+==================================================
+Total rows verified: 9589
+Total errors: 0
+ALL CHECKS PASSED

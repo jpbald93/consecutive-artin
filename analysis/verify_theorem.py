@@ -3,8 +3,17 @@
 Checks (i) the Legendre-symbol flip for ALL residue classes mod 40,
 (ii) empirically for all prime pairs with gap ≡ 20 (mod 40) up to 10^7,
 (iii) that no such pair is both-Artin up to 10^7 (direct order computation).
+
+Usage:
+    python3 verify_theorem.py [LIMIT]
+    # LIMIT defaults to 10000000 (10^7)
+
+Requires: sympy
 """
-from sympy import legendre_symbol, isprime, n_order, primerange
+import sys
+from sympy import legendre_symbol, n_order, primerange
+
+LIMIT = int(sys.argv[1]) if len(sys.argv) > 1 else 10_000_000
 
 # (i) exhaustive residue check mod 40
 print("(i) Residue-class check: (2|p) flip under p -> p+20 (mod 8), (5|p) fixed (mod 5)")
@@ -24,15 +33,13 @@ for r in range(1, 40, 2):
         print(f"  FAIL at residue {r}")
 print("  PASS: (2|.) flips for every residue class; (5|.) invariant" if ok else "  FAILED")
 
-# (ii) Legendre flip on actual prime pairs up to 1e7
-print("(ii) Empirical Legendre flip, prime pairs gap ≡ 20 (mod 40), p < 1e7")
-primes = list(primerange(7, 10**7))
-pset = set(primes)
+# (ii) Legendre flip on actual prime pairs up to LIMIT
+print(f"(ii) Empirical Legendre flip, prime pairs gap ≡ 20 (mod 40), p < {LIMIT}")
+primes = list(primerange(7, LIMIT))
 n_pairs = 0
 flip_fail = 0
 both_artin = 0
 checked_artin = 0
-prev = primes[0]
 for i in range(len(primes) - 1):
     p, q = primes[i], primes[i+1]
     g = q - p

@@ -1,10 +1,21 @@
 /*
- * prime_sieve_1e9.c  —  segmented sieve for 10^9
- * Uses a segmented Eratosthenes to avoid allocating 1GB of RAM at once.
+ * prime_sieve_1e9.c  —  segmented sieve with Artin-prime census
+ * Uses a segmented Eratosthenes to avoid allocating gigabytes of RAM.
  * Segment size: 2^21 ≈ 2M bytes per block.
  *
+ * For each prime p >= 7 up to LIMIT (default 10^9, configurable via argv[1]):
+ *   emits p, prev_gap, next_gap, min_gap, loneliness, omega(p-1),
+ *         is_artin10, pmod4, pmod8, pmod12
+ *
+ * The last prime in range has next_gap = 0 (unknown); this is recorded
+ * explicitly rather than omitted, so the CSV contains every eligible prime.
+ *
  * Compile:
- *   gcc -O3 -I/usr/include/x86_64-linux-gnu -o prime_sieve_1e9 prime_sieve_1e9.c -lm -lgmp
+ *   gcc -O3 -o prime_sieve_1e9 prime_sieve_1e9.c -lm -lgmp
+ *
+ * Usage:
+ *   ./prime_sieve_1e9 [LIMIT]          # default LIMIT = 1000000000
+ *   ./prime_sieve_1e9 1000000 > data_1e6.csv
  */
 
 #include <stdio.h>
@@ -13,20 +24,23 @@
 #include <math.h>
 #include <gmp.h>
 
-#define LIMIT      1000000000L   /* 10^9 */
-#define SEG_SIZE   (1 << 21)     /* ~2M per segment */
+#define DEFAULT_LIMIT  1000000000L   /* 10^9 */
+#define SEG_SIZE       (1 << 21)     /* ~2M per segment */
 
-/* ── tiny sieve for primes up to sqrt(LIMIT) ≈ 31623 ── */
-#define SMALL_LIM  32000
-static char small_composite[SMALL_LIM + 1];
-static long small_primes[3500];
-static int  n_small = 0;
+/* ── tiny sieve for primes up to sqrt(LIMIT) ── */
+static char *small_composite = NULL;
+static long *small_primes = NULL;
+static int   n_small = 0;
+static long  small_lim = 0;
 
-void build_small(void) {
-    for (long i = 2; i <= SMALL_LIM; i++) {
+void build_small(long limit) {
+    small_lim = (long)sqrt((double)limit) + 2;
+    small_composite = calloc(small_lim + 1, 1);
+    small_primes = malloc((size_t)(small_lim / 2) * sizeof(long));
+    for (long i = 2; i <= small_lim; i++) {
         if (!small_composite[i]) {
             small_primes[n_small++] = i;
-            for (long j = i*i; j <= SMALL_LIM; j += i)
+            for (long j = i*i; j <= small_lim; j += i)
                 small_composite[j] = 1;
         }
     }
@@ -65,26 +79,30 @@ int is_artin10(long p) {
     return ok;
 }
 
-int main(void) {
-    build_small();
-    fprintf(stderr, "Small primes built: %d primes up to %d\n", n_small, SMALL_LIM);
+int main(int argc, char **argv) {
+    long LIMIT = DEFAULT_LIMIT;
+    if (argc > 1) {
+        LIMIT = atol(argv[1]);
+        if (LIMIT < 10) { fprintf(stderr, "LIMIT must be >= 10\n"); return 1; }
+    }
+    fprintf(stderr, "Sieve limit: %ld\n", LIMIT);
+
+    build_small(LIMIT);
+    fprintf(stderr, "Small primes built: %d primes up to %ld\n", n_small, small_lim);
 
     static char seg[SEG_SIZE];
 
     /* track previous prime for gap calculation */
     long prev_prime = 5;   /* we start output from p=7 */
-    long prev_prev  = 3;
 
-    /* We need to buffer one prime ahead to get next_gap.
-       Strategy: process segment, collect primes, then emit all but last,
-       carrying last into next segment. */
-
-    long *buf = malloc(200000 * sizeof(long));  /* plenty for one segment */
+    /* Buffer primes from each segment; emit all but the last, carrying the
+       last into the next segment so we can compute next_gap. */
+    long *buf = malloc(200000 * sizeof(long));
     long buf_n = 0;
-    long carry_prime = 7;   /* first prime we'll emit */
 
-    /* prime at very start — we need: prev of 7 is 5, prev of 5 is 3 */
-    /* We handle 7 specially after the loop */
+    /* pending_prime: the prime waiting for next_gap information.
+       -1 means no prime is pending yet. */
+    long pending_prime = -1;
 
     printf("p,prev_gap,next_gap,min_gap,loneliness,omega_pm1,is_artin10,pmod4,pmod8,pmod12\n");
     fflush(stdout);
@@ -100,6 +118,7 @@ int main(void) {
         /* sieve this segment */
         for (int i = 0; i < n_small; i++) {
             long sp = small_primes[i];
+            if (sp * sp > high) break;
             long start = ((low + sp - 1) / sp) * sp;
             if (start == sp) start += sp;
             for (long j = start; j <= high; j += sp)
@@ -107,7 +126,7 @@ int main(void) {
         }
         if (low == 2) { seg[0] = 1; seg[1] = 0; /* 2 is prime */ }
 
-        /* collect primes in this segment into buf */
+        /* collect primes >= 7 in this segment */
         buf_n = 0;
         for (long i = (low < 7 ? 7 - low : 0); i < len; i++) {
             long p = low + i;
@@ -115,45 +134,46 @@ int main(void) {
                 buf[buf_n++] = p;
         }
 
-        /* emit: we need carry_prime's next_gap = buf[0] - carry_prime (if buf_n>0)
-           We already have prev_prime from the previous iteration. */
-        if (buf_n > 0) {
-            /* emit carry_prime if it's >= 7 */
-            if (carry_prime >= 7) {
-                long p        = carry_prime;
-                long pg       = p - prev_prime;
-                long ng       = buf[0] - p;
-                long mg       = pg < ng ? pg : ng;
-                double L      = (double)mg / log((double)p);
-                int   om      = omega(p - 1);
-                int   artin   = is_artin10(p);
-                printf("%ld,%ld,%ld,%ld,%.6f,%d,%d,%ld,%ld,%ld\n",
-                       p, pg, ng, mg, L, om, artin,
-                       p%4, p%8, p%12);
-            }
-            prev_prime = carry_prime;
+        /* process buffered primes */
+        for (long k = 0; k < buf_n; k++) {
+            long p_cur = buf[k];
 
-            /* emit buf[0] .. buf[buf_n-2] */
-            for (long k = 0; k < buf_n - 1; k++) {
-                long p  = buf[k];
-                long pg = p - prev_prime;
-                long ng = buf[k+1] - p;
+            /* If there is a pending prime, we can now emit it with next_gap */
+            if (pending_prime > 0) {
+                long pg = pending_prime - prev_prime;
+                long ng = p_cur - pending_prime;
                 long mg = pg < ng ? pg : ng;
-                double L = (double)mg / log((double)p);
-                int  om    = omega(p - 1);
-                int  artin = is_artin10(p);
+                double L = (double)mg / log((double)pending_prime);
+                int om    = omega(pending_prime - 1);
+                int artin = is_artin10(pending_prime);
                 printf("%ld,%ld,%ld,%ld,%.6f,%d,%d,%ld,%ld,%ld\n",
-                       p, pg, ng, mg, L, om, artin,
-                       p%4, p%8, p%12);
-                prev_prime = p;
+                       pending_prime, pg, ng, mg, L, om, artin,
+                       pending_prime%4, pending_prime%8, pending_prime%12);
+                prev_prime = pending_prime;
             }
-            carry_prime = buf[buf_n - 1];
+            pending_prime = p_cur;
         }
+
         if (low % 50000000 == 0 || low == 2)
             fprintf(stderr, "  processed up to %ld ...\n", high);
     }
-    /* last prime in dataset — can't compute next_gap; skip it */
-    fprintf(stderr, "Done.\n");
+
+    /* Emit the final prime with next_gap = 0 (unknown) */
+    if (pending_prime > 0) {
+        long pg = pending_prime - prev_prime;
+        long ng = 0;  /* next gap unknown */
+        long mg = pg;  /* min_gap = prev_gap since next is unknown */
+        double L = (double)mg / log((double)pending_prime);
+        int om    = omega(pending_prime - 1);
+        int artin = is_artin10(pending_prime);
+        printf("%ld,%ld,%ld,%ld,%.6f,%d,%d,%ld,%ld,%ld\n",
+               pending_prime, pg, ng, mg, L, om, artin,
+               pending_prime%4, pending_prime%8, pending_prime%12);
+    }
+
+    fprintf(stderr, "Done. Last prime emitted: %ld\n", pending_prime);
     free(buf);
+    free(small_composite);
+    free(small_primes);
     return 0;
 }

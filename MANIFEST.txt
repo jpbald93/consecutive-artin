@@ -1,0 +1,4 @@
+Current Paper 1 checksums are in MANIFEST.sha256.
+See PUBLICATION_STATUS.md for scope.
+Raw CSV excluded: generator is sieve/prime_sieve_1e9.c.
+Normal recomputation expects a physically corrected CSV; legacy repair is opt-in.

@@ -9,11 +9,26 @@ Mod 120 = lcm(8,3,5) captures:
 If the entire consecutive-Artin correlation flows through these known
 deterministic/LOS channels, residual delta ~ 0.
 Whatever survives is the genuinely novel signal.
+
+Usage:
+    python3 pilot2_residual.py DATA.csv [OUTPUT_DIR]
+    # DATA.csv defaults to ../data_1e9.csv (repository-relative)
+    # OUTPUT_DIR defaults to ../results/
 """
-import sys, math, json
+import sys, os, math, json
 from collections import defaultdict
 
-PATH = "/home/work/.openclaw/workspace/Prime Math/data_1e9.csv"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT  = os.path.dirname(SCRIPT_DIR)
+
+PATH = sys.argv[1] if len(sys.argv) > 1 else os.path.join(REPO_ROOT, "data_1e9.csv")
+OUT_DIR = sys.argv[2] if len(sys.argv) > 2 else os.path.join(REPO_ROOT, "results")
+os.makedirs(OUT_DIR, exist_ok=True)
+
+if not os.path.isfile(PATH):
+    print(f"Error: CSV file not found: {PATH}", file=sys.stderr)
+    print(f"Usage: {sys.argv[0]} DATA.csv [OUTPUT_DIR]", file=sys.stderr)
+    sys.exit(1)
 
 cell = defaultdict(lambda: [[0, 0], [0, 0]])   # (m_n, m_{n+1}) -> 2x2
 prev = None
@@ -63,8 +78,13 @@ print("="*70)
 print(f"cells used: {df}  (degenerate/deterministic cells: {degenerate})")
 print(f"pairs covered: {n_tot:,}")
 print(f"summed chi2 = {chi2_tot:.1f} on {df} df")
+print(f"  (nominal per-cell Pearson; this is a descriptive statistic,")
+print(f"   not a valid CMH test of a common association)")
 print(f"weighted mean residual delta = {wnum/wden:+.6f}")
+
+json_path = os.path.join(OUT_DIR, "pilot2_results.json")
 json.dump({"df": df, "chi2": chi2_tot, "n": n_tot, "wdelta": wnum/wden,
            "degenerate": degenerate},
-          open("/home/work/.openclaw/workspace/Prime Math/consecutive/pilot2_results.json", "w"), indent=2)
+          open(json_path, "w"), indent=2)
+print(f"Saved: {json_path}")
 print("DONE")

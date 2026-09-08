@@ -12,11 +12,26 @@ Strategy:
     the "residual" is just unabsorbed small-prime structure; if it stabilises,
     it's a genuine non-mod effect.
  3. Split-half consistency: first half vs second half of the range.
+
+Usage:
+    python3 pilot3_robustness.py DATA.csv [OUTPUT_DIR]
+    # DATA.csv defaults to ../data_1e9.csv (repository-relative)
+    # OUTPUT_DIR defaults to ../results/
 """
-import sys, math, json
+import sys, os, math, json
 from collections import defaultdict
 
-PATH = "/home/work/.openclaw/workspace/Prime Math/data_1e9.csv"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT  = os.path.dirname(SCRIPT_DIR)
+
+PATH = sys.argv[1] if len(sys.argv) > 1 else os.path.join(REPO_ROOT, "data_1e9.csv")
+OUT_DIR = sys.argv[2] if len(sys.argv) > 2 else os.path.join(REPO_ROOT, "results")
+os.makedirs(OUT_DIR, exist_ok=True)
+
+if not os.path.isfile(PATH):
+    print(f"Error: CSV file not found: {PATH}", file=sys.stderr)
+    print(f"Usage: {sys.argv[0]} DATA.csv [OUTPUT_DIR]", file=sys.stderr)
+    sys.exit(1)
 
 cell40g = defaultdict(lambda: [[0, 0], [0, 0]])   # (m40_n, m40_q, min(g,60)) -> 2x2
 cell840 = defaultdict(lambda: [[0, 0], [0, 0]])   # (m840_n, m840_q) -> 2x2
@@ -74,13 +89,19 @@ rh0 = summarize(halves[0], 5000)
 rh1 = summarize(halves[1], 5000)
 
 print("="*70)
+print("Robustness checks for residual Artin dependence")
+print("="*70)
 print("1) Condition on (m40_n, m40_q, gap): QR channel fully absorbed")
 print(f"   chi2={r1['chi2']:.1f} on {r1['df']} df, n={r1['n']:,}, wdelta={r1['wdelta']:+.6f}, degen={r1['degenerate']}")
 print("2) Condition on (m840_n, m840_q): absorbs 2,3,5,7 channels")
 print(f"   chi2={r2['chi2']:.1f} on {r2['df']} df, n={r2['n']:,}, wdelta={r2['wdelta']:+.6f}, degen={r2['degenerate']}")
+print(f"   (nominal per-cell Pearson sum; descriptive, not a valid CMH test)")
 print("3) Split-half (mod 120 conditioning):")
 print(f"   p < 5e8 : chi2={rh0['chi2']:.1f} on {rh0['df']} df, wdelta={rh0['wdelta']:+.6f}")
 print(f"   p >= 5e8: chi2={rh1['chi2']:.1f} on {rh1['df']} df, wdelta={rh1['wdelta']:+.6f}")
+
+json_path = os.path.join(OUT_DIR, "pilot3_results.json")
 json.dump({"m40_gap": r1, "m840": r2, "half1": rh0, "half2": rh1},
-          open("/home/work/.openclaw/workspace/Prime Math/consecutive/pilot3_results.json", "w"), indent=2)
+          open(json_path, "w"), indent=2)
+print(f"Saved: {json_path}")
 print("DONE")

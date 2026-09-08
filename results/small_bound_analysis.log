@@ -1,0 +1,77 @@
+Reading: /tmp/test_1e5.csv
+Mode: corrected CSV (no auto-repair)
+
+CSV stats after reading:
+  Total rows: 9589
+  Duplicate rows skipped: 0
+  Unique primes: 9589
+  Artin primes: 3617
+  First prime: 7
+  Last prime: 99991
+  Pairs: 9588
+Saved log: /tmp/p1-final-smoke/pilot_log.txt
+
+DONE
+======================================================================
+RESULTS: consecutive-prime Artin correlation
+  Input: test_1e5.csv (corrected CSV (clean input))
+======================================================================
+
+Dataset: 9,589 distinct primes, 7 to 99991
+  Artin primes: 3,617 (proportion 0.377203)
+  CSV rows: 9,589, duplicates removed: 0
+
+Pairs analysed: 9,588
+  Joint table: [[3667, 2304], [2305, 1312]]
+P(Artin_(n+1))            = 0.377138
+P(Artin_(n+1) | Artin_n)  = 0.362732
+P(Artin_(n+1) | ~Artin_n) = 0.385865
+delta                     = -0.023133468755792
+phi coefficient           = -0.023134730123223
+chi2 (1 df)               = 5.131648
+z-score (nominal)         = -2.27
+
+Pearson r(omega_n, omega_(n+1)) = -0.045786341355458
+
+--- Mod-12 transition matrix ---
+                 1         5         7        11
+     1      0.1318    0.3500    0.2704    0.2477
+     5      0.2105    0.1329    0.3837    0.2728
+     7      0.2736    0.2457    0.1249    0.3557
+    11      0.3734    0.2774    0.2261    0.1231
+
+--- Gap-stratified results (N >= 100,000) ---
+  gap            N    P(A|A)   P(A|~A)        delta       chi2
+
+--- Minimum delta among gaps with N >= 100,000 ---
+  No gap meets the reporting threshold for this input.
+
+--- Residual: omega conditioning ---
+  Summed chi2 = 0.0 on 0 df (0 pairs)
+  Weighted mean residual delta = +nan
+
+--- Residual: mod-12 conditioning ---
+  Summed chi2 = 0.0 on 0 df (0 pairs)
+  Weighted mean residual delta = +nan
+
+--- Residual: mod-120 conditioning ---
+  cells: 0, degenerate: 0
+  pairs: 0
+  summed chi2 = 0.0 on 0 df
+  weighted delta_res = +nan
+
+--- Residual: mod-840 conditioning ---
+  cells: 0, degenerate: 0
+  pairs: 0
+  summed chi2 = 0.0 on 0 df
+  chi2/df = nan
+  weighted delta_res = +nan
+
+--- Robustness: mod-40+gap conditioning ---
+  chi2=0.0 on 0 df, n=0, wdelta=+nan
+
+--- Split-half (mod-120) ---
+  p < 5e8:  chi2=0.0 on 0 df, wdelta=+nan
+  p >= 5e8: chi2=0.0 on 0 df, wdelta=+nan
+
+Saved JSON: /tmp/p1-final-smoke/pilot_results.json
