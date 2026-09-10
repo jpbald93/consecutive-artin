@@ -13,7 +13,7 @@ Prime Math series:
 ## Gate
 
 ```bash
-./gate.sh      # => PASS (16 theorems, standard axioms only)
+./gate.sh      # => PASS (19 theorems, standard axioms only)
 ```
 Checks: build succeeds; no `sorry`, `admit`, `axiom`, or `native_decide`;
 every theorem depends only on `propext`, `Classical.choice`, `Quot.sound`.
@@ -101,7 +101,10 @@ The corrected rule is: `(d-1)/2` when `g ≡ 0 (mod d)`, and
 `d = 5, 13`.
 
 **Not proved:** the general-`d` statement needs the Jacobsthal-type identity
-`∑_r χ(r) χ(r+g) = -1` for `g ≢ 0`, which is **not in Mathlib**. So Paper 2's
+`∑_r χ(r) χ(r+g) = -1` for `g ≢ 0`, which is **not proved here**. The
+underlying Jacobi-sum evaluation IS in Mathlib as `jacobiSum_nontrivial_inv`
+(`J(χ, χ⁻¹) = -χ(-1)`); the missing work is the specialisation to a quadratic
+character plus the bridge to an integer-valued shifted sum. So Paper 2's
 Theorem 2 is *corrected and confirmed for concrete `d`*, not proved in general.
 `chi` here is Euler's criterion (computable), not Mathlib's `legendreSym`.
 

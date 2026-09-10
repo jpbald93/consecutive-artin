@@ -16,7 +16,12 @@ This is endpoint repair and full reaggregation, not independent refactorization
 of every full-census prime. Conditioning is descriptive, not a complete
 mechanism decomposition or a proved limiting correlation. Empty selected cells
 may be NaN (Python JSON extension). Neither novelty nor journal acceptance is
-certified. Papers 2–7 were not revised or certified. No email or submission sent.
+certified. No email or submission sent.
+
+**Paper 2 (multibase) has since been rewritten and re-audited** — see
+`multibase/` and `multibase/rebuild/REWRITE_DONE.md`. It is no longer the
+2026-08-17 manuscript described in earlier notes. Papers 3–7 were not revised
+or certified.
 Private correspondence and superseded local archives are excluded.
 
 `MANIFEST.sha256` covers current Paper 1 public deliverables, excluding itself.

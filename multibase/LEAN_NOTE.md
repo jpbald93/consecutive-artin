@@ -1,8 +1,15 @@
 # Machine-checked findings for Paper 2 — `lean/`
 
-Added 2026-09-10. Paper 2 is **BLOCK** per `../review_2026-09-10/REPORT_A.md`.
-Lean is used here not to certify the paper but to settle two of its defects
-beyond argument. `lean/gate.sh` => **PASS (16 theorems, standard axioms only)**.
+Added 2026-09-10; status updated the same day. This note records how Lean was
+used to settle two defects of the **superseded** version of Paper 2 (the
+2026-08-17 manuscript, archived under `rebuild/`). That version was BLOCK. The
+paper has since been rewritten and re-audited four times — see
+`rebuild/REWRITE_DONE.md` for the ~40 corrections and `paper/` for the current
+20-page manuscript. `lean/gate.sh` => **PASS (19 theorems, standard axioms
+only)**.
+
+The findings below still stand as statements about what Lean checked; they are
+no longer a verdict on the current paper.
 
 ## (a) The p.13 twin-prime claim is FALSE — machine-checked
 
@@ -47,7 +54,10 @@ has exclusion classes exactly at `g = 2, 3 mod 5`) and
 ## What is NOT proved
 
 The general-`d` form of Theorem 2 needs a Jacobsthal-type identity
-(`sum_r chi(r) chi(r+g) = -1` for `g != 0`) that is **not in Mathlib**. So the
+(`sum_r chi(r) chi(r+g) = -1` for `g != 0`) that is **not proved here**. The
+underlying ingredient does exist in Mathlib as `jacobiSum_nontrivial_inv`
+(`J(chi, chi^-1) = -chi(-1)`); what is missing is the specialisation to a
+quadratic character and the bridge to an integer-valued shifted sum. So the
 corrected count is confirmed for concrete `d`, not proved for all `d = 1 mod 4`.
 `chi` in the Lean file is Euler's criterion (computable), not `legendreSym`.
 

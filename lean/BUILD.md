@@ -26,7 +26,7 @@ lake exe cache get
 
 # 4. Build and check
 lake build               # ~90 s cold on 2 cores, ~7 s warm
-./gate.sh                # => PASS (6 theorems, standard axioms only)
+./gate.sh                # => PASS (19 theorems, standard axioms only)
 ```
 
 **Do not compile Mathlib from source.** On a 2-core machine that takes many
@@ -42,7 +42,7 @@ hours; `lake exe cache get` downloads the 8,322 prebuilt `.olean` files instead.
 Expected output:
 
 ```
-PASS (6 theorems, standard axioms only)
+PASS (19 theorems, standard axioms only)
 ```
 
 ## Files

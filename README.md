@@ -146,8 +146,17 @@ figures are © the author, all rights reserved.
 ## Multi-base extension
 
 See [`multibase/`](multibase/) for the generalization to arbitrary bases:
-a general exclusion law, its complete classification via prime discriminants,
-and an 11-base measurement of the correlation at 10⁹.
+*Quadratic exclusion laws for consecutive Artin primes in arbitrary bases*
+(20 pp) — a general exclusion law, its complete classification via prime
+discriminants, a counting identity that repairs the composite-conductor case,
+and an 11-base measurement of the correlation at 10⁹. The classified
+obstruction is **quadratic**: an exclusion class proves impossibility, but the
+absence of one proves nothing.
+
+Reproduce every headline claim of that paper with a single command:
+`cd multibase/code && python3 regenerate_all.py`. Note that several older
+scripts in `multibase/code/` implement a superseded classification and are
+marked `SUPERSEDED`; `multibase/README.md` explains which and why.
 
 ## Current Paper 1 submission artifacts
 
