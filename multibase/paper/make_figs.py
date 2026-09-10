@@ -5,11 +5,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 rows = json.load(open("../results/delta_summary_corrected.json"))
-rows.sort(key=lambda r: r["conductor"])
-f  = [r["conductor"] for r in rows]
+rows.sort(key=lambda r: r["f"])
+f  = [r["f"] for r in rows]
 ad = [abs(r["delta"]) for r in rows]
-w  = [r["excluded_gap_weight"] for r in rows]
-bs = [r["base"] for r in rows]
+w  = [r["w"] for r in rows]
+bs = [r["a"] for r in rows]
 
 fig, ax = plt.subplots(1, 2, figsize=(11, 4.2))
 

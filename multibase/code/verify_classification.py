@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""
+SUPERSEDED — HISTORICAL ARTIFACT. Do not use to verify this paper.
+
+This script implements the earlier, reversal-only classification. Its gap-class
+domain is `range(2, f + 1, 2)` (even least residues), which MISSES odd-residue
+classes of odd conductors -- for example 7 mod 21 -- and the class 0 mod 5.
+It therefore cannot confirm the corrected exclusion set, which also contains
+the base-5 inadmissibility classes 2, 3 mod 5.
+
+The correct domain (Definition 7) is every gap class admitting an even
+representative: all g mod f when f is odd, the even g when f is even.
+
+Use `regenerate_all.py` instead. Retained only for provenance.
+"""
+
 """Verify the CLASSIFICATION THEOREM against the brute-force scan.
 
 Theory: chi_a = product of characters of prime discriminants D_i | D.
@@ -13,12 +28,6 @@ a component may only ever be 'flip', 'preserve', or 'mixed' (mixed kills it):
 from sympy import factorint
 from scan_exclusion import squarefree_part, conductor
 import json
-import os
-def _find(fn):
-    for c in (fn, os.path.join(os.path.dirname(__file__), fn),
-              os.path.join(os.path.dirname(__file__), "..", "results", fn)):
-        if os.path.exists(c): return c
-    return fn
 
 def prime_discriminants(d):
     """Decompose disc of Q(sqrt(d)) into prime discriminants."""
@@ -67,7 +76,7 @@ def predict(a):
         (flips if nf % 2 else pres).append(g % f)
     return f, sorted(set(flips)), sorted(set(pres)), parts
 
-scan = {r["base"]: r for r in json.load(open(_find("scan_results.json"))) if "conductor" in r}
+scan = {r["base"]: r for r in json.load(open("scan_results.json")) if "conductor" in r}
 allok = True
 for a in sorted(scan):
     f, pf, pp, parts = predict(a)

@@ -236,9 +236,12 @@ the number of residues $r \bmod d$ with $r, r+g \not\equiv 0$ and
 $\chi(r) = \chi(r+g) = -1$ equals $\bigl(d - 3 + 2\chi(g)\bigr)/4$, while
 $N_{--}(0) = (d-1)/2$. The count vanishes if and only if $d = 5$ and
 $\chi(g) = -1$, i.e.\ $g \equiv 2, 3 \pmod 5$. Consequently base $5$ (and any
-$a$ with $\sqf(a) = 5$) admits the exclusion classes $g \equiv 2, 3 \pmod 5$
---- which together contain $40.4\%$ of all consecutive prime pairs --- while
-for prime $d \equiv 1 \pmod 4$, $d \ge 13$, no exclusion class exists.
+$a$ with $\sqf(a) = 5$) admits the exclusion classes $g \equiv 2, 3 \pmod 5$,
+while for prime $d \equiv 1 \pmod 4$ with $d \ge 13$ no exclusion class
+exists. (Empirically these two classes contain $40.4\%$ of the consecutive
+prime pairs in our census, i.e.\ those with smaller member at least $5$ and
+larger member below $10^9$; that is a measured proportion, not part of the
+theorem.)
 \end{theorem}
 
 The hypothesis $g \not\equiv 0 \pmod d$ is not cosmetic. Since $\chi(0) = 0$,
@@ -305,13 +308,14 @@ $10^9$ we find
       which is not an additive decomposition of the global value.
 \end{itemize}
 
-What organises the data is the number of residue channels available to
-$\chi_a$, which is controlled by $f$: the smaller the conductor, the fewer the
-classes over which the Lemke Oliver--Soundararajan transition bias is
-distributed, and the larger the resulting per-base correlation. We state this
-as a measured empirical regularity (Observation~\ref{obs:conductor}) rather
-than a conjectured exact power of $f$, because the data do not support a clean
-exponent.
+A possible explanation --- which we propose rather than establish --- is that
+the residue information relevant to $\chi_a$ is carried by the $\varphi(f)$
+classes modulo $f$, so that the smaller the conductor, the fewer the channels
+over which the Lemke Oliver--Soundararajan transition bias is distributed, and
+the less cancellation between them. We state the association itself as a
+measured empirical regularity (Observation~\ref{obs:conductor}) rather than a
+conjectured exact power of $f$, because the data do not support a clean
+exponent, and we do not claim the channel count is the operative mechanism.
 
 \subsection*{A note on inferential language}
 The computation reported here is an exhaustive census of a finite set: every
@@ -554,7 +558,7 @@ preserved. Hence $g$ is neither reversing nor preserving.
 Theorem~\ref{thm:classification} classifies the reversing and preserving
 classes; it does not by itself classify the exclusion classes of
 Definition~\ref{def:exclusion}, since an indeterminate class may still be an
-exclusion class. That gap is closed in Section~\ref{sec:identity}.
+exclusion class. That gap is closed by Proposition~\ref{prop:exhaustion}.
 
 \begin{corollary}[Dichotomy for reversing classes]
 \label{cor:dichotomy}
@@ -803,6 +807,61 @@ $q \mid d$ satisfies $q \ge 5$, so $q - 2 \ge 3$ and $\prod_q (q-2) \ge 3^k
 In both cases $N_{--}(g) > 0$, so no exclusion class exists.
 \end{proof}
 
+\begin{proposition}[Exhaustion: the exclusion set is determined]
+\label{prop:exhaustion}
+Let $a$ be non-square with squarefree part $d$, and let $g$ be a gap class
+admitting an even representative. Call a prime-discriminant component $D_i$
+\emph{free at $g$} if all four sign patterns
+$(\chi_{D_i}(r), \chi_{D_i}(r+g)) \in \{\pm 1\}^2$ occur as $r$ ranges over the
+residues with both entries nonzero. Then:
+\begin{enumerate}
+\item a component $q^*$ with $q \ge 7$ prime is free at $g$ whenever
+      $q \nmid g$;
+\item the components $-4$, $\pm 8$ and $-3$ are never free, and the component
+      $5$ is never free;
+\item if some component is free at $g$, then $g$ is not an exclusion class.
+\end{enumerate}
+Consequently the set of quadratic exclusion classes of base $a$ equals its set
+of reversing classes, except when $d = 5$, where it is
+$\{g : g \equiv 2, 3 \pmod 5\}$.
+\end{proposition}
+
+\begin{proof}
+(1) For $q \ge 7$ and $q \nmid g$, Lemma~\ref{lem:components} gives
+$T_q = q - 2$ and $S_q = -1$, so by~\eqref{eq:identity} applied to the single
+component, $4 N^{(q)}_{--}(g) = q - 3 + 2\chi_q(g) \ge q - 5 > 0$; the same
+computation with $\chi_q$ replaced by $-\chi_q$ in either argument bounds the
+other three pattern counts below by $(q-5)/4 > 0$. Hence all four patterns
+occur.
+
+(2) The components $-4$, $\pm 8$ and $-3$ have exactly two admissible residues
+at each relevant $g$ (one residue in the case of $-3$ with $3 \nmid g$), so at
+most two patterns can occur. For $q = 5$ the count
+$4N^{(5)}_{--}(g) = 2 + 2\chi_5(g)$ vanishes when $\chi_5(g) = -1$, so the
+pattern $(-1,-1)$ is missing there; when $\chi_5(g) = +1$ the same computation
+applied to $(+1,+1)$ gives $2 - 2\chi_5(g) = 0$, so that pattern is missing
+instead. Either way $5$ is not free.
+
+(3) Suppose $D_j$ is free at $g$. By the Chinese Remainder Theorem, choose any
+admissible residue at each component $i \neq j$, let
+$\varepsilon = \prod_{i \neq j} \chi_{D_i}(r_i)$ and
+$\varepsilon' = \prod_{i \neq j} \chi_{D_i}(r_i + g)$, and then choose at $D_j$
+the pattern $(-\varepsilon, -\varepsilon')$, which is available by freeness.
+The resulting $r$ satisfies $\chi_a(r) = \chi_a(r+g) = -1$, so
+$N_{--}(g) > 0$ and $g$ is not an exclusion class.
+
+For the final statement, suppose $g$ is an exclusion class. By (3) no component
+is free at $g$, so by (1) every odd prime $q \ge 7$ dividing $d$ satisfies
+$q \mid g$. If $d$ has a component among $-4, \pm 8, -3$, the class is
+reversing by Theorem~\ref{thm:classification}, since a non-reversing,
+non-preserving class would make some component indeterminate, and an
+indeterminate component of conductor $8$ is free by direct inspection at
+$g \equiv 2, 6 \pmod 8$. If $d$ has no such component then $d \equiv 1 \pmod 4$
+is odd with $3 \nmid d$, and Corollary~\ref{cor:complete} leaves only $d = 5$,
+whose exclusion classes are $g \equiv 2, 3 \pmod 5$ by
+Theorem~\ref{thm:inadmissible}.
+\end{proof}
+
 \begin{remark}
 \label{rem:oldproof}
 The composite case above replaces an argument in an earlier version of this
@@ -932,9 +991,9 @@ cofactor, and then tested primitive-root status for all of the bases
 \]
 simultaneously, using the standard criterion that, for $p \nmid a$, $a$ is a
 primitive root modulo $p$ iff $a^{(p-1)/\ell} \not\equiv 1 \pmod p$ for every
-prime $\ell \mid p-1$. (The hypothesis $p \nmid a$ is necessary: for $a = p$
-the displayed condition holds vacuously while $a$ is not a unit. The
-implementation tests $p \nmid a$ first.) Modular exponentiation was carried out in $128$-bit
+prime $\ell \mid p-1$. (The hypothesis $p \nmid a$ is necessary: for $a = p$ every tested power is
+$\equiv 0$, so the displayed condition holds even though $a$ is not a unit and
+cannot be a primitive root. The implementation tests $p \nmid a$ first.) Modular exponentiation was carried out in $128$-bit
 arithmetic. Sharing the factorization of $p-1$ across all eleven bases is what
 makes the computation inexpensive; the run completed in under an hour on a
 single core of the author's machine, though we did not record a timed
@@ -1145,13 +1204,16 @@ does establish is a sign reversal: for each of the eight bases with exclusion
 classes, the statistic computed outside those classes is positive, while the
 global value is negative.
 
-We note also that the global anticorrelation is not purely a within-gap-class
-phenomenon even for the bases with no exclusion classes. Writing the global
-$\delta$ against the pair-weighted mean of the per-gap-class values, the
-difference --- a between-class term --- is $-0.0074$ for $a = 13$, $-0.0110$
-for $a = 17$ and $-0.0119$ for $a = 29$, so a substantial part of the effect
-lives in the variation of Artin density across gap classes rather than within
-them. We record these as measured quantities and do not attempt a mechanism.
+We note also that the global $\delta$ is not recovered by averaging its
+values over individual gaps. Stratifying by \emph{exact gap value} $g$ (not by
+residue class modulo $f$) and restricting to gaps where both conditional
+proportions are defined, the difference between the global $\delta$ and the
+pair-weighted mean of the per-gap values is $-0.0074$ for $a = 13$, $-0.0110$
+for $a = 17$ and $-0.0119$ for $a = 29$. This residual is a defined quantity,
+not a term of the law of total covariance: it absorbs the change in the
+within-stratum weighting of the two conditional proportions. We report it only
+to show that stratified and pooled values differ, and draw no mechanistic
+conclusion from it.
 
 What does organise the data is the conductor.
 
@@ -1389,13 +1451,23 @@ This research received no external funding.
 
 \section*{Data availability}
 The code and results supporting this paper are available at
-\url{https://github.com/jpbald93/consecutive-artin}, including the segmented
-sieve and multi-base correlation program, the classification and verification
-scripts, the exact contingency tables underlying
-Tables~\ref{tab:verification} and~\ref{tab:delta}, scripts reproducing
-Figure~\ref{fig:conductor}, and the Lean~4 development described in
-Section~\ref{sec:formal} together with the script that checks its axiom
-dependencies. The computation reported here can be reproduced from the
+\url{https://github.com/jpbald93/consecutive-artin}. A single entry point,
+\texttt{code/regenerate\_all.py}, reproduces every headline claim of this
+paper from the primary contingency data and exits non-zero on any mismatch:
+the dichotomy over all $72$ non-square bases $a \le 80$, the exhaustion of
+Proposition~\ref{prop:exhaustion}, the $14{,}803$-case identity check, the
+prime-conductor count in both cases, the twin-prime counts of
+Section~\ref{sec:discussion}, and the correlations, scaled products and
+incidence totals of Sections~\ref{sec:verification}--\ref{sec:delta}. Also
+included are the segmented sieve and multi-base correlation program, the exact
+contingency tables underlying Tables~\ref{tab:verification}
+and~\ref{tab:delta}, the script reproducing Figure~\ref{fig:conductor}, and
+the Lean~4 development of Section~\ref{sec:formal} with its axiom-dependency
+checker. Some earlier scripts in the repository implement the superseded
+reversal-only classification --- in particular they scan only even least
+residues, missing odd-residue classes of odd conductors --- and are retained
+as historical artifacts; they are marked as such and are not the reproduction
+route for this paper. The computation reported here can be reproduced from the
 repository on a single core; rebuilding the Lean development
 additionally requires a \texttt{mathlib} binary cache.
 

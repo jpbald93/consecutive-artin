@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
+"""
+SUPERSEDED — HISTORICAL ARTIFACT. Do not use to verify this paper.
+
+This script implements the earlier, reversal-only classification. Its gap-class
+domain is `range(2, f + 1, 2)` (even least residues), which MISSES odd-residue
+classes of odd conductors -- for example 7 mod 21 -- and the class 0 mod 5.
+It therefore cannot confirm the corrected exclusion set, which also contains
+the base-5 inadmissibility classes 2, 3 mod 5.
+
+The correct domain (Definition 7) is every gap class admitting an even
+representative: all g mod f when f is odd, the even g when f is even.
+
+Use `regenerate_all.py` instead. Retained only for provenance.
+"""
+
 """Analyze multibase_1e9.json: test Corollary 4's predicted ORDERING of |delta|."""
 import json, math, sys
-import os
-def _find(fn):
-    for c in (fn, os.path.join(os.path.dirname(__file__), fn),
-              os.path.join(os.path.dirname(__file__), "..", "results", fn)):
-        if os.path.exists(c): return c
-    return fn
 from scan_exclusion import scan_base, conductor
 
-PATH = sys.argv[1] if len(sys.argv) > 1 else _find("multibase_1e9.json")
+PATH = sys.argv[1] if len(sys.argv) > 1 else "multibase_1e9.json"
 d = json.load(open(PATH))
 
 def delta_from(m):
@@ -59,7 +68,7 @@ ys = [abs(r["delta"]) for r in rows]
 n = len(xs); mx = sum(xs)/n; my = sum(ys)/n
 cov = sum((x-mx)*(y-my) for x,y in zip(xs,ys))
 sx = math.sqrt(sum((x-mx)**2 for x in xs)); sy = math.sqrt(sum((y-my)**2 for y in ys))
-print(f"\nPearson r( excluded_gap_weight , |delta| ) = {cov/(sx*sy):.4f}   (refuted: see Observation 8)")
+print(f"\nPearson r( excluded_gap_weight , |delta| ) = {cov/(sx*sy):.4f}   (Corollary 4 predicts strongly positive)")
 
 nolaw = [r for r in rows if r["n_flip_classes"] == 0]
 law   = [r for r in rows if r["n_flip_classes"] > 0]
