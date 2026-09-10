@@ -97,3 +97,69 @@ The manuscript now matches the mathematics. It has **not** been re-audited
 end-to-end by an independent pass, and the author has not yet reviewed it.
 Remaining before any submission: Josh's read-through, an independent
 verification pass, and a decision on venue.
+
+---
+
+# Round 2 — independent audit applied (2026-09-10, later)
+
+Two independent audits were run on `gpt-6-astra` (a different model from the one
+that wrote the paper), with non-overlapping briefs and a mechanical gate.
+Both passed their gate and returned **REVISE**. All findings were independently
+re-verified before being applied. Reports:
+`Prime Math/reaudit_2026-09-10/REPORT_DATA.md` and `REPORT_MATH.md`.
+
+## The core mathematics survived
+
+The math audit's exact-arithmetic checks found **no counterexample** to:
+the counting identity (5,461 sign-function assignments; 15,285 modulus/character/shift
+cases), all eight component values (21,534 cases, every odd prime 3..499),
+the two-case prime-conductor theorem (9,964 cases through d=499), and
+**both cases of the new composite dichotomy proof** (13,719 shifts over 27
+squarefree composites). The 14,803 census count was independently reproduced.
+Corollary 20 — the only genuinely new proof, written the same day — held up.
+
+## Round-2 fixes applied (7 from the math audit)
+
+1. **MAJOR — the `p = 2` scope gap.** The abstract and introduction stated the
+   exclusion conclusion for "primes" without the odd restriction that
+   Lemma 5 and Theorem 9 themselves carry. Counterexample: base 33 is a
+   primitive root modulo both 2 and 13, whose gap 11 is a reversing class
+   modulo the conductor 33 — and chi_33(2) = +1, so the unqualified necessity
+   claim fails too. `Art_a` is now defined over odd primes, with the
+   counterexample stated explicitly.
+2. A duplicate copy of the stale zero-shift arithmetic survived in the
+   introduction: `(d-3+2)/4 = (d-1)/4` -> `(d-3+2chi(0))/4 = (d-3)/4`.
+3. **The even-conductor parity argument was vacuous** — adding an even `f`
+   cannot change parity. Replaced with the correct reason: the 2-primary
+   component forces the CRT-prescribed residue to be even.
+4. "two of the four odd-conductor classes" -> "two of the five gap classes
+   modulo 5" (the zero class is a class too).
+5. "The error is invisible at d = 5" is false — there the bad extension gives
+   1/2 against a true count of 2, equally visible. Claim removed.
+6. **The mathlib claim was too broad.** `jacobiSum_nontrivial_inv` (J(chi,chi^-1)
+   = -chi(-1)) IS in the pinned mathlib; what is missing is the specialisation
+   and the integer-valued bridge. Verified in the local tree.
+7. Definition 7 now carries a parity proviso: for even `f`, an odd `g` would be
+   a vacuous exclusion class, which was outside the intended domain.
+
+Plus one typographic fix: an underfull vbox at the figure page break
+(`\raggedbottom`).
+
+## Round-1 fixes (19, from the data audit) are recorded above and in git 49f31a0.
+
+## Build and verification status
+
+19 pp, **0 overfull/underfull boxes, 0 undefined references**. Round-2
+corrections screened in the PDF text: 11 required strings present, 6 superseded
+claims absent. Package is 1.4 MB / 47 files — an 832 MB Lean `.lake` build tree
+had leaked in and was removed; the Lean gate still passes (19 theorems,
+standard axioms only) from the cleaned source-only copy.
+
+## Honest status
+
+Two independent audits have now been applied. The core mathematics has been
+checked by exact computation and, for two theorems, by Lean. **The author has
+still not read the rewritten manuscript**, and no audit has been run against
+this latest revision — the round-2 fixes are themselves unaudited. Remaining
+before any submission: Josh's read-through, a confirmation pass on the round-2
+edits, and a venue decision.

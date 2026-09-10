@@ -5,6 +5,7 @@
 \usepackage{booktabs}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{microtype}
+\raggedbottom
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -38,8 +39,10 @@ characters, prime discriminants, Lemke Oliver--Soundararajan bias}
 \date{September 10, 2026}
 
 \begin{abstract}
-Say that a prime $p$ is \emph{Artin base $a$} if $a$ is a primitive root modulo
-$p$. Membership in $\Art_a$ forces the quadratic character value
+Say that an odd prime $p$ is \emph{Artin base $a$} if $a$ is a primitive root
+modulo $p$. (We restrict to odd primes throughout: modulo $2$ every odd
+integer trivially has full multiplicative order, and the quadratic obstruction
+below fails there.) Membership in $\Art_a$ forces the quadratic character value
 $\chi_a(p) = -1$, and since $\chi_a$ has conductor $f$, this necessary
 condition depends only on $p \bmod f$. We determine, for every non-square base
 $a$, the exact set of gap classes on which the resulting \emph{quadratic
@@ -99,9 +102,16 @@ uniform versions.
 
 Write
 \[
-  \Art_a = \{\, p \text{ prime} : a \text{ is a primitive root mod } p \,\},
+  \Art_a = \{\, p \text{ an odd prime} : a \text{ is a primitive root mod } p \,\},
 \]
-and call $p \in \Art_a$ an \emph{Artin prime base $a$}. All results above
+and call $p \in \Art_a$ an \emph{Artin prime base $a$}. The restriction to odd
+primes is not cosmetic. Modulo $2$ the group $(\Z/2\Z)^\times$ is trivial, so
+every odd $a$ vacuously has full order, while $\chi_a(2)$ need not be $-1$;
+taking $a = 33$, the primes $2$ and $13$ both have $33$ as a primitive root
+even though their gap $11$ lies in a reversing class modulo the conductor
+$33$. Every statement below therefore concerns odd primes only, as the
+hypotheses of Lemma~\ref{lem:obstruction} and Theorem~\ref{thm:exclusion}
+already record. All results above
 concern a \emph{single} prime at a time. The behaviour of Artin primes in
 \emph{pairs} has been studied much less. Garcia, Kahoro and
 Luca~\cite{GarciaKahoroLuca2019} (see also~\cite{GarciaLucaShiUdell2020})
@@ -135,8 +145,9 @@ completely is the set of gap classes on which the \emph{quadratic} obstruction
 alone forbids a doubly-Artin pair (Definition~\ref{def:exclusion}). Therefore:
 
 \begin{itemize}
-\item when a gap class \emph{is} a quadratic exclusion class, no pair of primes
-      at that gap can both be Artin base $a$ --- an unconditional theorem;
+\item when a gap class \emph{is} a quadratic exclusion class, no pair of
+      \emph{odd} primes at that gap can both be Artin base $a$ --- an
+      unconditional theorem;
 \item when a gap class is \emph{not} a quadratic exclusion class, we conclude
       nothing. Higher-order obstructions may still forbid doubly-Artin pairs
       there, and our results do not assert that such pairs exist.
@@ -228,10 +239,11 @@ $a$ with $\sqf(a) = 5$) admits the exclusion classes $g \equiv 2, 3 \pmod 5$
 for prime $d \equiv 1 \pmod 4$, $d \ge 13$, no exclusion class exists.
 \end{theorem}
 
-The hypothesis $g \not\equiv 0 \pmod d$ is not cosmetic. At $g \equiv 0$ the
-displayed formula returns $(d-3+2)/4 = (d-1)/4$, which is not in general an
-integer --- for $d = 13$ it gives $2.5$ against a true count of $6$ --- so the
-$g \equiv 0$ case must be handled separately, as it is above. Both statements
+The hypothesis $g \not\equiv 0 \pmod d$ is not cosmetic. Since $\chi(0) = 0$,
+evaluating the displayed formula at $g \equiv 0$ would give
+$(d - 3 + 2\chi(0))/4 = (d-3)/4$, which is not in general an integer --- for
+$d = 13$ it gives $2.5$ against a true count of $6$ --- so the $g \equiv 0$
+case must be handled separately, as it is above. Both statements
 are machine-checked (Section~\ref{sec:formal}).
 
 The classification is sharp enough to answer the qualitative question
@@ -245,8 +257,8 @@ $d = 5$ (inadmissibility classes).
 
 Thus for $d \in \{13, 17, 29, 37, 41, 53, 61, \dots\}$ there is no quadratic
 exclusion law at all, while for $d = 3$ fully half of the even gap classes
-modulo $12$ are exclusion classes, and for $d = 5$ two of the four
-odd-conductor classes are excluded. The reversing dichotomy is a genuine
+modulo $12$ are exclusion classes, and for $d = 5$ two of the five
+gap classes modulo $5$ are excluded. The reversing dichotomy is a genuine
 structural phenomenon whose source is a degeneration of a Jacobi-sum
 obstruction at the single prime $3$ (Remark~\ref{rem:three}); the
 inadmissibility phenomenon is a second, independent degeneration, this time of
@@ -382,9 +394,13 @@ say that $g$ is
 
 \begin{definition}
 \label{def:exclusion}
-A class $g \bmod f$ is a \emph{quadratic exclusion class} for base $a$ if there
-is no residue $r \in R_f$ with $r + g \in R_f$ and
-$\chi_a(r) = \chi_a(r+g) = -1$. Every reversing class is an exclusion class
+A class $g \bmod f$ is a \emph{quadratic exclusion class} for base $a$ if it
+admits an even representative --- equivalently, any class when $f$ is odd, and
+an even class when $f$ is even --- and there is no residue $r \in R_f$ with
+$r + g \in R_f$ and $\chi_a(r) = \chi_a(r+g) = -1$. The parity proviso
+excludes a trivial case: when $f$ is even, an odd $g$ admits no $r$ with $r$
+and $r+g$ both odd, so the defining condition would hold vacuously. Since all
+gaps between odd primes are even, nothing of interest is lost. Every reversing class is an exclusion class
 (Theorem~\ref{thm:exclusion}); Theorem~\ref{thm:inadmissible} below exhibits
 exclusion classes that are not reversing. As stressed in
 Section~\ref{sec:intro}, this is a condition on the quadratic character only.
@@ -563,9 +579,11 @@ a reversing class of $D_j$ and in the class $0$ modulo $|D_i|$ for every
 $i \neq j$; this is possible as the moduli are coprime. Then every other
 component preserves and exactly one reverses, so $g$ is reversing by
 Theorem~\ref{thm:classification}. It remains to check that $g$ may be taken
-even. If $f$ is even, replacing $g$ by $g + f$ if necessary preserves the class
-modulo $f$ and adjusts the parity, so an even representative exists. If $f$ is
-odd then $D_j = -3$ and $f = |D| = d$ is odd; here the reversing condition is
+even. If $f$ is even, then $D$ has a $2$-primary prime discriminant component
+$-4$ or $\pm 8$, and the CRT prescription above assigns $g$ the residue $0$ or
+$2$ modulo $4$, or $0$ or $4$ modulo $8$; in every case the prescribed residue
+is even, so every CRT solution $g$ is even. (Note that adding $f$ would not
+help here, since $f$ even preserves parity.) If $f$ is odd then $D_j = -3$ and $f = |D| = d$ is odd; here the reversing condition is
 $g \not\equiv 0 \pmod 3$ together with $g \equiv 0$ modulo the other odd
 components, and since $\gcd(2, f) = 1$ every class modulo $f$ contains even
 integers, so again an even representative exists.
@@ -719,8 +737,8 @@ $d \mid g$ never vanishes since $(d-1)/2 \ge 2$ for $d \ge 5$.
 The distinction between the two cases is essential and was omitted in an
 earlier version of this paper. Applying the second formula at $g \equiv 0$
 would give $(d-3)/4$, which for $d = 13$ is $2.5$ --- not an integer, against a
-true count of $6$. The error is invisible at $d = 5$, where both expressions
-happen to be small, which is presumably how it survived. We record it because
+true count of $6$. At $d = 5$ the incorrect extension returns $1/2$ against a true count of $2$,
+so the failure is equally visible there; we do not know why it survived. We record it because
 the same class of error --- a character-sum evaluation applied outside the
 range where its input identity holds --- is easy to make and hard to see.
 \end{remark}
@@ -850,8 +868,11 @@ standard axioms (\texttt{propext}, \texttt{Classical.choice},
 \texttt{Quot.sound}), and a check script verifies this. We state plainly what
 is \emph{not} formalised. The general-$d$ case of
 Theorem~\ref{thm:inadmissible} is not, because it requires the Jacobi-type
-evaluation $\sum_r \chi(r)\chi(r+g) = -1$, which is not at present available
-in \texttt{mathlib}. The reversing classification of
+evaluation $\sum_r \chi(r)\chi(r+g) = -1$. The underlying ingredient is in
+fact present in \texttt{mathlib} as \texttt{jacobiSum\_nontrivial\_inv}
+($J(\chi, \chi^{-1}) = -\chi(-1)$, which for quadratic $\chi$ gives the shifted
+sum after the substitution $r = -gx$); what this development has not done is
+formalise the specialisation and the bridge to an integer-valued shifted sum. The reversing classification of
 Theorem~\ref{thm:classification} is not formalised either, and no empirical
 statement in
 Sections~\ref{sec:computation}--\ref{sec:delta} is formalised. The
