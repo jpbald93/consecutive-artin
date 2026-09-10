@@ -1,6 +1,7 @@
 import Artin.Exclusion
 import Artin.Bridge
 import Artin.TripleExclusion
+import Artin.Paper2
 set_option linter.style.header false
 /-! Axiom audit + the fully bridged exclusion theorem. -/
 namespace ArtinExclusion
@@ -43,3 +44,12 @@ open ArtinExclusion
 #print axioms not_all_three_nonresidue
 #print axioms legendreSym_third_eq_one
 #print axioms not_all_three_nonresidue_two_five_ten
+
+-- Paper 2: refutation of the p.13 twin-prime claim + corrected Theorem 2 count
+#print axioms Paper2.refutation_gap_two_base_three
+#print axioms Paper2.group_orders
+#print axioms Paper2.nmm_five
+#print axioms Paper2.nmm_thirteen
+#print axioms Paper2.paper_formula_fails_at_zero
+#print axioms Paper2.nmm_five_vanishes
+#print axioms Paper2.nmm_thirteen_never_vanishes
