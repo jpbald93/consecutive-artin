@@ -6,3 +6,10 @@ data_1e9.csv
 !results/*_log.txt
 !multibase/results/*.log
 __pycache__/
+
+# private correspondence and superseded manuscripts (provenance only, kept local)
+submission/endorsement_email_pollack.md
+archive/
+
+# Lean build tree (~7.5 GB); reconstruct with `lake exe cache get` per lean/BUILD.md
+lean/.lake/

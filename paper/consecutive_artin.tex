@@ -15,6 +15,7 @@
 
 \newcommand{\Lsym}[2]{\left(\tfrac{#1}{#2}\right)}
 \newcommand{\Art}{\mathrm{Art}}
+\newcommand{\E}{\mathbb{E}}
 
 \begin{document}
 
@@ -24,7 +25,7 @@
 \thanks{\textbf{Corresponding author.} Josh Bald, Independent Researcher.
 	Email: \texttt{jpbald93@gmail.com}. ORCID: \texttt{0009-0002-1317-6489}.}
 
-\date{September 7, 2026}
+\date{September 10, 2026}
 
 \subjclass[2020]{Primary 11A07; Secondary 11N05, 11N13, 11Y16, 11Y60}
 \keywords{Artin's primitive root conjecture, primitive roots, consecutive primes,
@@ -36,7 +37,7 @@
 	modulo $p$. We investigate the dependence between the Artin
 	statuses of \emph{consecutive} primes. Computing Artin status for all
 	$50{,}847{,}531$ primes $7 \le p \le 10^9$, we find that consecutive primes are
-	significantly \emph{anticorrelated}: $P(\Art_{n+1} \mid \Art_n) = 0.36514$
+	measurably \emph{anticorrelated}: $P(\Art_{n+1} \mid \Art_n) = 0.36514$
 	versus $P(\Art_{n+1} \mid \lnot\Art_n) = 0.37928$, a deficit
 	$\delta = -0.01414$ (Pearson statistic $10{,}167$ on one degree of freedom;
 	signed square root $-100.8$ under a nominal independent-status reference model;
@@ -143,7 +144,8 @@ been considered.
 	      most one can be an Artin prime for base $10$. If instead
 	      $g \equiv 0 \pmod{40}$, then $\Lsym{10}{p+g} = \Lsym{10}{p}$.
 	\item (Section~\ref{sec:global}) Across all $50{,}847{,}530$ consecutive
-	      prime pairs with $7 \le p_n \le 10^9$, Artin statuses are anticorrelated:
+	      prime pairs with $7 \le p_n < p_{n+1} \le 10^9$, Artin statuses are
+	      anticorrelated:
 	      $\delta = P(\Art_{n+1} \mid \Art_n) - P(\Art_{n+1} \mid \lnot \Art_n)
 		      = -0.01414$, with Pearson $\chi^2 = 10{,}167$ on one degree of freedom.
 	\item (Section~\ref{sec:gaps}) The dependence is violently non-uniform in
@@ -278,13 +280,15 @@ $10 \not\equiv 1 \bmod 4$, so no correction factor applies and the conjectural
 density is exactly $C$; see~\cite{Hooley1967,Moree2012}). Agreement with a
 conjectural density is a sanity check, not a verification of every indicator.
 
+\begin{sloppypar}
 The consecutive-pair analysis is a single streaming pass over the
 $50{,}847{,}530$ ordered pairs $(p_n, p_{n+1})$, accumulating $2 \times 2$
-contingency tables of $(\mathbf{1}[\Art_n], \mathbf{1}[\Art_{n+1}])$: globally,
-stratified by gap $g$, and stratified by joint residues of $(p_n, p_{n+1})$ to
-various moduli. All counts reported below are exact (no sampling), except
-where noted. Analysis scripts (Python) and their outputs are available with
-the data (see the Data Availability statement).
+contingency tables of $(\mathbf{1}[\Art_n], \mathbf{1}[\Art_{n+1}])$:
+globally, stratified by gap $g$, and stratified by joint residues of
+$(p_n, p_{n+1})$ to various moduli. All counts reported below are exact
+(no sampling), except where noted. Analysis scripts and their outputs are
+available with the data; see the Data Availability statement.
+\end{sloppypar}
 
 \subsection*{Runtime, hardware, and validation}
 All computations were performed on a single machine with a $2$-core Intel Xeon
@@ -311,7 +315,7 @@ in~\cite{LOS2016} at comparable scale.
 \begin{table}[ht]
 	\centering
 	\caption{Artin status of consecutive primes, all $50{,}847{,}530$ pairs with
-	$7 \le p_n \le 10^9$.}
+	$7 \le p_n < p_{n+1} \le 10^9$.}
 	\label{tab:global}
 	\begin{tabular}{lr}
 		\toprule
@@ -357,8 +361,19 @@ in~\cite{LOS2016} at comparable scales.
 \section{Gap structure}
 \label{sec:gaps}
 
-Stratifying by the gap $g = p_{n+1} - p_n$ reveals that the global
-$\delta = -0.0141$ is the average of far larger, sign-alternating effects.
+Stratifying by the gap $g = p_{n+1} - p_n$ reveals sign-alternating
+within-gap effects that are individually far larger in magnitude than the
+global $\delta = -0.0141$. The global value is \emph{not} the
+pair-frequency-weighted average of the within-gap values: for a marginal
+conditional risk difference such as~$\delta$, the strata are additionally
+reweighted by the gap-conditional distribution of $\Art_n$, so no such
+averaging identity holds. Indeed the pair-weighted mean of the within-gap
+differences over the $36$ qualifying gap classes ($50{,}114{,}759$ pairs,
+$98.6\%$ of the census) is $+0.00159$, opposite in sign to the global value.
+The two quantities answer different questions, and the gap table below should
+be read as a decomposition of \emph{where} the association lives, not as a
+summand decomposition of~$\delta$ itself (cf.\ the caution in
+Section~\ref{sec:decomposition}).
 Table~\ref{tab:gaps} shows all gaps with at least $10^5$ pairs up to $g = 60$;
 additional qualifying gaps ($g \in \{62, 64, 66, 70, 72, 78\}$) are included
 in the analysis scripts and archived results but omitted from the table
@@ -386,7 +401,7 @@ $g \bmod 40$ marked, including all qualifying gaps.
 		14  & 2{,}464{,}565 & 0.298          & 0.296          & $+0.002$    & 44 & 389{,}634     & 0.344          & 0.249 & $+0.095$ \\
 		16  & 1{,}846{,}097 & 0.296          & 0.543          & $-0.247$    & 46 & 334{,}720     & 0.469          & 0.469 & $+0.000$ \\
 		18  & 3{,}351{,}032 & 0.378          & 0.359          & $+0.019$    & 48 & 577{,}247     & 0.216          & 0.454 & $-0.238$ \\
-		20  & 1{,}824{,}043 & \textbf{0.000} & 0.553          & $-0.553$    & 50 & 328{,}066     & 0.312          & 0.307 & $+0.005$ \\
+		20  & 1{,}824{,}043 & \textbf{0.000} & 0.553          & $-0.553$    & 50 & 328{,}066     & 0.311          & 0.307 & $+0.005$ \\
 		22  & 1{,}569{,}679 & 0.444          & 0.447          & $-0.004$    & 52 & 245{,}804     & 0.572          & 0.381 & $+0.191$ \\
 		24  & 2{,}367{,}474 & 0.295          & 0.411          & $-0.116$    & 54 & 410{,}754     & 0.382          & 0.356 & $+0.026$ \\
 		26  & 1{,}119{,}585 & 0.313          & 0.313          & $+0.000$    & 56 & 211{,}462     & 0.225          & 0.389 & $-0.164$ \\
@@ -455,7 +470,11 @@ $\Lsym{10}{\cdot}$ of both primes (its conductor $40$ divides $120$) and the
 mod-$3$ channel. Cells in which $10$ is a quadratic residue for $p_n$ or
 $p_{n+1}$ are degenerate for the analysis (one margin of the $2\times2$ table
 vanishes --- the Artin property is impossible); the informative population is
-the quarter of pairs in doubly-non-residue cells.
+roughly a quarter of all pairs, those in doubly-non-residue cells. The
+selected populations in Table~\ref{tab:decomp} are the thresholded subsets of
+this population: $12{,}255{,}203$ pairs ($24.10\%$ of the census) at
+modulus~$120$ and $12{,}086{,}765$ pairs ($23.77\%$) at modulus~$840$. The
+unthresholded doubly-non-residue fraction need not be exactly $1/4$.
 
 \begin{table}[ht]
 	\centering
@@ -548,10 +567,34 @@ motivates the following open questions.
 
 The measurements $\delta(10^8) = -0.01336$ and $\delta(10^9) = -0.01414$ do
 not determine whether $\delta(x) \to 0$ as $x \to \infty$ or tends to a
-small nonzero limit. A Hardy--Littlewood-based channel model (not developed
-here) would predict a nonzero limiting~$\delta$ from the non-uniform weights
-of gap classes in the singular series, but such a prediction is conditional on
-unproved conjectures and has not been verified against data at larger scales.
+small nonzero limit, and we do not claim a prediction either way. We note one
+reason for caution against assuming a nonzero limit, in a restricted setting.
+Consider a \emph{separable} fixed-modulus channel model: write $R, S$ for the
+residue classes of $(p_n, p_{n+1})$ modulo a fixed~$M$, and suppose the
+modelled indicators satisfy $\E[X \mid R,S] = \alpha(R)$,
+$\E[Y \mid R,S] = \beta(S)$ and $\operatorname{Cov}(X, Y \mid R,S) = 0$, so
+that the only modelled dependence between the two endpoints runs through the
+joint law of $(R,S)$. If that joint law tends to the product of its
+marginals, as the leading term of the Lemke Oliver--Soundararajan prediction
+gives for fixed~$M$~\cite{LOS2016}, then
+$\E[XY] - \E[X]\,\E[Y] \to 0$, and hence the modelled $\delta \to 0$ whenever
+the limiting source marginal is nondegenerate. Non-uniform singular-series
+weights across gap classes do not by themselves defeat this conclusion: the
+gaps grow with~$x$, and it is the surviving total covariance, rather than the
+non-uniformity of the weights, that would have to be estimated.
+
+The separability hypothesis is essential and is not automatic. Conditioning
+on the joint pair $(R,S)$ alone does not force independence: taking $R,S$
+independent and uniform on the sixteen reduced classes modulo~$40$ and setting
+$X = Y = Q(R)Q(S)$, where $Q$ indicates the eight classes on which the
+relevant quadratic symbol is~$-1$, gives perfectly equidistributed residue
+pairs together with $\E[X] = \E[Y] = \E[XY] = \tfrac14$ and
+$\operatorname{Cov}(X,Y) = \tfrac{3}{16}$. So the observation above constrains
+separable finite-modulus models, not every model built on a fixed modulus.
+Extending a finite-obstruction approach to a statement about the limit would
+in addition require joint-distribution information at each finite channel
+together with a uniform bound on the omitted higher-power-residue
+obstructions; the quadratic channel visible here is only the first of these.
 The question of the limiting behaviour is unresolved; finite-range
 measurements cannot distinguish the two alternatives.
 
@@ -647,8 +690,11 @@ accompanying reproduction package (C segmented sieve, Python analysis scripts,
 figure script, and raw output logs). The corrected code, manuscript and summary
 outputs are at \url{https://github.com/jpbald93/consecutive-artin}; the
 full per-prime CSV is not included in the public repository. The sieve limit is
-configurable via a command-line argument; all scripts accept their
-input/output paths as arguments and default to repository-relative locations.
+configurable via a command-line argument; within the Paper-1 reproduction
+pipeline described above, the scripts accept their input/output paths as
+arguments and default to repository-relative locations. This statement is
+scoped to that pipeline and does not extend to other scripts that may be
+present in the repository for related projects.
 The per-prime dataset itself ($1.8$~GB CSV covering all $50{,}847{,}531$
 primes from $7$ to $999{,}999{,}937$: gap, $\omega(p-1)$, Artin indicator,
 and small residues for each prime) is not deposited because of its size, but

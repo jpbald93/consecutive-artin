@@ -18,7 +18,7 @@ Before sending:
    reproduction ZIP excludes private correspondence and archived manuscripts.
 4. Check the target journal's current review model and submission requirements.
    This checklist does not certify policy compliance, novelty, or acceptance.
-5. See `../PUBLICATION_STATUS.md` for verification scope and remaining limitations.
+5. See `../FINAL_STATUS.md` for verification scope and remaining limitations.
 
 Do not upload the named source ZIP as anonymous review material: it identifies
 its author. The anonymous PDF has been separately screened in text and metadata.
