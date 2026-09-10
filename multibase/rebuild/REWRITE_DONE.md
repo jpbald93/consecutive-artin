@@ -122,7 +122,7 @@ Corollary 20 — the only genuinely new proof, written the same day — held up.
 
 1. **MAJOR — the `p = 2` scope gap.** The abstract and introduction stated the
    exclusion conclusion for "primes" without the odd restriction that
-   Lemma 5 and Theorem 9 themselves carry. Counterexample: base 33 is a
+   Lemma 5 and Theorem 8 themselves carry. Counterexample: base 33 is a
    primitive root modulo both 2 and 13, whose gap 11 is a reversing class
    modulo the conductor 33 — and chi_33(2) = +1, so the unqualified necessity
    claim fails too. `Art_a` is now defined over odd primes, with the
@@ -163,3 +163,74 @@ still not read the rewritten manuscript**, and no audit has been run against
 this latest revision — the round-2 fixes are themselves unaudited. Remaining
 before any submission: Josh's read-through, a confirmation pass on the round-2
 edits, and a venue decision.
+
+---
+
+# Round 3 — confirmation pass on the round-2 fixes (2026-09-10)
+
+A third independent audit (`gpt-6-astra`, gated) checked whether the seven
+round-2 fixes were themselves correct. Report:
+`Prime Math/reaudit_2026-09-10/REPORT_CONFIRM.md`.
+
+## All seven round-2 fixes: CONFIRMED CORRECT
+
+Each was checked for (a) mathematical correctness, (b) whether it fixes the
+reported problem, (c) whether it introduces a new error. All seven passed on
+all three counts, with no new mathematical error found. Notably:
+
+* the base-33 counterexample verified in every sub-claim;
+* the **replaced even-conductor parity proof** — the highest-risk edit — passed
+  all six 2-primary cases and **712 explicit CRT constructions** (I had
+  independently confirmed 0 odd solutions across all even-conductor squarefree
+  `d < 400`);
+* the Jacobi substitution verified algebraically and by **560,836 termwise
+  checks**;
+* Definition 7's parity proviso preserves Corollary 20 and **every** Table 2/3
+  class list, over 14,803 base–shift cases.
+
+## Round-3 fixes applied (8, all inherited defects rather than round-2 errors)
+
+1. **K1 — a round-1 fix had not fully landed.** The additive/within-class
+   reading of Table 5 was removed from the discussion but survived verbatim in
+   Observation 23(3) and in the introduction bullet ("an average of forced-zero
+   classes against positively coupled ones"; "a genuine within-class residue
+   effect"). Both now state only the sign reversal under restriction. Verified
+   absent everywhere.
+2. **F1** — the introduction's reversal prose omitted `p, q ∤ a`. Counterexample:
+   `a = 3`, `p = 3`, `q = 7` at the reversing gap 4, where `chi_3(3) = 0`, so
+   neither the reversal equation nor the "+1" conclusion holds. Added the
+   hypothesis and noted separately that a prime dividing `a` is not Artin either.
+3. **F2** — the primitive-root criterion in Section 5 omitted `p ∤ a`. For
+   `a = p = 5` the displayed condition holds vacuously. (The C implementation
+   tests `a % p` first, so no count is affected.)
+4. **F3** — the Table 2 caption claimed odd conductors have odd residues. False:
+   `2 mod 5` and `14 mod 21` are even. Reworded.
+5. **F5** — "Both statements are machine-checked" and "The two theorems ... have
+   been formalised" overstated the Lean coverage. Now: the counting identity in
+   full generality, and the prime-conductor count for `d = 5, 13` only.
+6. **F6** — the computational-scan domain was ambiguous under the new parity
+   proviso. Now states the class domain explicitly and distinguishes the
+   parity-filtered exclusion scan from the unfiltered identity check.
+7. **F4** — the shipped `lean/Artin/Paper2.lean` scope comment still carried the
+   superseded "not in Mathlib" claim. Updated to match the paper; Lean gate
+   re-run and still PASS (19 theorems, standard axioms only).
+8. **F7** — this log cited "Theorem 9"; the exclusion theorem is Theorem 8.
+
+## Build
+
+19 pp, **0 overfull/underfull boxes, 0 undefined references**.
+
+## Status after three rounds
+
+34 corrections applied across three independent audit rounds. The core
+mathematics — counting identity, component evaluation, prime-conductor count,
+and both cases of the new composite dichotomy — has now been checked by two
+separate audits over roughly 65,000 and 580,000 exact-arithmetic cases
+respectively, and found correct. Round 3 found **no error in round 2's
+mathematics**; everything it raised was an inherited scope or documentation
+defect.
+
+**Still outstanding: the author has not read the manuscript**, and the round-3
+edits are themselves unaudited. The rate of new findings is falling sharply
+(19 -> 7 -> 0 new mathematical errors), which suggests convergence, but that is
+an observation, not a guarantee.

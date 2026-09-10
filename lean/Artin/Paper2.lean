@@ -54,9 +54,12 @@ and `nmm_thirteen_never_vanishes` (base 13 has none).
 ## Scope
 
 The general-`d` statement rests on a Jacobsthal-type identity
-(`∑_r χ(r) χ(r + g) = -1` for `g ≢ 0`) that is **not** in Mathlib and is not
-proved here. This file gives an unconditional refutation of the twin-prime
-claim plus the corrected count for concrete `d`. See `README_LEAN.md`.
+(`∑_r χ(r) χ(r + g) = -1` for `g ≢ 0`), which is **not** proved here. The
+underlying ingredient does exist in Mathlib as `jacobiSum_nontrivial_inv`
+(`J(χ, χ⁻¹) = -χ(-1)`); what is missing is the specialisation to a quadratic
+character and the bridge to an integer-valued shifted sum. This file gives an
+unconditional refutation of the twin-prime claim plus the corrected count for
+concrete `d`. See `README_LEAN.md`.
 -/
 
 namespace Paper2

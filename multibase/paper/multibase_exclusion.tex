@@ -130,9 +130,11 @@ $\Q(\sqrt{a})$. Because $\chi_a$ is a character modulo the conductor $f$ of
 that field, the value $\chi_a(p)$ depends only on $p \bmod f$. Consequently, if
 a shift $g$ has the property that it \emph{reverses} $\chi_a$ on every
 admissible residue class modulo $f$, then for any two primes $p$ and $q = p+g'$
-with $g' \equiv g \pmod f$ we get $\chi_a(q) = -\chi_a(p)$, so at least one of
-$\chi_a(p), \chi_a(q)$ equals $+1$ --- and that prime is not Artin base $a$.
-Two primes at such a gap can never \emph{both} be Artin base $a$. We call this
+with $g' \equiv g \pmod f$, \emph{neither dividing $a$}, we get
+$\chi_a(q) = -\chi_a(p)$, so at least one of $\chi_a(p), \chi_a(q)$ equals
+$+1$ --- and that prime is not Artin base $a$. A prime dividing $a$ is not
+Artin base $a$ either, since then $a$ is not even a unit; so two odd primes at
+such a gap can never \emph{both} be Artin base $a$. We call this
 a \emph{quadratic exclusion law} (Theorem~\ref{thm:exclusion}).
 
 \subsection*{What this paper does and does not classify}
@@ -243,8 +245,8 @@ The hypothesis $g \not\equiv 0 \pmod d$ is not cosmetic. Since $\chi(0) = 0$,
 evaluating the displayed formula at $g \equiv 0$ would give
 $(d - 3 + 2\chi(0))/4 = (d-3)/4$, which is not in general an integer --- for
 $d = 13$ it gives $2.5$ against a true count of $6$ --- so the $g \equiv 0$
-case must be handled separately, as it is above. Both statements
-are machine-checked (Section~\ref{sec:formal}).
+case must be handled separately, as it is above. Both branches of the count
+are machine-checked for $d = 5$ and $d = 13$ (Section~\ref{sec:formal}).
 
 The classification is sharp enough to answer the qualitative question
 completely.
@@ -299,9 +301,8 @@ $10^9$ we find
       better than exclusion weight does;
 \item restricting $\delta$ to gap classes outside the exclusion set
       (Table~\ref{tab:outside}) gives a \emph{positive} value for all eight
-      bases possessing such classes: the global negative $\delta$ arises as a
-      competition between forced-zero classes and positively coupled ones, not
-      as a simple dilution of the exclusion effect.
+      bases possessing such classes --- a sign reversal under restriction,
+      which is not an additive decomposition of the global value.
 \end{itemize}
 
 What organises the data is the number of residue channels available to
@@ -825,8 +826,9 @@ $d$ is $132 = 135 - 3$, attained where $\chi(g) = -1$ and $k$ is odd.
 \subsection*{Computational confirmation of the classification}
 For each non-square $a$ with $2 \le a \le 30$ we computed the reversing and
 preserving sets directly, by evaluating $\chi_a$ on every reduced residue
-class modulo $f$ and testing Definition~\ref{def:shift} exhaustively over all
-even $g$ modulo $f$. The resulting sets agree \emph{exactly}, in every case,
+class modulo $f$ and testing Definition~\ref{def:shift} exhaustively over
+every gap class admitting an even representative --- all $g$ modulo $f$ when
+$f$ is odd, and the even $g$ when $f$ is even. The resulting sets agree \emph{exactly}, in every case,
 with the prediction of Theorem~\ref{thm:classification}. The exact count of
 Theorem~\ref{thm:inadmissible} was verified for all primes
 $d \equiv 1 \pmod 4$ with $d \le 41$ and all shifts, in both the $g \equiv 0$
@@ -834,17 +836,21 @@ and $g \not\equiv 0$ cases. The identity~\eqref{eq:identity} was verified
 directly against brute-force counts for every non-square $a \le 120$ and every
 shift modulo $f$, a total of $14{,}803$ (base, shift) pairs, with no
 discrepancy. The criterion of the complete dichotomy
-(Corollary~\ref{cor:complete}) was confirmed by exhaustive scan --- over all
-residue classes modulo $f$, odd classes included --- for all $72$ non-square
-$a$ with $2 \le a \le 80$, again with no discrepancy.
+(Corollary~\ref{cor:complete}) was confirmed by exhaustive scan for all $72$
+non-square $a$ with $2 \le a \le 80$, again with no discrepancy; for odd
+conductors this scan covers every residue class, odd residues included, and
+for even conductors the even classes, in accordance with the parity proviso of
+Definition~\ref{def:exclusion}. The identity check of~\eqref{eq:identity}, by
+contrast, was run over \emph{all} shifts modulo $f$ without that filter.
 Table~\ref{tab:classification} records a representative sample.
 
 \section{Machine verification}
 \label{sec:formal}
 
-The two theorems on which the deterministic half of this paper rests have been
-formalised and checked by the Lean~4 proof assistant against
-\texttt{mathlib}. We report this because both statements were, in an earlier
+Part of the deterministic half of this paper has been formalised and checked
+by the Lean~4 proof assistant against \texttt{mathlib}: the counting identity
+in full generality, and the prime-conductor count in the two special cases
+$d = 5$ and $d = 13$. We report this because both statements were, in an earlier
 version, asserted in forms that were false or incomplete, and a proof
 assistant is an effective guard against exactly that failure.
 
@@ -885,8 +891,10 @@ certificate for the paper.
 factorization~\eqref{eq:primedisc}. Reversing classes are those predicted by
 Theorem~\ref{thm:classification}; inadmissibility classes by
 Theorem~\ref{thm:inadmissible}; all confirmed by exhaustive search. For odd
-conductors the residues are odd numbers realised by even gaps (e.g.\
-$g \equiv 7 \pmod{21}$ via $g = 28, 70, \dots$); an earlier version of this
+conductors a residue may be odd even though the gaps representing it are
+even --- every class then admits an even representative, e.g.\
+$g \equiv 7 \pmod{21}$ via $g = 28, 70, \dots$ --- while other residues, such
+as $2 \bmod 5$ and $14 \bmod 21$, are already even. An earlier version of this
 table, which scanned only even residues, missed the class $7$ of base $21$
 and all classes of base $5$.}
 \label{tab:classification}
@@ -922,9 +930,11 @@ cofactor, and then tested primitive-root status for all of the bases
 \[
   a \in \{2, 3, 5, 6, 7, 10, 11, 13, 17, 21, 29\}
 \]
-simultaneously, using the standard criterion that $a$ is a primitive root
-modulo $p$ iff $a^{(p-1)/\ell} \not\equiv 1 \pmod p$ for every prime
-$\ell \mid p-1$. Modular exponentiation was carried out in $128$-bit
+simultaneously, using the standard criterion that, for $p \nmid a$, $a$ is a
+primitive root modulo $p$ iff $a^{(p-1)/\ell} \not\equiv 1 \pmod p$ for every
+prime $\ell \mid p-1$. (The hypothesis $p \nmid a$ is necessary: for $a = p$
+the displayed condition holds vacuously while $a$ is not a unit. The
+implementation tests $p \nmid a$ first.) Modular exponentiation was carried out in $128$-bit
 arithmetic. Sharing the factorization of $p-1$ across all eleven bases is what
 makes the computation inexpensive; the run completed in under an hour on a
 single core of the author's machine, though we did not record a timed
@@ -1089,10 +1099,11 @@ $|\delta|$ does not track $w$:
       (Table~\ref{tab:outside}) yields a positive value for \emph{all eight}
       bases possessing such classes (e.g.\ base $3$: $-0.047$ globally,
       $+0.578$ outside; base $5$: $-0.067$ globally, $+0.002$ outside), while
-      the no-exclusion bases are untouched by construction. The global
-      negative $\delta$ of the exclusion-law bases is thus an average of
-      forced-zero classes against positively coupled ones, whereas for
-      $a = 13, 17, 29$ it is a genuine within-class residue effect.
+      the no-exclusion bases are untouched by construction. This is a sign
+      reversal under restriction; as explained after
+      Table~\ref{tab:outside}, it is not an additive decomposition of the
+      global $\delta$, and no contribution of the exclusion classes to the
+      global value can be read off from it.
 \end{enumerate}
 These are descriptive summaries of eleven points; the eleven bases are not a
 random sample, and no inference to other bases is intended.
