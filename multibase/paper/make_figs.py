@@ -4,7 +4,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-rows = json.load(open("../delta_summary.json"))
+rows = json.load(open("../results/delta_summary_corrected.json"))
 rows.sort(key=lambda r: r["conductor"])
 f  = [r["conductor"] for r in rows]
 ad = [abs(r["delta"]) for r in rows]
@@ -38,7 +38,7 @@ for x, y, b in zip(w, ad, bs):
                    xytext=(5, 4), fontsize=8)
 ax[1].set_xlabel("weighted fraction of pairs in exclusion classes")
 ax[1].set_ylabel(r"$|\delta(a)|$")
-ax[1].set_title(r"(b) no association with exclusion density ($r=0.23$)")
+ax[1].set_title(r"(b) exclusion density: $r=0.65$, but $r=0.14$ after adjusting for $\log f$")
 ax[1].grid(alpha=.3, zorder=0)
 
 from matplotlib.lines import Line2D
