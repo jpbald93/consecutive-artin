@@ -1,5 +1,6 @@
 import Artin.Exclusion
 import Artin.Bridge
+import Artin.TripleExclusion
 set_option linter.style.header false
 /-! Axiom audit + the fully bridged exclusion theorem. -/
 namespace ArtinExclusion
@@ -39,3 +40,6 @@ open ArtinExclusion
 #print axioms chi10_eq_legendreSym
 #print axioms legendreSym_flip_of_shift_twenty
 #print axioms not_both_artin
+#print axioms not_all_three_nonresidue
+#print axioms legendreSym_third_eq_one
+#print axioms not_all_three_nonresidue_two_five_ten

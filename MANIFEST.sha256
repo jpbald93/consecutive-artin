@@ -37,6 +37,7 @@ a1d01563003ca7f809ea86fb4f7202c00beafc0eee0bc11c719ab2e49e0d3c33  ./archive/pre-
 dec733a4611c3988bdfdbcadace9b3819f55e5b3adaa48c74f10ad50d895e33f  ./archive/pre-followup-2026-09-07/SHA256SUMS.txt
 58c8e99701f02708b888c67211868cabb42845eb4ce5ae124b98e23f31d281d5  ./archive/pre-followup-2026-09-07/consecutive_artin.tex
 3473f9072f85fcc1ddef64ac17a8af8c6027a6785e9d4783e9b452ba3643d2ff  ./archive/pre-followup-2026-09-07/endorsement_email_pollack.md
+ce684275604fdada19c0b759c5af0486f4646da00f7e85521d224da9e0038edc  ./crossbase/LEAN_NOTE.md
 bf3f4d99a7b99fa265d820f2939a3f8c66702e10bb2704d34ef9e12056606078  ./crossbase/code/analyze_crossbase.py
 285a2caf59bc16af375d144df7be319f44f76b28923c3479df80d9b0044b4966  ./crossbase/code/analyze_fine.py
 85eef1d642cc3d3852e912354cdf228de4dc4cb9ef980c06f7d963920e9e3bf9  ./crossbase/code/analyze_om.py
@@ -78,12 +79,13 @@ ad20b4c407b0577c2a8e1de97fed93a4db3cfdc3a6c88f35ec1d56357b972509  ./layers/layer
 fee13c1afe2f88d7fceb91ee9d14a55a4868d26aa70b546eb5f74bb165170842  ./layers/pilot_cubic.py
 6582e266f2fd8a9f8a23be123ca39645043a7210081ee569ebac27df21792c76  ./layers/pilot_ell.json
 f3fdf33d5f13c59a78869d7f724248cdd58812d0496b16839ef54c06f774bf32  ./layers/pilot_ell.py
-d99b3635f9e5ffe41a6606b6b1a75ebd7772773a69b334c78b8a17d8cca8c704  ./lean/Artin.lean
+529b516dcd24b246e7dec5e6c3fb0154ee88cf108db4ca6d9df9924c6d788572  ./lean/Artin.lean
 5d6062049509ef5f11b2909104a8a08d38214a49ce2579eac37778b571601ad4  ./lean/Artin/Bridge.lean
-24f318eaef5d792f7aad58486087bfeddc23716a5fece6603dd17e470bda88f2  ./lean/Artin/Check.lean
+9dcb167617e95e4c76fd4218d9a7650f5270e94c1a4ed10b7f3419fd3e07f8eb  ./lean/Artin/Check.lean
 217f782c2d3938f64cf84c4095743b54bd5b159c589e32ad86ac7abacef49023  ./lean/Artin/Exclusion.lean
+7ec3866520b9f659f48e9c6a80d6d8780c820727e3b2cffd3768e0ea14a3fbdc  ./lean/Artin/TripleExclusion.lean
 41bd099e6ec7d30b9e6d21a2d9a7d8e6fd2878ad00c68173860f1f4bc4af2a59  ./lean/BUILD.md
-4c7873bf64ffc2082180997d0982ccbd8dd33824e2a2c560ff37d9c096cf78bf  ./lean/README_LEAN.md
+5ea9d21049faa0d1e5b7a6ab8015f7b5b6f3f8554217db27bd4d32a587f926cd  ./lean/README_LEAN.md
 bde2294bc46b231db1afa37717112b259708db7e148bc90ddca1251794f69d72  ./lean/gate.sh
 2c27c7ceeaff548a4b9f536e2ee2e5183bb690020ab14a05fa9acdcf25325e08  ./lean/lake-manifest.json
 2d10b0a170f8529f5be9f734ac164faff78522d20a398ab189704b2631af3e93  ./lean/lakefile.toml

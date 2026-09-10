@@ -1,13 +1,17 @@
-# artin-lean — machine-checked exclusion law for consecutive Artin primes
+# artin-lean — machine-checked exclusion laws for Artin primes
 
-Lean 4 formalization of **Theorem 1** of `Prime Math/Paper 1 Full file`
-("Correlations between primitive root statuses of consecutive primes") and its
-`g ≡ 0 (mod 40)` companion.
+Lean 4 formalizations of the two *deterministic* exclusion theorems in the
+Prime Math series:
+
+* **Paper 1, Theorem 1** — consecutive primes, gaps `g ≡ 20 (mod 40)`
+  (`Artin/Exclusion.lean`, `Artin/Bridge.lean`)
+* **Paper 3, Theorem 2** — same prime, multiplicative triples
+  (`Artin/TripleExclusion.lean`)
 
 ## Gate
 
 ```bash
-./gate.sh      # => PASS (6 theorems, standard axioms only)
+./gate.sh      # => PASS (9 theorems, standard axioms only)
 ```
 Checks: build succeeds; no `sorry`, `admit`, `axiom`, or `native_decide`;
 every theorem depends only on `propext`, `Classical.choice`, `Quot.sound`.
@@ -27,6 +31,30 @@ Toolchain: Lean 4 v4.33.1, Mathlib v4.33.1 (prebuilt cache).
 **Supporting (residue-class level, `ZMod 40`):**
 `chi10_shift_twenty`, `chi10_shift_zero`, `not_both_nonresidue`, `chi10_ne_zero`.
 
+## Paper 3, Theorem 2 — triple exclusion (`Artin/TripleExclusion.lean`)
+
+| theorem | statement |
+|---|---|
+| `not_all_three_nonresidue` | if `c * s² = a * b * t²` (i.e. `sqf c = sqf (ab)`) with `s, t ≢ 0`, the symbols `(a\|p), (b\|p), (c\|p)` cannot all be `-1` |
+| `legendreSym_third_eq_one` | under the same relation, `(a\|p) = (b\|p) = -1` forces `(c\|p) = +1` |
+| `not_all_three_nonresidue_two_five_ten` | the paper's headline case: no prime has `2`, `5`, `10` all non-residues |
+
+The `sqf(c) = sqf(ab)` hypothesis is encoded as `c * s ^ 2 = a * b * t ^ 2`,
+which avoids needing a squarefree-part function; witnesses are immediate in
+practice (`40 * 1² = 2 * 5 * 2²`).
+
+**Lean found the paper's hypotheses to be stronger than needed.** The
+`a, b ≢ 0 (mod p)` conditions were flagged as never used: `legendreSym p a = -1`
+already forces `a ≢ 0`, because a vanishing base gives symbol `0`. So the
+paper's `p ∤ 2abc` is more than the parity argument requires, and
+`not_all_three_nonresidue_two_five_ten` holds for **every** prime with no side
+conditions at all.
+
+Numerical corroboration (independent of the proofs), primes `3 ≤ p < 100000`
+over six triples including `(2,5,40)` and `(2,5,90)`: **0 violations** of
+`not_all_three_nonresidue`, and **14,436/14,436** cases with
+`(a|p) = (b|p) = -1` gave `(c|p) = +1`.
+
 `not_both_artin` is the exclusion content of Paper 1 Theorem 1. The paper's own
 proof structure is preserved: `(10|p) = (2|p)(5|p)`, with `(2|p)` from the second
 supplementary law (`ZMod.exists_sq_eq_two_iff`, `p % 8 ∈ {1,7}`) and
@@ -44,9 +72,15 @@ valid since `5 % 4 = 1`); a shift of 20 moves `p` by 4 mod 8 and 0 mod 5.
 3. **Nothing empirical is formalized** — not δ = −0.01414, the z-scores, the
    channel decompositions, or any conjecture. Those are census measurements over
    50.8M pairs, not theorems, and Lean is the wrong tool for them.
-4. **Only Paper 1's Theorem 1 and its companion.** Papers 2–7 are untouched.
-   Paper 2's exclusion theorem is currently **false** (see below) and Paper 3's
-   triple-exclusion theorem is the natural next target.
+4. **Paper 3's Theorem 2 is formalized at the character-parity level.** The step
+   "Artin base `a` ⇒ `(a|p) = -1`" is taken as a hypothesis, not derived from
+   Mathlib's `orderOf`/primitive-root machinery. That implication is standard
+   (criterion (1) in the paper) but connecting it formally is a separate task.
+   So what is machine-checked is the parity obstruction that does the work, not
+   the translation from "is a primitive root" to "is a non-residue".
+5. **Papers 2, 4, 5, 6, 7 are untouched.** Paper 2's exclusion theorem is
+   currently **false** (see below); formalizing its rebuilt statement is the
+   natural next target.
 
 ## Numerical corroboration (independent of the proof)
 
