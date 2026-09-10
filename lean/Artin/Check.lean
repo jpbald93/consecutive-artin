@@ -2,6 +2,7 @@ import Artin.Exclusion
 import Artin.Bridge
 import Artin.TripleExclusion
 import Artin.Paper2
+import Artin.Paper2Rebuild
 set_option linter.style.header false
 /-! Axiom audit + the fully bridged exclusion theorem. -/
 namespace ArtinExclusion
@@ -53,3 +54,8 @@ open ArtinExclusion
 #print axioms Paper2.paper_formula_fails_at_zero
 #print axioms Paper2.nmm_five_vanishes
 #print axioms Paper2.nmm_thirteen_never_vanishes
+
+-- Paper 2 rebuild: the general counting identity replacing the broken composite argument
+#print axioms Paper2Rebuild.four_mul_indicator
+#print axioms Paper2Rebuild.main_identity
+#print axioms Paper2Rebuild.counting_identity
