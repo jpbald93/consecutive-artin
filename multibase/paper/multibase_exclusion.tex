@@ -928,9 +928,16 @@ The formalisation covers:
 
 \sloppypar
 The Lean development contains no \texttt{sorry}, no additional axioms and no
-appeal to \texttt{native\_decide}; every theorem depends only on Lean's three
-standard axioms (\texttt{propext}, \texttt{Classical.choice},
-\texttt{Quot.sound}), and a check script verifies this. We state plainly what
+appeal to \texttt{native\_decide}. Every non-private theorem and lemma in the
+development carries an explicit \texttt{\#print axioms} line, and all of them
+report only Lean's three standard axioms (\texttt{propext},
+\texttt{Classical.choice}, \texttt{Quot.sound}). The check script
+\texttt{gate.sh} enforces this: it requires a successful build \emph{exit
+status}, requires the number of axiom reports to meet a pinned expected count
+so that a silently deleted audit line fails the gate, and rejects any axiom
+outside the three. Private helper lemmas are not listed individually --- they
+are inaccessible from the audit module by construction, and each is consumed
+by an audited theorem, so its dependencies are covered transitively. We state plainly what
 is \emph{not} formalised. The general-$d$ case of
 Theorem~\ref{thm:inadmissible} is not, because it requires the Jacobi-type
 evaluation $\sum_r \chi(r)\chi(r+g) = -1$. The underlying ingredient is in
@@ -995,9 +1002,9 @@ prime $\ell \mid p-1$. (The hypothesis $p \nmid a$ is necessary: for $a = p$ eve
 $\equiv 0$, so the displayed condition holds even though $a$ is not a unit and
 cannot be a primitive root. The implementation tests $p \nmid a$ first.) Modular exponentiation was carried out in $128$-bit
 arithmetic. Sharing the factorization of $p-1$ across all eleven bases is what
-makes the computation inexpensive; the run completed in under an hour on a
-single core of the author's machine, though we did not record a timed
-benchmark and writes no intermediate table, accumulating instead the
+makes the computation inexpensive. The run completed in under an hour on a
+single core of the author's machine; we did not record a formal timed
+benchmark. The program writes no intermediate table, accumulating instead the
 $2\times 2$ contingency counts of (Artin status of $p_n$, Artin status of
 $p_{n+1}$), both globally and separately for each gap $g \le 300$.
 
@@ -1215,7 +1222,10 @@ within-stratum weighting of the two conditional proportions. We report it only
 to show that stratified and pooled values differ, and draw no mechanistic
 conclusion from it.
 
-What does organise the data is the conductor.
+What organises the data descriptively is the conductor. We stress that the
+regularities below are measured associations over eleven bases at a single
+bound, offered as a proposed explanation rather than an established
+mechanism.
 
 \begin{observation}[Conductor regularity]
 \label{obs:conductor}
