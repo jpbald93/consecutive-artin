@@ -8,8 +8,8 @@
  * For each prime p we factor p-1 once and record Artin status for all bases,
  * then accumulate a 2x2 table for every unordered pair (a,b).
  *
- * gcc -O3 -o crossbase crossbase.c -lm
- * ./crossbase <limit> <out.json>
+ * gcc -O3 -o crossbase_om crossbase_om.c -lm
+ * ./crossbase_om <limit> <out.json>
  */
 #include <stdio.h>
 #include <stdlib.h>

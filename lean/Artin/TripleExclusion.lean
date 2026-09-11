@@ -5,6 +5,7 @@ Authors: J. Bald
 -/
 import Mathlib.NumberTheory.LegendreSymbol.Basic
 import Mathlib.Tactic
+import Artin.PrimitiveRootBridge
 
 set_option linter.style.header false
 
@@ -30,11 +31,15 @@ giving `(-1)(-1) = -1`.
   `s, t ≠ 0`.  This is equivalent to equality of squarefree parts and avoids
   needing a `sqf` function; the witnesses are immediate in practice, e.g.
   `(a,b,c) = (2,5,40)` has `40 * 1 ^ 2 = 2 * 5 * 2 ^ 2`.
-* **"Artin base `a` forces `χ_a(p) = -1`"** is taken as a hypothesis
-  (`legendreSym p a = -1`) rather than derived from the definition of a
-  primitive root.  The implication "primitive root ⇒ non-residue" is standard
-  and is exactly criterion (1) cited in the paper; deriving it from Mathlib's
-  `orderOf` machinery is a separate task and is *not* done here.  See
+* **"Artin base `a` forces `χ_a(p) = -1`"** is proved from the definition of a
+  primitive root via `Artin/PrimitiveRootBridge.lean`
+  (`legendreSym_eq_neg_one_of_isPrimitiveRoot`), and composed into this file
+  below (`not_all_three_nonresidue_of_primitiveRoot`,
+  `legendreSym_third_eq_one_of_primitiveRoot`). The
+  `legendreSym p a = -1`-hypothesis theorems remain as the character-parity
+  core — they hold for the genuine `legendreSym` independent of *how* the `-1`
+  arose — and the `_of_primitiveRoot` variants discharge that hypothesis from
+  an actual `IsPrimitiveRoot` fact, closing the gap end-to-end. See
   `README_LEAN.md`.
 
 The theorem below is therefore the **character-parity core** of Theorem 2: it is
@@ -106,5 +111,42 @@ theorem not_all_three_nonresidue_two_five_ten :
   refine not_all_three_nonresidue (s := 1) (t := 1) (by ring) ?_ ?_
   · simp
   · simp
+
+/-- **End-to-end composition, hypothesis-free.** Same statement as
+`not_all_three_nonresidue`, but with "Artin base `a`" / "Artin base `b`"
+expressed as actual `IsPrimitiveRoot` facts (`a`, `b` generate the full unit
+group mod `p`) rather than as bare `legendreSym = -1` hypotheses. This closes
+the gap `LEAN_NOTE.md` used to flag: the translation "primitive root ⇒
+non-residue" is no longer assumed anywhere in the chain from primitive root to
+triple exclusion. -/
+theorem not_all_three_nonresidue_of_primitiveRoot
+    (hp2 : p ≠ 2)
+    {a b c s t : ℤ}
+    (hrel : c * s ^ 2 = a * b * t ^ 2)
+    (hs : ((s : ZMod p)) ≠ 0) (ht : ((t : ZMod p)) ≠ 0)
+    (ha : IsPrimitiveRoot ((a : ZMod p)) (p - 1))
+    (hb : IsPrimitiveRoot ((b : ZMod p)) (p - 1))
+    (hC : legendreSym p c = -1) :
+    False :=
+  not_all_three_nonresidue hrel hs ht
+    ⟨legendreSym_eq_neg_one_of_isPrimitiveRoot hp2 ha,
+     legendreSym_eq_neg_one_of_isPrimitiveRoot hp2 hb, hC⟩
+
+/-- Same composition for `legendreSym_third_eq_one`: if `a` and `b` are both
+primitive roots mod `p` (hence both non-residues) and `c` completes the
+multiplicative triple, then `c` is forced to be a residue — with "`a`, `b`
+Artin" expressed as genuine `IsPrimitiveRoot` facts, not assumed
+non-residues. -/
+theorem legendreSym_third_eq_one_of_primitiveRoot
+    (hp2 : p ≠ 2)
+    {a b c s t : ℤ}
+    (hrel : c * s ^ 2 = a * b * t ^ 2)
+    (hs : ((s : ZMod p)) ≠ 0) (ht : ((t : ZMod p)) ≠ 0)
+    (ha : IsPrimitiveRoot ((a : ZMod p)) (p - 1))
+    (hb : IsPrimitiveRoot ((b : ZMod p)) (p - 1)) :
+    legendreSym p c = 1 :=
+  legendreSym_third_eq_one hrel hs ht
+    (legendreSym_eq_neg_one_of_isPrimitiveRoot hp2 ha)
+    (legendreSym_eq_neg_one_of_isPrimitiveRoot hp2 hb)
 
 end ArtinExclusion

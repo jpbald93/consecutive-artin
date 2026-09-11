@@ -1,6 +1,8 @@
 import Artin.Exclusion
 import Artin.Bridge
 import Artin.TripleExclusion
+import Artin.PairExclusion
+import Artin.PrimitiveRootBridge
 import Artin.Paper2
 import Artin.Paper2Rebuild
 set_option linter.style.header false
@@ -45,6 +47,17 @@ open ArtinExclusion
 #print axioms not_all_three_nonresidue
 #print axioms legendreSym_third_eq_one
 #print axioms not_all_three_nonresidue_two_five_ten
+#print axioms isPrimitiveRoot_imp_legendreSym_eq_neg_one
+#print axioms legendreSym_eq_neg_one_of_isPrimitiveRoot
+#print axioms not_all_three_nonresidue_of_primitiveRoot
+#print axioms legendreSym_third_eq_one_of_primitiveRoot
+
+-- Paper 3 Theorem 3 (pair exclusion): the headline deterministic law
+#print axioms ArtinExclusion.not_both_nonresidue_of_barring_character
+#print axioms ArtinExclusion.not_both_primitiveRoot_of_barring_character
+#print axioms ArtinExclusion.not_all_three_nonresidue_of_pair
+#print axioms ArtinExclusion.not_both_primitiveRoot_five_ten
+#print axioms ArtinExclusion.not_both_primitiveRoot_two_six
 
 -- Paper 2: refutation of the p.13 twin-prime claim + corrected Theorem 2 count
 #print axioms Paper2.refutation_gap_two_base_three
@@ -59,3 +72,15 @@ open ArtinExclusion
 #print axioms Paper2Rebuild.four_mul_indicator
 #print axioms Paper2Rebuild.main_identity
 #print axioms Paper2Rebuild.counting_identity
+
+-- Supporting lemmas. Listed so the axiom audit covers EVERY non-private theorem
+-- and lemma declaration in the development, not a selected paper-facing subset
+-- (Paper 2 referee finding F7). `private` declarations are excluded by
+-- construction: they are not accessible from this module, and each is consumed
+-- only by a theorem audited above, so its dependencies appear transitively.
+#print axioms ArtinExclusion.chi10_ne_zero
+#print axioms ArtinExclusion.chi10_shift_of_gap
+#print axioms ArtinExclusion.legendreSym_five_eq
+#print axioms ArtinExclusion.legendreSym_two_eq
+#print axioms Paper2.three_primitiveRoot_five
+#print axioms Paper2.three_primitiveRoot_seven
