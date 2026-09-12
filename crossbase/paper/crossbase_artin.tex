@@ -4,6 +4,8 @@
 \usepackage{booktabs}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{microtype}
+% let hyperref break long URLs at punctuation instead of running into the margin
+\usepackage{xurl}
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -340,9 +342,11 @@ $p = 3, 5, 11, 29, 53, \ldots$) Such pairs are precisely the ones our base set
 avoids: all twelve bases are squarefree and distinct, so $d > 1$ for all $66$
 pairs. Writing the classes out in the four cases we return to below:
 \[
-  (2,6),\; d = 3\!: \ p \equiv 5, 7 \!\!\pmod{12}; \qquad
-  (3,6) \text{ and } (5,10),\; d = 2\!: \ p \equiv 3, 5 \!\!\pmod 8; \qquad
-  (2,10),\; d = 5\!: \ p \equiv 2, 3 \!\!\pmod 5 .
+  \begin{aligned}
+    (2,6),\; d = 3&\!: \ p \equiv 5, 7 \!\!\pmod{12}; &\qquad
+    (3,6) \text{ and } (5,10),\; d = 2&\!: \ p \equiv 3, 5 \!\!\pmod 8; \\
+    (2,10),\; d = 5&\!: \ p \equiv 2, 3 \!\!\pmod 5 .
+  \end{aligned}
 \]
 We verified each over all primes below $6 \times 10^4$ with no exceptions, and
 Section~\ref{sec:measurement} verifies the theorem itself against all
@@ -689,8 +693,10 @@ multiplicatively dependent. The six pairs below are the only ones with
 $\phi \mid \mathrm{sig} < -0.004$, and all six are dependent (Fisher exact
 $p = 5.5 \times 10^{-5}$):
 \[
-  (2,10)\!:\, -0.0343, \quad (5,15)\!:\, -0.0255, \quad (6,10)\!:\, -0.0144,
-  \quad (5,10)\!:\, -0.0125, \quad (7,21)\!:\, -0.0060, \quad (10,15)\!:\, -0.0049 .
+  \begin{aligned}
+    (2,10)&\!:\, -0.0343, &\quad (5,15)&\!:\, -0.0255, &\quad (6,10)&\!:\, -0.0144, \\
+    (5,10)&\!:\, -0.0125, &\quad (7,21)&\!:\, -0.0060, &\quad (10,15)&\!:\, -0.0049 .
+  \end{aligned}
 \]
 At $x = 10^9$ these are also the only six negative residuals of any size, but
 that sharper statement is not stable with $x$: at $x = 3 \times 10^7$ a further
@@ -798,8 +804,11 @@ $\ell$-th power residue'':
   \qquad L = \mathrm{lcm}(m,n),
 \end{equation}
 and the entanglement enters through the degree in the denominator. Generically
-$[\Q(\zeta_L, a^{1/m}, b^{1/n}):\Q] = \varphi(L)\,m\,n$, but the degree
-\emph{drops by a factor of $2$ for each quadratic class in the group}
+\[
+  [\Q(\zeta_L, a^{1/m}, b^{1/n}):\Q] = \varphi(L)\,m\,n ,
+\]
+but the degree drops by the order of the subgroup of quadratic classes
+realised inside $\Q(\zeta_L)$, taken from the group
 \[
   V(m,n) = \bigl\langle\, d_a \text{ (if $2 \mid m$)},\;
                           d_b \text{ (if $2 \mid n$)} \,\bigr\rangle
@@ -986,10 +995,14 @@ single-pass multi-base programs (\texttt{crossbase.c},
 \texttt{crossbase\_fine.c}, \texttt{crossbase\_om.c},
 \texttt{crossbase\_qr.c}), the analysis scripts, and the raw
 contingency-table output at $x = 10^9$ from which every value quoted here is
-derived (\texttt{crossbase\_qr\_1e9.json},
-\texttt{crossbase\_fine\_1e9.json}, \texttt{crossbase\_om\_1e9.json}; $3.2$~MB
-in total). Running \texttt{analyze\_qr.py} on the first of these reproduces
-Table~\ref{tab:residual} exactly. The full computation reproduces in under two
+derived, namely
+\begin{center}
+\texttt{crossbase\_qr\_1e9.json}, \quad
+\texttt{crossbase\_fine\_1e9.json}, \quad
+\texttt{crossbase\_om\_1e9.json}
+\end{center}
+($3.2$~MB in total). Running \texttt{analyze\_qr.py} on the first of these
+reproduces Table~\ref{tab:residual} exactly. The full computation reproduces in under two
 hours on a single core; the $x = 10^9$ signature-and-character run alone takes
 about $16$ minutes on $1$ core of a modern desktop. The Lean sources for the
 machine-checked statements are included in the same repository, with build
