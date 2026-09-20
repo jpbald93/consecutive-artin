@@ -342,9 +342,12 @@ available with the data; see the Data Availability statement.
 \end{sloppypar}
 
 \subsection*{Runtime, hardware, and validation}
-All computations were performed on a single machine with a $2$-core Intel Xeon
-E5-2673~v4 processor at $2.3$~GHz and $8$~GB of RAM, running Ubuntu Linux; no
-parallelism beyond a single core was used for any run reported here. The
+The computations to $10^9$ were performed on a single machine with a $2$-core
+Intel Xeon E5-2673~v4 processor at $2.3$~GHz and $8$~GB of RAM, running Ubuntu
+Linux, using no parallelism beyond a single core. The independent
+recomputation and the extensions to $10^{10}$ and $10^{11}$ were run on a
+separate $32$-core AMD machine (gcc~15.2.0) as a few hundred contiguous
+shards; that run is described above and uses a different implementation. The
 segmented sieve (segment length $2^{21}$, so the working set stays within
 cache) together with the per-prime computation --- trial-division
 factorisation of $p - 1$ and the Artin test by modular exponentiation ---
