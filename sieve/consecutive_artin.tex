@@ -60,11 +60,12 @@
 	independent quantitative verification of the Hardy--Littlewood explanation.
 	As an intermediate link we report the (apparently unreported) anticorrelation
 	$r\bigl(\omega(p_n - 1), \omega(p_{n+1} - 1)\bigr) = -0.041$.
-	Across four decades the deficit strengthens monotonically with decelerating
-	increments --- $\delta = -0.01336, -0.01414, -0.01472, -0.01500$ at
-	$x = 10^8, 10^9, 10^{10}, 10^{11}$ --- which over the measured range does not
-	support $\delta(x) \to 0$; we do not claim a nonzero limit, since the
-	increment law is not identified.
+	At four decade-spaced cutoffs $x = 10^8, 10^9, 10^{10}, 10^{11}$ the deficit
+	grows in magnitude with decreasing increments,
+	$\delta = -0.01336, -0.01414, -0.01472, -0.01500$, and no turnover is
+	observed; we draw no asymptotic conclusion from this, and in particular these
+	finite-range values do not distinguish eventual decay to zero from
+	persistence of a nonzero correlation.
 	We formulate open questions and discuss extensions to general bases.
 \end{abstract}
 
@@ -78,7 +79,8 @@ Two classical themes in the theory of primes intersect in this paper.
 The first is Artin's primitive root conjecture, communicated to Hasse in 1927
 (see~\cite{Artin1965} and the historical account in~\cite{Moree2012}): for any integer
 $a \notin \{-1, 0, 1\}$ that is not a perfect square, the set of primes $p$ for
-which $a$ is a primitive root modulo $p$ has positive density; for base
+which $a$ is a primitive root modulo $p$ has positive density relative to
+the primes; for base
 $a = 10$ this density is Artin's constant
 $C = \prod_q \bigl(1 - \tfrac{1}{q(q-1)}\bigr) \approx 0.3739558$.
 Hooley~\cite{Hooley1967} proved the conjecture under the Generalized Riemann
@@ -91,7 +93,10 @@ $p - 1$ (the \emph{full reptend} or \emph{long} primes; see
 \cite[pp.~166--171]{ConwayGuy1996}).
 
 The second theme is the surprising dependence between \emph{consecutive}
-primes discovered by Lemke Oliver and Soundararajan~\cite{LOS2016}: for a
+primes quantitatively investigated and conjecturally explained by Lemke Oliver
+and Soundararajan~\cite{LOS2016} (earlier numerical observations of such
+biases are due to Knapowski--Tur\'an, Ko, and Ash--Beltis--Gross--Sinnott, as
+\cite{LOS2016} itself discusses): for a
 modulus $q$, a prime in a given reduced residue class mod $q$ is followed by a
 prime in the \emph{same} class markedly less often than equidistribution would
 predict. The phenomenon, which they explain conjecturally via the
@@ -115,8 +120,9 @@ $10^9$ and isolate one component that is not merely statistical but
 Related but distinct questions have been studied. Garcia, Kahoro, and
 Luca~\cite{GarciaKahoroLuca2019} (see also the sequel~\cite{GarciaLucaShiUdell2020})
 compared the \emph{number} of primitive roots, $\varphi(p-1)$ versus
-$\varphi(p+1)$, for twin prime pairs, finding a strong bias which they explain
-under the Bateman--Horn conjecture. Pollack~\cite{Pollack2014} proved
+$\varphi(p+1)$, for twin prime pairs; under the Bateman--Horn conjecture they
+establish a majority bias together with a positive exceptional proportion, and
+conjecture a precise value for that proportion. Pollack~\cite{Pollack2014} proved
 (under GRH) that for every nonsquare $g \neq -1$ and every~$m$, there are
 infinitely many runs of $m$ consecutive primes each having $g$ as a primitive
 root. Baker and Pollack~\cite{BakerPollack2016} proved unconditionally that
@@ -157,8 +163,11 @@ been considered.
 		      = -0.01414$, with Pearson $\chi^2 = 10{,}167$ on one degree of freedom.
 	\item (Section~\ref{sec:gaps}) The dependence is violently non-uniform in
 	      the gap: $\delta(g)$ ranges from $-0.592$ (at $g = 60$, where the theorem
-	      forces exclusion) to $+0.643$ (at $g = 40$), with sign and magnitude
-	      predicted by $g \bmod 40$ and $g \bmod 3$.
+	      forces exclusion) to $+0.643$ (at $g = 40$). The exclusion classes
+	      $g \equiv 20 \pmod{40}$ are forced by Theorem~\ref{thm:exclusion}; for
+	      the remaining classes we observe a qualitative association between the
+	      sign of $\delta(g)$ and the residues $g \bmod 40$ and $g \bmod 3$, but
+	      we do not exhibit a predictor of its magnitude.
 	\item (Section~\ref{sec:decomposition}) Conditioning on the pair of residues
 	      of $(p_n, p_{n+1})$ modulo $120$ or $840$ substantially reduces a
 	      selected-cell signed residual metric; the remaining small residual
@@ -232,10 +241,18 @@ sufficient) condition for the Artin property.
 \begin{remark}
 	The modulus $40$ is specific to base $10$: it is the conductor of the
 	quadratic character $p \mapsto \Lsym{10}{p}$, namely $4 \cdot 10 = 40$ (the
-	discriminant of $\mathbb{Q}(\sqrt{10})$). For a general non-square base $a$
+	discriminant of $\mathbb{Q}(\sqrt{10})$). For a general non-square integer base $a$
 	the same argument applies with $40$ replaced by the conductor $|d_a|$ of the
-	quadratic character attached to $\mathbb{Q}(\sqrt{a})$: gaps
-	$g \equiv 0 \pmod{|d_a|}$ preserve quadratic-residue status. Some bases also
+	quadratic character attached to $\mathbb{Q}(\sqrt{a})$: for odd primes
+	$p, p'$ with $p \nmid a$ and $p' \nmid a$, gaps
+	$g \equiv 0 \pmod{|d_a|}$ preserve quadratic-residue status. The
+	coprimality hypothesis is needed, not cosmetic: the primitive character of
+	the field agrees with $\Lsym{a}{\cdot}$ only away from the primes dividing
+	$a$, and a prime dividing a square factor of $a$ gives $\Lsym{a}{p} = 0$
+	while the field character is nonzero. For instance $a = 98 = 2 \cdot 7^2$
+	has conductor $8$, and the primes $7$ and $23$ differ by $16 \equiv 0
+	\pmod 8$, yet $\Lsym{98}{7} = 0$ while $\Lsym{98}{23} = \Lsym{2}{23} = +1$.
+	(The base-$10$ theorem is unaffected: its hypotheses exclude $p = 2, 5$.) Some bases also
 	admit residue classes of gaps that reverse the Legendre symbol on every
 	admissible pair; their existence requires a separate classification.
 	Base $10$ is distinguished only by our decimal habit and the
@@ -361,7 +378,7 @@ in~\cite{LOS2016} at comparable scale.
 		$\delta = $ difference           & $-0.014140$ \\
 		$\phi$ coefficient               & $-0.014140$ \\
 		$\chi^2$ (1 df)                  & $10{,}167$  \\
-		$z$-score (nominal)              & $-100.8$    \\
+		signed $\sqrt{\chi^2}$ (descriptive)              & $-100.8$    \\
 		\bottomrule
 	\end{tabular}
 \end{table}
@@ -478,19 +495,27 @@ $p_{n+1}$ enjoys both the non-residue status and the mod-$3$ advantage.
 These conditions are consistent with the large observed value $0.899$ but do
 not quantitatively derive it without an explicit density calculation.
 
-\emph{(iii) Sign classes.} Gaps divisible by $3$ but not constrained mod $40$
-(e.g.\ $6, 18, 30, 42, 54$) show small positive $\delta \approx +0.02$: the
-pair shares its mod-$3$ status, weakly coupling the largest single
-suppression factor. Gaps $g \equiv 8, 16 \pmod{24}$-type classes with
-adverse mod-$8$/mod-$5$ shifts show strong negative $\delta$. The sign
-pattern of Table~\ref{tab:gaps} is reproduced by tracking how the shift by
-$g$ permutes the residues of $p$ modulo $8$, $5$, and $3$.
+\emph{(iii) Sign classes.} Several gaps that are divisible by $3$ but not
+constrained mod~$40$, for instance $6$, $18$, $30$, $42$ and $54$, show a
+small positive $\delta \approx +0.02$. A natural guess is that the pair
+shares its mod-$3$ status, weakly coupling the largest single suppression
+factor. This is a
+selected family rather than a rule: other gaps divisible by $3$ and lying in
+neither $0$ nor $20$ mod~$40$, such as $12$, $24$ and $36$, do not all
+behave this way, and we have no statement covering every class. Some gaps with
+adverse mod-$8$ and mod-$5$ shifts show strong negative $\delta$. We can
+therefore offer only a qualitative reading of Table~\ref{tab:gaps} in terms of
+how the shift by $g$ permutes the residues of $p$ modulo $8$, $5$ and $3$; we
+do not derive the entries, and outside the exclusion classes nothing here is
+forced.
 
 \section{Residue conditioning}
 \label{sec:decomposition}
 
-How much of the global association do the explicit residue channels
-account for? We condition on the \emph{joint} residue class of
+To what extent does the association persist once the explicit residue channels
+are held fixed? We treat what follows as an exploratory conditioning
+diagnostic; it does not answer that question quantitatively. We condition on
+the \emph{joint} residue class of
 $(p_n, p_{n+1})$ to modulus $m$ and measure the residual within-cell
 dependence. The statistic reported is the sum of per-cell Pearson $\chi^2$
 values over all non-degenerate cells meeting a minimum count threshold,
@@ -532,13 +557,21 @@ unthresholded doubly-non-residue fraction need not be exactly $1/4$.
 \end{table}
 
 \textbf{Interpretation and limitations.}
-The selected-cell signed mean residual $\delta_{\mathrm{res}}$ shrinks from
-$-0.0141$ (global) to $-0.00106$ (mod~$120$, $145$~cells covering
-$12.3$~million pairs) to $-0.00047$ (mod~$840$, $633$~cells covering
-$12.1$~million pairs). The summed per-cell $\chi^2$ at mod~$840$ is
-$719.8$ on $633$ nominal degrees of freedom ($\chi^2/\mathrm{df} = 1.14$).
-Two consistency observations: (i) the residual shrinks monotonically as
-channels are absorbed ($-0.0141 \to -0.00106 \to -0.00047$); (ii) a
+The three statistics in Table~\ref{tab:decomp} have successively smaller
+absolute values: $-0.0141$ (global) then $-0.00106$ (mod~$120$, $145$~cells
+covering $12.3$~million pairs) then $-0.00047$ (mod~$840$, $633$~cells
+covering $12.1$~million pairs). We emphasise that these are three different
+quantities computed on three different populations, not one quantity being
+reduced; the comparison is an exploratory conditioning diagnostic, not a
+decomposition. Note also that a signed mean can be small because sizable
+positive and negative within-cell associations cancel, so smallness in this
+metric is not by itself evidence that dependence has gone. The summed per-cell
+$\chi^2$ at mod~$840$ is $719.8$ on $633$ nominal degrees of freedom
+($\chi^2/\mathrm{df} = 1.14$); we do not read $\chi^2/\mathrm{df} \approx 1$
+as the disappearance of dependence, since no reference distribution has been
+established for this serially structured, selected collection.
+Two further observations: (i) the three values decrease in magnitude in the
+order stated ($-0.0141$, $-0.00106$, $-0.00047$); (ii) a
 split-sample check (pairs with $p < 5 \times 10^8$ versus
 $p \ge 5 \times 10^8$, conditioning mod $120$) gives residuals
 $-0.00096$ and $-0.00094$ --- stable across the range.
@@ -552,11 +585,16 @@ mean of stratum risk differences without a between-group term and specified
 weights. The per-cell Pearson calibration assumes independent observations
 within each cell, which is not established for this serially structured
 deterministic census. The paper does not specify a numerical model for the
-omitted channels ($q \ge 11$) against which ``compatible'' could be formally
-tested.
+omitted channels against which ``compatible'' could be formally tested. Those
+omitted channels are not only the divisibility channels at $q \ge 11$:
+fixing $p$ modulo $840$ determines whether $3$, $5$ and $7$ divide $p - 1$,
+but not whether $10^{(p-1)/q} \equiv 1 \pmod p$ when one of them does, so
+cubic and higher power-residue obstructions at these same small primes are
+also unmodelled. The mod-$3$ channel here is the divisibility channel, not the
+full cubic-residue condition.
 
-Joint-residue conditioning substantially reduces a selected-cell signed
-residual association. The remaining association is small in that metric but is
+Joint-residue conditioning yields a smaller selected-cell signed
+residual association than the global figure. The remaining association is small in that metric but is
 not established to vanish. These results are consistent with a substantial role
 for arithmetic residue structure; they do not constitute a complete
 decomposition or an independent quantitative verification of the
@@ -567,9 +605,10 @@ Hardy--Littlewood-based explanation of the consecutive-prime bias.
 
 The chain from residue bias to Artin status passes through the factorisation
 of $p - 1$. Its first summary statistic is
-$\omega(p-1)$, the number of distinct prime factors, whose average grows like
-$\log\log p$ (for $p - 1$ shifted primes this is a classical result of
-Erd\H{o}s~\cite{Erdos1935}). If consecutive primes repel modulo every small
+$\omega(p-1)$, the number of distinct prime factors, which has normal order
+$\log\log p$ over shifted primes $p - 1$ --- a classical result of
+Erd\H{o}s~\cite{Erdos1935}. (We invoke the normal order only; we do not use a
+mean-value asymptotic, which would need separate tail control.) If consecutive primes repel modulo every small
 $q$, then $q \mid p_n - 1$ makes $q \mid p_{n+1} - 1$ \emph{less} likely than
 average, and summing over $q$ one predicts a negative correlation between
 $\omega(p_n - 1)$ and $\omega(p_{n+1} - 1)$.
@@ -579,10 +618,23 @@ The data confirm this with a value that is, to our knowledge, unreported:
 	r\bigl(\omega(p_n - 1),\, \omega(p_{n+1} - 1)\bigr) = -0.0410
 	\qquad (50{,}847{,}530 \text{ pairs}, \; p \le 10^9).
 \]
-The factorisations of $p - 1$ for consecutive primes are not independent: they
-repel, in the same sense and for the same reason that the primes themselves
-repel in residue classes. The Pearson coefficient is reported as a descriptive
-nominal value.
+The factorisations of $p - 1$ for consecutive primes are therefore not
+independent. We stress that this measurement establishes dependence, not its
+cause. The heuristic above accounts only for the same-$q$ terms: writing
+$I_q(p) = \mathbf{1}_{q \mid p-1}$,
+\[
+  \operatorname{Cov}\bigl(\omega(p_n-1), \omega(p_{n+1}-1)\bigr)
+  = \sum_q \operatorname{Cov}\bigl(I_q(p_n), I_q(p_{n+1})\bigr)
+  + \sum_{q \ne r} \operatorname{Cov}\bigl(I_q(p_n), I_r(p_{n+1})\bigr),
+\]
+and the cross terms $q \ne r$ are neither estimated nor signed here. Summing
+fixed-modulus predictions over all $q$ up to a growing cutoff would in any case
+require uniformity and tail control that we do not supply. Nor is $\omega$ a
+sufficient statistic for Artin status: which primes divide $p-1$, and whether
+$10$ is a $q$th power residue, both matter. The observed repulsion is
+consistent with the same residue-class repulsion that governs the primes, but
+we do not establish that it has the same cause. The Pearson coefficient is
+reported as a descriptive nominal value.
 
 \section{Open questions}
 \label{sec:questions}
@@ -599,7 +651,7 @@ motivates the following open questions.
 	is negative for all sufficiently large $x$.
 \end{conjecture}
 
-We have measured $\delta$ over four decades:
+We have measured $\delta$ at four decade-spaced cutoffs:
 \[
   \delta(10^8) = -0.013360, \quad
   \delta(10^9) = -0.014140, \quad
@@ -608,22 +660,42 @@ We have measured $\delta$ over four decades:
 \]
 the last two from an independent recomputation described in
 Section~\ref{sec:data} (over $455{,}052{,}508$ and $4{,}118{,}054{,}810$
-primes respectively; at $10^{11}$ the sampling standard error on $\delta$ is
-about $1.6 \times 10^{-5}$). The correlation strengthens monotonically, and the
-increments $-0.000780$, $-0.000583$, $-0.000275$ decelerate. Over the measured
-range this does not support $\delta(x) \to 0$.
+primes respectively). At these four cutoffs the magnitude of $\delta$
+increases, and the increments $-0.000780$, $-0.000583$, $-0.000275$ decrease.
+No turnover is observed over the measured range.
 
-It does not, however, establish a nonzero limit, and we claim none. The
-increment law is not identified: the ratio of successive increments is not
-constant ($0.75$ then $0.47$), so a geometric model fails --- extrapolating
-geometrically from the first three values predicts
-$\delta(10^{11}) \approx -0.01516$, which the measurement misses by some ten
-standard errors --- and $\delta(x)\log x$ is not constant either
-($-0.246, -0.293, -0.339, -0.380$), so simple $1/\log x$ decay fits no better.
-What the data support is the conjecture as stated, that $\delta$ remains
-negative, together with the weaker observation that any decay to zero would
-have to be slower than these four decades suggest. We note one
-reason for caution against assuming a nonzero limit, in a restricted setting.
+We draw no asymptotic conclusion from this. Four nested cumulative cutoffs are
+not four independent observations, and they determine neither an eventual sign
+nor a limit nor a decay rate. Two specific negative remarks are all that the
+values support: the ratio of successive increments is not constant ($0.75$
+then $0.47$), so a geometric increment model does not describe them ---
+extrapolating geometrically from the first three values predicts
+$\delta(10^{11}) \approx -0.01516$ against a measured $-0.014998$, a
+discrepancy of $1.6 \times 10^{-4}$ --- and $\delta(x)\log x$ is not constant
+($-0.246, -0.293, -0.339, -0.380$), so a bare $c/\log x$ law does not describe
+them either.
+
+It is worth recording explicitly that monotone strengthening with decelerating
+increments does \emph{not} constrain the eventual rate, and in particular does
+not exclude decay to zero. Writing $t = \log_{10} x$, the function
+\[
+  f(t) = -\frac{0.248463}{t} - \frac{1.495239}{t^2}
+         + \frac{41.285554}{t^3} - \frac{162.098640}{t^4}
+\]
+reproduces all four measured values at $t = 8, 9, 10, 11$, is negative for all
+$t \ge 8$, strengthens across the measured range, and yet satisfies
+$f(t) \sim -0.248463/t$, so that $f \to 0$; its turning point lies at
+$t \approx 11.56$, just beyond the last cutoff. This is an interpolation
+constructed to make the point, not a proposed model, and we attach no
+significance to its coefficients. It shows only that our data are equally
+compatible with eventual decay to zero and with persistence of a nonzero
+correlation, and that the question is not settled by extending the census a
+decade or two further.
+
+We also note that the conjecture as stated --- that $\delta$ is eventually
+negative --- is compatible with $\delta(x) \to 0$; eventual negativity and
+decay to zero are not competing alternatives. A separate
+reason for caution against assuming a nonzero limit arises in a restricted setting.
 Consider a \emph{separable} fixed-modulus channel model: write $R, S$ for the
 residue classes of $(p_n, p_{n+1})$ modulo a fixed~$M$, and suppose the
 modelled indicators satisfy $\E[X \mid R,S] = \alpha(R)$,
@@ -664,12 +736,21 @@ criterion (e.g.\ a covariance decomposition rather than a signed cell mean),
 and the range of~$x$ over which the bound is asserted. We do not know a
 formulation that avoids these ambiguities.
 
-We remark that a sufficiently uniform version of the Hardy--Littlewood prime
-pair conjectures would predict the joint distribution of
-$(p_n \bmod M, p_{n+1} \bmod M, g)$ via singular series; whether such
-predictions carry the Chebotarev/power-residue information needed for Artin
-status, and whether the no-intermediate-prime condition defining
-consecutiveness introduces additional structure, requires further analysis.
+We remark that a sufficiently uniform Hardy--Littlewood prime $k$-tuple
+framework, together with a justified treatment of the no-intermediate-prime
+restriction, would be the natural setting in which to predict the joint
+distribution of $(p_n \bmod M, p_{n+1} \bmod M, g)$ via singular series. The
+pair conjecture alone does not suffice, and the restriction is not an optional
+refinement: consecutiveness is part of the event, and its indicator
+\[
+  \mathbf{1}_{p \text{ prime}} \, \mathbf{1}_{p+g \text{ prime}}
+  \prod_{1 \le h < g} \bigl(1 - \mathbf{1}_{p+h \text{ prime}}\bigr)
+\]
+expands into higher-tuple correlations that two-point counts do not determine.
+This is why~\cite{LOS2016} proceeds from a $k$-tuple heuristic rather than from
+the pair conjecture. Whether such predictions carry the Chebotarev and
+power-residue information needed for Artin status is a further question again,
+and requires analysis we do not attempt here.
 
 \begin{conjecture}[$\omega$ repulsion]
 	\label{conj:omega}
@@ -821,11 +902,6 @@ a single machine; it is also available from the author on request.
 	\emph{Unexpected biases in the distribution of consecutive primes},
 	Proc. Natl. Acad. Sci. USA \textbf{113} (2016), no.~31, E4446--E4454.
 
-	\bibitem{Maynard2015}
-	J.~Maynard,
-	\emph{Small gaps between primes},
-	Ann. of Math. (2) \textbf{181} (2015), no.~1, 383--413.
-
 	\bibitem{Moree2012}
 	P.~Moree,
 	\emph{Artin's primitive root conjecture --- a survey},
@@ -840,11 +916,6 @@ a single machine; it is also available from the author on request.
 	P.~Pollack,
 	\emph{Bounded gaps between primes with a given primitive root},
 	Algebra Number Theory \textbf{8} (2014), no.~7, 1769--1786.
-
-	\bibitem{Zhang2014}
-	Y.~Zhang,
-	\emph{Bounded gaps between primes},
-	Ann. of Math. (2) \textbf{179} (2014), no.~3, 1121--1174.
 
 \end{thebibliography}
 
