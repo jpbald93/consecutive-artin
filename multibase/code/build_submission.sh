@@ -44,6 +44,11 @@ if i != -1:
     s = s[:i] + s[j:]
 # strip identifying strings anywhere else (e.g. acknowledgements, data availability)
 s = s.replace('Josh Bald', 'the author')
+# anonymise the self-citation: the bibliography prints "J.~Bald" and the
+# discussion refers to the companion paper as the author's earlier work.
+s = s.replace('J.~Bald,', '[Author],')
+s = s.replace(r'the author in earlier\nwork~\cite{BaldConsecutive}',
+              r'the present author in earlier work~\cite{BaldConsecutive}')
 s = s.replace('jpbald93@gmail.com', 'email withheld for review')
 s = s.replace('0009-0002-1317-6489', 'ORCID withheld for review')
 s = re.sub(r'https?://github\.com/jpbald93/[^\s}{,)]*', 'repository URL withheld for review', s)
