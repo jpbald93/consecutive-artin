@@ -98,7 +98,13 @@ should have density given by a rational multiple of Artin's constant, as
 proved under GRH by Hooley~\cite{Hooley1967}. The joint distribution for
 \emph{several} bases at the same prime was treated by
 Matthews~\cite{Matthews1976}, who computed (under GRH) the density of primes
-for which several prescribed integers are simultaneously primitive roots.
+for which several prescribed integers are simultaneously primitive
+roots.\footnote{We record one limitation of our own scholarship:
+\cite{Matthews1976} was verified from the publisher's bibliographic record and
+from independent restatements of its main theorem, not from the original text,
+which the author was unable to obtain. Every other reference was checked
+against the published record, except the companion
+preprints~\cite{BaldI, BaldII}, which are unrefereed.}
 Lenstra's Galois-theoretic framework~\cite{Lenstra1977} covers a single
 finitely generated group $W$ with a prescribed index condition, and Lenstra
 explicitly lists the simultaneous problem --- ``the set of primes $q$ for which
@@ -351,10 +357,16 @@ pairs. Writing the classes out in the four cases we return to below:
 We verified each over all primes below $6 \times 10^4$ with no exceptions, and
 Section~\ref{sec:measurement} verifies the theorem itself against all
 $50{,}847{,}524$ primes below $10^9$ for all $66$ pairs of our base set
-simultaneously. Theorem~\ref{thm:pair} is also machine-checked in Lean~4
-against Mathlib, as is the $(5,10)$ instance above with its barring condition
-discharged from $p \bmod 8$; see \texttt{LEAN\_NOTE.md} in the accompanying
-package.
+simultaneously. Theorems~\ref{thm:pair} and~\ref{thm:triple} are also
+machine-checked in Lean~4 against Mathlib, including the
+step~\eqref{eq:obstruction} and the $(5,10)$ instance above, whose barring
+condition is discharged from $p \bmod 8$ --- so that instance is verified with
+no character hypothesis assumed at all. Every checked statement depends on no
+axiom beyond \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}. We state the limit of this plainly: the general
+translation of $\bigl(\tfrac{d}{p}\bigr) = -1$ into residue classes
+modulo $4d$ is \emph{not} formalised generically, but carried out by hand per
+instance. See \texttt{LEAN\_NOTE.md} in the accompanying package.
 
 The triple form of the law, which was our original route to it, is the special
 case in which the barring character is supplied by a third base of the set.
@@ -952,35 +964,18 @@ The author thanks the developers of the open-source tools used in this work
 (GCC, Python, \texttt{sympy}, \texttt{matplotlib}).
 
 \subsection*{Use of generative AI}
-The author used Anthropic's Claude (models Claude Opus 4.5 and Claude
-Opus 5) as an assistant: for drafting and revising exposition, for writing
-and debugging the sieve and analysis programs, for exploratory discussion, and
-for an adversarial audit of an earlier version of this manuscript, which
-located the $\varepsilon(m,n)$ error recorded in Remark~\ref{rem:eps} and the
-omission of the $(2,6)$ residual. In addition, the skeleton of the Lean proof
-of the primitive-root/non-residue bridge
-(\texttt{PrimitiveRootBridge.lean}, criterion~\eqref{eq:obstruction}) was
-drafted by a locally hosted open-weights model (Qwen3-32B) over six supervised
-rounds and then completed by the author, who supplied the two steps the model
-flagged as uncertain; provenance is recorded in the file's own header.
-
-All computations were executed and verified on the author's own
-hardware from source code the author has inspected. The proofs of
-Theorems~\ref{thm:pair} and~\ref{thm:triple} have been checked by hand and
-machine-checked in Lean~4 against Mathlib with no appeal to any axiom beyond
-\texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}, including
-the step \eqref{eq:obstruction} and, for the instance $(a,b) = (5,10)$, the
-discharge of the barring condition $\bigl(\tfrac{2}{p}\bigr) = -1$ from
-$p \bmod 8$ --- so that instance is verified with no character hypothesis
-assumed at all. The general translation of $\bigl(\tfrac{d}{p}\bigr) = -1$ into
-residue classes mod $4d$ is not formalised generically; it is carried out by
-hand per instance. See \texttt{LEAN\_NOTE.md} in the accompanying package. Every reference has been
-checked against the published record, with two stated exceptions: the
-companion preprints~\cite{BaldI, BaldII} are unrefereed and have no published
-record, and~\cite{Matthews1976} was verified from the publisher's
-bibliographic record and from independent restatements of its main theorem
-rather than from the original text, which the author was unable to obtain. The
-author is solely responsible for the content.
+The author used Anthropic's Claude (models Claude Opus~4.5 and Claude Opus~5)
+as an assistant: for drafting and revising exposition, for writing and
+debugging the sieve and analysis programs, for exploratory discussion, and for
+an adversarial audit of an earlier version of this manuscript, which located
+errors that are corrected here. The skeleton of the Lean proof of the
+primitive-root/non-residue bridge (\texttt{PrimitiveRootBridge.lean}) was
+drafted by a locally hosted open-weights model (Qwen3-32B) and completed by
+the author, who supplied the steps the model flagged as uncertain; provenance
+is recorded in that file's header. All computations were executed on the
+author's own hardware from source code the author has inspected, and numerical
+outputs were produced by running deterministic programs, not synthesised by a
+language model. The author is solely responsible for the content.
 
 \section*{Declaration of interest}
 The author reports there are no competing interests to declare.
