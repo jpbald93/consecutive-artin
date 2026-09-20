@@ -4,6 +4,8 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
+% allow a little inter-paragraph stretch so page breaks are not underfull
+\raggedbottom
 \graphicspath{{./}}
 
 \newtheorem{theorem}{Theorem}
@@ -84,9 +86,14 @@ the primes; for base
 $a = 10$ this density is Artin's constant
 $C = \prod_q \bigl(1 - \tfrac{1}{q(q-1)}\bigr) \approx 0.3739558$.
 Hooley~\cite{Hooley1967} proved the conjecture under the Generalized Riemann
-Hypothesis, Gupta and Murty~\cite{GuptaMurty1984} and
-Heath-Brown~\cite{HeathBrown1986} obtained the strongest unconditional
-results, and Moree's survey~\cite{Moree2012} gives a comprehensive account.
+Hypothesis. Unconditionally, Gupta and Murty~\cite{GuptaMurty1984} and
+Heath-Brown~\cite{HeathBrown1986} showed that the conjecture can fail for at
+most two prime values of~$a$, though without an asymptotic for the counting
+function; in the averaged direction Klurman, Shparlinski and
+Ter\"av\"ainen~\cite{KlurmanShparlinskiTeravainen2025} recently established the
+predicted asymptotic for almost all $1 \le a \le \exp((\log\log x)^2)$,
+substantially improving the range of Stephens~(1969). Moree's
+survey~\cite{Moree2012} gives a comprehensive account.
 For $a = 10$ the property has a pleasant classical meaning: $10$ is a primitive
 root mod $p$ precisely when the decimal expansion of $1/p$ has maximal period
 $p - 1$ (the \emph{full reptend} or \emph{long} primes; see
@@ -899,6 +906,12 @@ a single machine; it is also available from the author on request.
 	C.~Hooley,
 	\emph{On Artin's conjecture},
 	J. Reine Angew. Math. \textbf{225} (1967), 209--220.
+
+	\bibitem{KlurmanShparlinskiTeravainen2025}
+	O.~Klurman, I.~E. Shparlinski, and J.~Ter\"av\"ainen,
+	\emph{On Artin's conjecture on average and short character sums},
+	Bull. Lond. Math. Soc. \textbf{57} (2025), no.~8, 2429--2443;
+	\texttt{arXiv:2412.13355}.
 
 	\bibitem{LOS2016}
 	R.~J. Lemke~Oliver and K.~Soundararajan,
