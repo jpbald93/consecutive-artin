@@ -59,8 +59,12 @@ describe the paper as "verified by Lean" without this qualification.
 ## What is NOT claimed
 
 - No journal acceptance, and no referee outside the audit chain has seen it.
-- A cross-vendor non-computational audit was run on 2026-09-20 (report at
-  `audit_2026-09-20/AUDIT_astra_noncomputational.md`, verdict MAJOR REVISION).
+- Three non-computational audits were run on 2026-09-20 (reports in
+  `audit_2026-09-20/`). The first returned MAJOR REVISION; two later
+  independent passes returned MINOR REVISION with no blockers. One of those
+  two terminated early and covers only lines 1-720 of the source; its own
+  report says so, and the remainder was covered by the pass that ran to
+  completion.
   All four blockers and all eight should-fixes have been addressed. The most
   serious was a false equivalence between the paper's triple-completion
   labelling and Kummer degree collapse; that claim has been withdrawn and

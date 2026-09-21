@@ -72,3 +72,41 @@ Theorem pair also needs $(d/p)=-1$. The intended meaning (no hypothesis on the b
 - **Population bookkeeping** (lines 463–471): $50{,}847{,}534 - 2 = 50{,}847{,}532$ (drops $p=2,3$); $-8$ more for the eight primes $5,7,11,13,17,19,23,29$ in $[5,31)$ gives $50{,}847{,}524$. Consistent. The abstract and intro correctly attach $524$ to the law-check and $532$ to the correlation run.
 - **Triple-completed count**: with base set $\{2,3,5,6,7,10,11,13,15,17,21,29\}$, exactly 15 pairs have $\sqf(ab)$ in the set (triples $(2,3,6),(2,5,10),(3,5,15),(3,7,21),(6,10,15)$) and the $d$-values are exactly $\{2,3,5,6,7,10,15,21\}$ as stated at line 610. Conductor 5 is the smallest and the only odd one.
 - **Internal arithmetic**: table means combine consistently ($15\cdot0.0314+51\cdot0.0363)/66 = 0.0352$; $(15\cdot 0.0049 + 51\cdot 0.0010)/66 = 0.0019$; $(15\cdot0.0049+51\cdot0.0052)/66=0.0051\approx0.0052$; $0.0179/0.0010 \approx 18$, $0.0077/0.0010\approx 8$.
+
+---
+
+## Coverage note (added by the maintainer, not the auditor)
+
+**This report is incomplete.** The audit session terminated during the
+scholarship checks, while attempting to locate the Klurman--Shparlinski--%
+Ter\"av\"ainen reference. The report never advanced past its provisional
+status: it covers **lines 1--720 of 1089**, and the two items it marked
+`[Pending]` (N2, N3) plus `[Pending: lines 721--1089]` were never resolved by
+the auditor.
+
+What this means for the record:
+
+- Every finding it *did* report (S1--S4, N1--N3) was verified against the
+  source and applied.
+- Its two pending items were resolved by the maintainer: `sec:data` was
+  confirmed to contain no Lean discussion and the cross-reference was
+  repointed at `sec:theorem`; and "entangled" was found to be doing duty for
+  "triple-completed" in four further places beyond the one it flagged, all
+  disambiguated.
+- Lines 721--1089 were **not** audited by this pass. They were, however,
+  covered by the independent pass recorded in
+  `AUDIT_deepseek_verification.md`, which ran to completion and reports
+  findings at lines 721, 733, 740, 758, 766, 780, 796, 815, 840, 907, 916 and
+  969.
+
+**The check it died on, completed by the maintainer:**
+The paper cites Klurman--Shparlinski--Ter\"av\"ainen, *On Artin's conjecture on
+average and short character sums*, Bull. Lond. Math. Soc. **57** (2025),
+2429--2443. Verified against arXiv:2412.13355, whose journal reference reads
+"Bull. London Math. Soc. 57, 2429-2443, 2025" -- volume, pages and year all
+match. The paper describes the result as "results on average over the base";
+the abstract states that $N_a(x)$ satisfies the Artin asymptotic for almost all
+$1 \le a \le \exp((\log\log x)^2)$, improving Stephens (1969), which is an
+accurate description. The paper attaches "(all results there conditional on
+GRH)" to Kimmel only and not to this reference, which is correct: the
+KST result is unconditional. **No change required.**
