@@ -2,14 +2,18 @@
 
 Paste-ready. Files to upload are listed at the bottom.
 
-**Order:** Paper 1 is deposited (`10.5281/zenodo.22863946`). Deposit Paper 2
-before this one, then replace the bare `BaldII` repository URL below with
-Paper 2's DOI and rebuild before minting this record.
+**Order:** satisfied. Paper 1 (`10.5281/zenodo.22863946`) and Paper 2
+(`10.5281/zenodo.22865343`) are both deposited, and both companion citations
+in this manuscript now carry their DOIs. This record can be minted.
 
-**Before depositing, consider a cross-vendor non-computational audit.**
-Papers 1 and 2 each had one and each turned up substantive problems — for
-Paper 2, prior art that changed how the main result had to be framed. Paper 3
-has not had one. A Zenodo DOI is permanent.
+**Audits done.** Two independent non-computational audits were run on
+2026-09-20 (reports in `audit_2026-09-20/`). The first returned MAJOR REVISION
+with four blockers, including a false equivalence between the paper's
+triple-completion labelling and Kummer degree collapse; that claim is
+withdrawn and replaced by the actual conductor-divisibility condition, with
+counterexamples in both directions now in the text. The second returned MINOR
+REVISION with no blockers, and caught four places where pre-revision language
+had survived the first round of fixes. All findings are addressed.
 
 ---
 
@@ -71,7 +75,7 @@ formal verification
 
 - `https://github.com/jpbald93/consecutive-artin` — **is supplemented by**
 - `10.5281/zenodo.22863946` (Paper 1) — **cites**
-- Paper 2's DOI once minted — **cites**
+- `10.5281/zenodo.22865343` (Paper 2) — **cites**
 - Leave the arXiv field empty until a posting exists.
 
 ## Subjects
