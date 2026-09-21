@@ -7,15 +7,15 @@ which aborts if any gate below fails.
 
 | file | what it is |
 |---|---|
-| `crossbase_artin_manuscript.pdf` | named manuscript, 14 pp |
+| `crossbase_artin_manuscript.pdf` | named manuscript, 15 pp |
 | `crossbase_artin_anonymous.pdf` | anonymised (author, email, ORCID, repo URLs stripped; PDF metadata cleared) |
 | `crossbase_artin_source.zip` | flat named LaTeX source + figures, compiles standalone |
 | `crossbase_artin_reproduction.zip` | portable package: code, paper, results, Lean sources |
 
 ## Gates that passed at build time
 
-- Manuscript build: **14 pp, 0 undefined references**.
-- Bad boxes: **2**, both long-standing and neither visible. One overfull `\vbox`
+- Manuscript build: **15 pp, 0 undefined references**.
+- Bad boxes: **1**, both long-standing and neither visible. One overfull `\vbox`
   of 1.29 pt (page-breaking slack, not text in the margin) and one underfull
   `\hbox`. Measured by ink position: **no page has any ink outside the text
   block**. Do not "fix" these by loosening the gate.
@@ -59,9 +59,14 @@ describe the paper as "verified by Lean" without this qualification.
 ## What is NOT claimed
 
 - No journal acceptance, and no referee outside the audit chain has seen it.
-- **Paper 3 has not had a cross-vendor non-computational audit.** Papers 1 and 2
-  each received one and each turned up substantive problems, including prior art
-  that was not known at the time. Consider running one before deposit.
+- A cross-vendor non-computational audit was run on 2026-09-20 (report at
+  `audit_2026-09-20/AUDIT_astra_noncomputational.md`, verdict MAJOR REVISION).
+  All four blockers and all eight should-fixes have been addressed. The most
+  serious was a false equivalence between the paper's triple-completion
+  labelling and Kummer degree collapse; that claim has been withdrawn and
+  replaced by the actual conductor-divisibility condition, with counterexamples
+  in both directions now stated in the text.
+- No referee outside that audit chain has seen the paper.
 - The exclusion law is **quadratic**: it bars pairs, it does not assert that
   unbarred pairs occur.
 - The density comparisons rest on the Matthews–Moree–Stevenhagen framework and

@@ -89,7 +89,7 @@ Mathematics → Number Theory. MSC 2020: Primary 11A07; Secondary 11N05, 11N13,
 
 | file | what it is |
 |---|---|
-| `submission/crossbase_artin_manuscript.pdf` | the paper, 14 pp, named |
+| `submission/crossbase_artin_manuscript.pdf` | the paper, 15 pp, named |
 | `submission/crossbase_artin_source.zip` | LaTeX source + figures |
 | `submission/crossbase_artin_reproduction.zip` | code, results, Lean |
 | `LICENSE-CC-BY-4.0.txt` | licence split |
@@ -106,8 +106,8 @@ Mathematics → Number Theory. MSC 2020: Primary 11A07; Secondary 11N05, 11N13,
 
 ## State at time of writing
 
-- 14 pp, 0 undefined references
-- 2 bad boxes, both long-standing, **neither visible** — verified by ink
+- 15 pp, 0 undefined references
+- 1 bad box, long-standing, **not visible** — verified by ink
   position: no page has ink outside the text block
 - `MANIFEST.sha256` verifies
 - anonymous PDF → 0 identifying strings
