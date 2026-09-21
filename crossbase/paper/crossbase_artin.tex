@@ -4,6 +4,8 @@
 \usepackage{booktabs}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{microtype}
+% allow inter-paragraph stretch so page breaks are not underfull
+\raggedbottom
 % let hyperref break long URLs at punctuation instead of running into the margin
 \usepackage{xurl}
 
@@ -58,9 +60,7 @@ We then measure, for all $66$ pairs from the twelve bases
 $\{2,3,5,6,7,10,11,13,15,17,21,29\}$ and all $50{,}847{,}532$ primes up to
 $10^9$, the same-prime correlation $\phi(a,b)$ between the indicator variables
 of Artin status. Three empirical findings emerge. First, the correlation is
-positive for $64$ of the $66$ pairs (mean $\phi = 0.0352$, individual
-$|z|$ up to $476$ --- which reflects the $5 \times 10^7$ sample size rather
-than a large effect; the correlations explain about $0.1\%$ of variance),
+positive for $64$ of the $66$ pairs (mean $\phi = 0.0352$, individual $\phi/\sigma_0$ up to $476$ against the benchmark scale $\sigma_0 = N^{-1/2}$ --- which reflects the $5 \times 10^7$ primes enumerated rather than a large effect; the correlations explain about $0.1\%$ of variance),
 despite the exclusion law: the common cause $p-1$ dominates. The only negative
 pairs are $(2,10)$ and $(3,15)$, the two for which the barring character has
 conductor $5$, the smallest occurring. Second, conditioning on the number of prime factors
@@ -72,12 +72,13 @@ fact that all bases see the same factorisation of $p - 1$. Third, the residual
 that survives fine conditioning is concentrated on the triple-completed pairs (mean absolute residual $0.018$ within those pairs, or
 $0.008$ excluding one large positive outlier, versus $0.001$ for
 non-completed pairs), and is localised in the quadratic-character
-channel --- identifying it as the statistical residue of the exclusion law
-itself, visible once the common cause is conditioned away. Finally we evaluate the joint
+channel, which is where the exclusion law of Theorem~\ref{thm:pair} acts;
+we read this as the law's statistical trace, visible once the common cause is
+conditioned away, while noting that a support restriction of this kind does
+not by itself determine the size or sign of a residual. Finally we evaluate the joint
 densities predicted by the Matthews--Moree--Stevenhagen Kummer-degree heuristic for all
 $66$ pairs: with no fitted parameters they match the measured densities to a
-mean relative error of $0.012\%$, and they reproduce the sign reversal on the
-entangled pairs. Both the pointwise obstruction and the Kummer-degree
+mean relative error of $0.012\%$, and they reproduce the sign reversal on the two negatively correlated pairs. Both the pointwise obstruction and the Kummer-degree
 heuristic are governed by the same quadratic class $\sqf(ab)$, which appears
 in the first as a congruence barring half the primes and in the second as a
 member of the group of quadratic classes that can reduce the degree. We do not
@@ -242,9 +243,7 @@ $\sigma_0$ by a factor of $476$: knowing that $a$ is a
     $P(\Art_{13} \mid \Art_5) = 0.416$ against
     $P(\Art_{13} \mid \lnot\Art_5) = 0.350$).
   \item \emph{Where the exclusion wins.} The only two negative
-    correlations are $\phi(2,10) = -0.0302$ and $\phi(3,15) = -0.0303$. Both
-    are triple-completed, but dependence alone is not the
-    discriminant: fifteen of the $66$ pairs are triple-completed and thirteen of those are positively correlated. What singles out these two is the conductor of
+    correlations are $\phi(2,10) = -0.0302$ and $\phi(3,15) = -0.0303$. Both are triple-completed, but triple-completion alone is not the discriminant: fifteen of the $66$ pairs are triple-completed and thirteen of those are positively correlated. What singles out these two is the conductor of
     the barring character $\chi_{\sqf(ab)}$: both have $\sqf(ab) = 5$, of
     conductor $5$ --- the smallest conductor occurring among the triple-completed pairs, and the only odd prime one. A plausible reading, recorded as an observation in Section~\ref{sec:measurement} rather than proved, is that a small conductor is what lets the exclusion of Theorem~\ref{thm:pair} survive the averaging over $p-1$ instead of being diluted by it.
   \item \emph{The positive correlation is $p-1$ structure, not entanglement.}
@@ -268,19 +267,14 @@ $\sigma_0$ by a factor of $476$: knowing that $a$ is a
     Kummer-degree heuristic~\eqref{eq:model} for each pair
     (Section~\ref{sec:model}) predicts the measured joint densities to a mean
     relative error of $0.012\%$ over the $66$ pairs, with no fitted
-    parameters, including the negative $\phi$ of the two entangled pairs. The
-    entangled degree collapse in the model is precisely the character relation
-    behind Theorem~\ref{thm:pair}.
+    parameters, including the negative $\phi$ of the two negatively correlated pairs. The degree collapse in the model, where it occurs, is driven by the same quadratic class $\sqf(ab)$ that bars half the primes in Theorem~\ref{thm:pair}; the class is present for every pair, while the collapse is not.
 \end{enumerate}
 
 The theme of the series persists: at every level, the joint behaviour of
 Artin primes decomposes into a small deterministic core (here, the pair
 exclusion law) plus a statistical component with an identifiable arithmetic
 carrier (here, the shared factorisation of $p-1$, with entanglement as a
-measurable second-order correction). What this paper adds to the pattern is
-that the deterministic core and the statistical carrier are the \emph{same}
-character seen twice: $\chi_{\sqf(ab)}$ bars half the primes pointwise, and
-reappears as the degree collapse that bends the predicted densities.
+measurable second-order correction). What this paper adds to the pattern is that one quadratic class, $\sqf(ab)$, is common to both descriptions: it bars half the primes pointwise in Theorem~\ref{thm:pair}, and it is the class whose conductor, when it divides the relevant cyclotomic level, produces the degree collapse that bends the predicted densities.
 
 \section{The same-prime exclusion laws}
 \label{sec:theorem}
@@ -409,14 +403,13 @@ one insists on reading the barring character off a primitive root instead of off
 a residue class.
 
 \begin{remark}[Sharpness of the hypotheses]
-In both theorems only ``$p$ odd'' is needed. Non-squareness of the bases is not
+In both theorems no hypothesis on the bases beyond positivity is needed, only ``$p$ odd'' (together with the barring condition $(d/p) = -1$ in Theorem~\ref{thm:pair}). Non-squareness of the bases is not
 required: if $a$ is a square then $\chi_a(p) = +1$ and $a$ is not a primitive
 root, so the conclusion is immediate. The same remark disposes of $c = 1$ in
 Theorem~\ref{thm:triple}, which arises whenever $\sqf(a) = \sqf(b)$. The
 hypothesis $p \ne 2$ must however be kept, and is not removable:
 $(\Z/2\Z)^\times$ is trivial, so every odd integer is vacuously a primitive
-root mod $2$ and e.g.\ $(a,b,c) = (3,5,15)$ violates the conclusion there. The
-accompanying Lean formalisation (Section~\ref{sec:data}) confirms
+root mod $2$ and e.g.\ $(a,b,c) = (3,5,15)$ violates the conclusion there. The accompanying Lean formalisation (Section~\ref{sec:theorem}) confirms
 independently that the $a \not\equiv 0$ and $b \not\equiv 0 \pmod p$
 assumptions are never used.
 \end{remark}
@@ -558,11 +551,11 @@ second smallest: $(2,10)$ & & $-0.0302$ \\
 \caption{The ten largest $|\phi|$ at $x = 10^9$, with the values after
 conditioning on $\omega(p-1)$ and on the fine signature $\mathrm{sig}(p)$
 (pair-weighted mean of within-cell $\phi$; cells with fewer than $200$
-primes excluded). ``Dep.''\ marks triple-completed pairs.}
+primes excluded). ``TC''\ marks triple-completed pairs.}
 \label{tab:top}
 \begin{tabular}{rrrrrc}
 \toprule
-$a$ & $b$ & $\phi$ & $\phi \mid \omega$ & $\phi \mid \mathrm{sig}$ & Dep. \\
+$a$ & $b$ & $\phi$ & $\phi \mid \omega$ & $\phi \mid \mathrm{sig}$ & TC \\
 \midrule
 $5$ & $13$ & $+0.0667$ & $+0.0200$ & $+0.0003$ & \\
 $5$ & $17$ & $+0.0649$ & $+0.0218$ & $+0.0025$ & \\
@@ -594,7 +587,7 @@ LOS-anticorrelated) values of $p - 1$; here every base is tested against the
 $2$-part, the primitive-root condition is easier for every base at once.
 Formally, the Artin indicators share the common cause $\mathrm{sig}(p)$.
 
-\begin{observation}[The negative pairs are the entangled ones]
+\begin{observation}[The negative pairs are triple-completed]
 \label{obs:negative}
 The only pairs with $\phi < 0$ are $(2, 10)$ and $(3, 15)$: in each, the
 product of the two bases is, up to a square, the third base of a
@@ -604,7 +597,7 @@ $P(\Art_{10} \mid \Art_2) = 0.3551$ versus
 $P(\Art_{10} \mid \lnot\Art_2) = 0.3853$.
 \end{observation}
 
-The sign reversal is Theorem~\ref{thm:pair} operating statistically. For every pair, triple-completed or not, the primes split into two halves according to the sign
+The sign reversal is where Theorem~\ref{thm:pair} becomes visible statistically. For every pair, triple-completed or not, the primes split into two halves according to the sign
 of $\chi_d(p)$, $d = \sqf(ab)$: on the half with $\chi_d(p) = -1$ the values
 $\chi_a(p)$ and $\chi_b(p)$ are forced \emph{opposite}, so joint Artin status
 is impossible there, while on the half with $\chi_d(p) = +1$ they are forced
@@ -693,7 +686,7 @@ Section~\ref{sec:measurement} had largely averaged away.
 \centering
 \caption{Residual correlation after conditioning on $\mathrm{sig}(p)$ and
 after additionally conditioning on the pair of quadratic-residue statuses
-$(\chi_a(p), \chi_b(p))$, split by multiplicative dependence. All values at
+$(\chi_a(p), \chi_b(p))$, split by triple-completion. All values at
 $x = 10^9$ over $50{,}847{,}524$ primes.}
 \label{tab:residual}
 \begin{tabular}{lrrr}
@@ -864,13 +857,12 @@ $0.376368$ for $d = 13$, against measured $0.373957$, $0.393642$, $0.376362$.
 \begin{table}[t]
 \centering
 \caption{Predicted versus measured joint Artin densities, selected pairs at
-$x = 10^9$. ``Dep.''\ marks triple-completed pairs. The final two
-rows are the two negatively correlated pairs.}
+$x = 10^9$. ``TC''\ marks triple-completed pairs. The final two rows are the two negatively correlated pairs.}
 \label{tab:model}
 \begin{tabular}{rrrrrrrc}
 \toprule
 $a$ & $b$ & measured $j$ & model $j$ & rel.\ err.
-    & measured $\phi$ & model $\phi$ & Dep. \\
+    & measured $\phi$ & model $\phi$ & TC \\
 \midrule
 $5$  & $13$ & $0.163939$ & $0.163943$ & $+0.00\%$ & $+0.0667$ & $+0.0667$ & \\
 $5$  & $10$ & $0.161962$ & $0.161922$ & $-0.02\%$ & $+0.0624$ & $+0.0623$ & \checkmark \\
@@ -892,15 +884,13 @@ $2$  & $10$ & $0.132776$ & $0.132776$ & $+0.00\%$ & $-0.0302$ & $-0.0302$ & \che
 \label{obs:model}
 Over all $66$ pairs at $x = 10^9$, the mean absolute relative error between
 the predicted and measured joint densities is $0.012\%$, with maximum
-$0.040\%$ (attained at $(21,29)$). In particular the model predicts the sign
-reversal: for the entangled pairs $(2,10)$ and $(3,15)$ it gives
+$0.040\%$ (attained at $(21,29)$). In particular the model predicts the sign reversal: for the negatively correlated pairs $(2,10)$ and $(3,15)$ it gives
 $j = 0.132776$ and $\phi = -0.0302$ for both, against measured
 $j = 0.132776$, $0.132769$ and $\phi = -0.0302$, $-0.0303$ respectively.
 \end{observation}
 
 This is the quantitative counterpart of Sections~\ref{sec:measurement} and~\ref{sec:entanglement}. It is a comparison of unconditional joint densities, so it does not by itself validate any conditional mechanism, but it is a demanding test and the framework passes it. The
-$66$-pair pattern --- positive correlation almost everywhere, negative
-precisely on the two entangled pairs, with magnitudes ordered as observed
+$66$-pair pattern --- positive correlation almost everywhere, negative precisely on the two pairs where it is observed to be negative, with magnitudes ordered as observed
 --- is not merely \emph{consistent with} the Matthews--Moree--Stevenhagen framework; it is
 reproduced by it to within a few parts in $10^4$, with no fitted parameters.
 Correspondingly, the same quadratic class $\sqf(ab)$ governs the deterministic law of Theorem~\ref{thm:pair} and enters the heuristic through the group $V(m,n)$. We stop short of calling these one object: the class lies in $V(m,n)$ for every pair once both indices are even, while it lowers a degree only when its conductor divides $L$, and the two conditions come apart in both directions as noted in Section~\ref{sec:model}.
