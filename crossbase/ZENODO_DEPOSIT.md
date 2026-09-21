@@ -73,7 +73,7 @@ formal verification
 
 ## Related identifiers
 
-- `https://github.com/jpbald93/consecutive-artin` — **is supplemented by**
+- `https://github.com/jpbald93/cross-base-artin-correlations` — **is supplemented by**
 - `10.5281/zenodo.22863946` (Paper 1) — **cites**
 - `10.5281/zenodo.22865343` (Paper 2) — **cites**
 - Leave the arXiv field empty until a posting exists.
