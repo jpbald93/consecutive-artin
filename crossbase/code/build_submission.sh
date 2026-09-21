@@ -34,6 +34,16 @@ import re, sys
 p = sys.argv[1]
 s = open(p).read()
 s = s.replace(r'\author{Josh Bald}', r'\author{}')
+# \address is an identifying field. "Ontario, Canada" survived an earlier build
+# because the gate only grepped for names and URLs, never the address.
+k = s.find(r'\address{')
+if k != -1:
+    m = k + len(r'\address{'); dd = 1
+    while dd and m < len(s):
+        if s[m] == '{': dd += 1
+        elif s[m] == '}': dd -= 1
+        m += 1
+    s = s[:k] + s[m:]
 i = s.find(r'\thanks{')
 if i != -1:
     j = i + len(r'\thanks{'); d = 1
@@ -64,8 +74,8 @@ for i in 1 2 3; do pdflatex -interaction=nonstopmode anon.tex >/dev/null 2>&1; d
 APAGES=$(pdfinfo anon.pdf | awk '/^Pages/{print $2}')
 [ "$APAGES" = "$PAGES" ] || { echo "FAIL: anon page count $APAGES != $PAGES"; exit 1; }
 pdftotext -layout anon.pdf anon.txt
-if grep -qiE 'josh|bald|jpbald93|0009-0002-1317-6489|github\.com/jpbald93' anon.txt; then
-  echo "FAIL: identifying text in anonymous PDF"; grep -niE 'josh|bald|jpbald93' anon.txt | head; exit 1
+if grep -qiE 'josh|bald|jpbald93|0009-0002-1317-6489|github\.com/jpbald93|ontario|canada' anon.txt; then
+  echo "FAIL: identifying text in anonymous PDF"; grep -niE 'josh|bald|jpbald93|ontario|canada' anon.txt | head; exit 1
 fi
 pdfinfo anon.pdf > anon_meta.txt
 if grep -iE '^(Author|Title|Subject|Keywords)' anon_meta.txt | grep -qiE 'josh|bald|artin|primitive'; then
