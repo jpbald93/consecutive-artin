@@ -73,7 +73,7 @@ open ArtinExclusion
 #print axioms Paper2Rebuild.main_identity
 #print axioms Paper2Rebuild.counting_identity
 
--- Supporting lemmas. Listed so the axiom audit covers EVERY non-private theorem
+-- Supporting lemmas. Listed so the dependency audit covers EVERY non-private theorem
 -- and lemma declaration in the development, not a selected paper-facing subset
 -- (Paper 2 referee finding F7). `private` declarations are excluded by
 -- construction: they are not accessible from this module, and each is consumed
