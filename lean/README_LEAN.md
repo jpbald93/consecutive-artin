@@ -18,6 +18,8 @@ Prime Math series:
 Checks: build succeeds; no `sorry`, `admit`, `axiom`, or `native_decide`;
 every theorem depends only on `propext`, `Classical.choice`, `Quot.sound`.
 
+`scratch/Satisfiable.lean` gives, for every theorem with hypotheses, a Lean-checked example showing the hypotheses can all be met (compile with `lake env lean scratch/Satisfiable.lean`).
+
 Toolchain: Lean 4 v4.33.1, Mathlib v4.33.1 (prebuilt cache).
 
 ## What is proved
